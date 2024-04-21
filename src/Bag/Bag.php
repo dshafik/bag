@@ -14,7 +14,7 @@ use Bag\Property\Value;
 use Bag\Property\ValueCollection;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Collection as LaravelCollection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use JsonSerializable;
@@ -32,13 +32,13 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable
         return [];
     }
 
-    public static function from(ArrayAccess|iterable|Collection|Arrayable $values): static
+    public static function from(ArrayAccess|iterable|Collection|LaravelCollection|Arrayable $values): static
     {
         if (\is_iterable($values)) {
             $values = \iterator_to_array($values);
         }
 
-        $values = self::prepareInputValues(collect($values));
+        $values = self::prepareInputValues(Collection::make($values));
 
         return new static(...$values->toArray());
     }
@@ -99,9 +99,9 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable
         return self::prepareOutputValues($properties->except($this->getHidden()->merge($this->getHiddenFromJson())))->toArray();
     }
 
-    public static function validate(Collection|array $values): bool
+    public static function validate(LaravelCollection|array $values): bool
     {
-        $values = $values instanceof Collection ? $values->toArray() : $values;
+        $values = $values instanceof LaravelCollection ? $values->toArray() : $values;
 
         $rules = static::getProperties(new ReflectionClass(static::class))->map(function (Value $property) {
             return $property->validators;
@@ -245,10 +245,10 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable
     {
         $value = $this;
 
-        return collect((fn (): array => \get_object_vars($value))->bindTo(null)());
+        return Collection::make((fn (): array => \get_object_vars($value))->bindTo(null)());
     }
 
-    protected function getHidden(): Collection
+    protected function getHidden(): LaravelCollection
     {
         static $cache = new WeakMap();
 
@@ -271,7 +271,7 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable
         return $hidden;
     }
 
-    protected function getHiddenFromJson(): Collection
+    protected function getHiddenFromJson(): LaravelCollection
     {
         static $cache = new WeakMap();
 

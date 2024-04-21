@@ -1,0 +1,16 @@
+{
+    "preset": "psr12",
+    "rules": {
+        "declare_strict_types": true,
+        "fully_qualified_strict_types": {
+            "import_symbols": true,
+            "leading_backslash_in_global_namespace": true
+        },
+        "strict_comparison": true,
+        "blank_line_after_opening_tag": false,
+        "blank_line_after_namespace": true,
+        "blank_lines_before_namespace": true,
+        "ordered_imports": true,
+        "blank_line_between_import_groups": false
+    }
+}

@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace Bag;
 
 use Bag\Exceptions\ImmutableCollectionException;
+use Illuminate\Support\Collection as LaravelCollection;
 use Override;
 
-class Collection extends \Illuminate\Support\Collection
+class Collection extends LaravelCollection
 {
     #[Override]
     public function forget($keys)

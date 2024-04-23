@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Tests\Feature;
+
 use Bag\BagServiceProvider;
 use Orchestra\Testbench\TestCase;
 use Symfony\Component\HttpFoundation\Request;

@@ -1,5 +1,5 @@
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dshafik_bag&metric=coverage)](https://sonarcloud.io/summary/new_code?id=dshafik_bag)
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=dshafik_bag)](https://sonarcloud.io/summary/new_code?id=dshafik_bag)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=bag&metric=coverage)](https://sonarcloud.io/summary/new_code?id=bag)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bag&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=bag)
 
 # Bag
 

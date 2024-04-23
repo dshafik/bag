@@ -7,7 +7,7 @@
                 "options": {
                     "config": {
                         "typeCase": "lower",
-                        "types": ["feat", "fix", "build", "chore", "refactor", "test", "revert"]
+                        "types": ["feat", "fix", "build", "chore", "refactor", "test", "revert", "docs"]
                     }
                 }
             }

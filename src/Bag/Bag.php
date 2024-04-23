@@ -58,23 +58,22 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable
      * @param  iterable<int, mixed>  $values
      * @return Collection<static>
      */
-    public function collect(iterable $values): Collection
+    public static function collect(iterable $values = []): Collection
     {
-        static $cache = new WeakMap();
+        static $cache = [];
 
-        /** @var WeakMap<class-string<Collection>|null> $cache */
-        if (isset($cache[$this])) {
-            return $cache[$this]::make($values)->map(fn ($value): static => static::from($value));
+        if (isset($cache[static::class])) {
+            return $cache[static::class]::make($values)->map(fn ($value): static => static::from($value));
         }
 
-        $cache[$this] = Collection::class;
+        $cache[static::class] = Collection::class;
 
-        $collectionAttributes = (new ReflectionClass($this))->getAttributes(Attributes\Collection::class);
+        $collectionAttributes = (new ReflectionClass(static::class))->getAttributes(Attributes\Collection::class);
         if (count($collectionAttributes) > 0) {
-            $cache[$this] = $collectionAttributes[0]->newInstance()->collectionClass;
+            $cache[static::class] = $collectionAttributes[0]->newInstance()->collectionClass;
         }
 
-        return $cache[$this]::make($values)->map(fn ($value): static => static::from($value));
+        return $cache[static::class]::make($values)->map(fn ($value): static => static::from($value));
     }
 
     #[Override]

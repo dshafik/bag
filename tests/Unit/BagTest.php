@@ -2,14 +2,19 @@
 
 declare(strict_types=1);
 
+namespace Tests\Unit;
+
 use Bag\Exceptions\AdditionalPropertiesException;
 use Bag\Exceptions\MissingPropertiesException;
 use Carbon\CarbonImmutable;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Validation\ValidationException;
 use Orchestra\Testbench\TestCase;
+use Tests\Fixtures\BagWithCollection;
 use Tests\Fixtures\CastsDateBag;
 use Tests\Fixtures\CastsDateInputBag;
 use Tests\Fixtures\CastsDateOutputBag;
+use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\HiddenJsonPropertiesBag;
 use Tests\Fixtures\HiddenPropertiesBag;
 use Tests\Fixtures\MappedInputNameClassBag;
@@ -25,6 +30,8 @@ use Tests\Fixtures\VariadicBag;
 
 class BagTest extends TestCase
 {
+    use WithFaker;
+
     public function testItRequiresAConstructor()
     {
         $this->expectException(\RuntimeException::class);
@@ -285,5 +292,22 @@ class BagTest extends TestCase
     public function testItValidatesUsingBoth()
     {
         $this->assertTrue(ValidateUsingAttributesAndRulesMethodBag::validate(collect(['name' => 'Davey Shafik', 'age' => 40])));
+    }
+
+    public function testItCreatesCustomCollections()
+    {
+        $data = [
+            ['name' => $this->faker->name(), 'age' => $this->faker->numberBetween(18, 100)],
+            ['name' => $this->faker->name(), 'age' => $this->faker->numberBetween(18, 100)],
+        ];
+
+        $collection = BagWithCollection::collect($data);
+
+        $this->assertInstanceOf(BagWithCollectionCollection::class, $collection);
+        $this->assertCount(2, $collection);
+        $collection->each(function (BagWithCollection $bag, $index) use ($data) {
+            $this->assertSame($data[$index]['name'], $bag->name);
+            $this->assertSame($data[$index]['age'], $bag->age);
+        });
     }
 }

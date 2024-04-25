@@ -20,7 +20,8 @@
         "captainhook/captainhook-phar": "^5.23",
         "larastan/larastan": "^2.0",
         "captainhook/hook-installer": "^1.0",
-        "laravel/pint": "^1.15"
+        "laravel/pint": "^1.15",
+        "roave/security-advisories": "dev-latest"
     },
     "repositories": [
         {

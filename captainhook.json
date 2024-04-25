@@ -24,7 +24,7 @@
                 "action": "\\CaptainHook\\App\\Hook\\PHP\\Action\\Linting"
             },
             {
-                "action": "vendor/bin/pint {$STAGED_FILES|of-type:php}",
+                "action": "vendor/bin/pint {$STAGED_FILES|of-type:php} && git add {$STAGED_FILES|of-type:php}",
                 "conditions": [
                     {
                         "exec": "\\CaptainHook\\App\\Hook\\Condition\\FileStaged\\OfType",

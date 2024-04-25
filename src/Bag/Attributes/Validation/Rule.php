@@ -9,12 +9,14 @@ use Attribute;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
 class Rule
 {
+    public string|object $rule;
+
     public function __construct(
-        public string $rule,
+        string $rule,
         mixed ...$arguments,
     ) {
-        if (\str_contains($this->rule, '\\')) {
-            new $rule(...$arguments);
+        if (\str_contains($rule, '\\')) {
+            $this->rule = new $rule(...$arguments);
 
             return;
         }
@@ -23,6 +25,6 @@ class Rule
             return;
         }
 
-        $this->rule .= ':'.\implode(',', $arguments);
+        $this->rule = $rule . ':'.\implode(',', $arguments);
     }
 }

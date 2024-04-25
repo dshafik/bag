@@ -42,6 +42,10 @@
         }
 
     },
+    "scripts": {
+        "test": "phpunit",
+        "style": "pint"
+    },
     "extra" : {
         "laravel" : {
             "providers" : [

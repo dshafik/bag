@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Bag;
 
+use Bag\Exceptions\InvalidPropertyType;
 use Laravel\SerializableClosure\Support\ReflectionClosure;
 use ReflectionIntersectionType;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionProperty;
 use ReflectionUnionType;
-use RuntimeException;
 
 class Util
 {
@@ -22,7 +22,7 @@ class Util
         }
 
         if ($type instanceof ReflectionIntersectionType) {
-            throw new RuntimeException(message: 'Intersection types are not supported for parameter {$name}');
+            throw new InvalidPropertyType(message: sprintf('Intersection types are not supported for parameter %s', $property->getName()));
         }
 
         if ($type instanceof ReflectionUnionType) {

@@ -6,9 +6,9 @@ namespace Bag\Casts;
 
 use Attribute;
 use Bag\Bag;
+use Bag\Exceptions\InvalidCollection;
 use Illuminate\Support\Collection;
 use Override;
-use RuntimeException;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
 class CollectionOf implements CastsPropertySet
@@ -21,15 +21,15 @@ class CollectionOf implements CastsPropertySet
     }
 
     /**
-     * @param  class-string<Collection>  $type
+     * @param  class-string<Collection>  $propertyType
      */
     #[Override]
-    public function set(string $type, string $propertyName, Collection $properties): mixed
+    public function set(string $propertyType, string $propertyName, Collection $properties): mixed
     {
-        if ($type !== Collection::class && ! \is_subclass_of($type, Collection::class, true)) {
-            throw new RuntimeException("The property {$propertyName} must be a Collection or a subclass of Collection");
+        if ($propertyType !== Collection::class && ! \is_subclass_of($propertyType, Collection::class, true)) {
+            throw new InvalidCollection(sprintf('The property %s->%s must be a subclass of Collection', $propertyType, $propertyName));
         }
 
-        return $type::make($properties->get($propertyName))->map(fn ($item) => $this->valueClassname::from($item));
+        return $propertyType::make($properties->get($propertyName))->map(fn ($item) => $this->valueClassname::from($item));
     }
 }

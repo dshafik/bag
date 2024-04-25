@@ -1,0 +1,18 @@
+:root {
+    --vp-font-family-base: "Source Sans 3", sans-serif;
+    --vp-font-family-mono: "Source Code Pro", monospace;
+    --vp-nav-logo-height: 64px;
+}
+
+header .title span {
+    font-size: 32px;
+    font-family: var(--vp-font-family-mono);
+}
+
+header .title img {
+    padding: 8px;
+}
+
+code {
+    white-space: pre;
+}

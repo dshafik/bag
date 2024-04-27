@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bag;
 
-use ArrayAccess;
 use Bag\Concerns\WithArrayable;
 use Bag\Concerns\WithCasts;
 use Bag\Concerns\WithCollections;
@@ -13,11 +12,11 @@ use Bag\Concerns\WithInput;
 use Bag\Concerns\WithJson;
 use Bag\Concerns\WithOutput;
 use Bag\Concerns\WithProperties;
+use Bag\Concerns\WithTransformers;
 use Bag\Concerns\WithValidation;
 use Bag\Concerns\WithVariadics;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Support\Collection as LaravelCollection;
 use JsonSerializable;
 
 readonly class Bag implements Arrayable, Jsonable, JsonSerializable
@@ -30,11 +29,14 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable
     use WithJson;
     use WithOutput;
     use WithProperties;
+    use WithTransformers;
     use WithValidation;
     use WithVariadics;
 
-    public static function from(ArrayAccess|iterable|Collection|LaravelCollection|Arrayable $values): static
+    public static function from(mixed $values): static
     {
+        $values = self::transform($values);
+
         if (\is_iterable($values)) {
             $values = \iterator_to_array($values);
         }

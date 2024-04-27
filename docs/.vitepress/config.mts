@@ -60,6 +60,7 @@ export default defineConfig({
         items: [
           { text: 'Collections', link: '/collections' },
           { text: 'Casting Values', link: '/casting' },
+          { text: 'Transformers', link: '/transformers' },
           { text: 'Validation', link: '/validation' },
           { text: 'Testing', link: '/testing' },
         ]
@@ -87,28 +88,4 @@ export default defineConfig({
       light: 'github-light'
     }
   },
-  transformHead: function(context): HeadConfig[]  {
-    let head = []
-    head.push([
-      'meta',
-      {
-        name: 'author',
-        content: 'Davey Shafik'
-      }
-    ])
-    head.push([
-      'meta',
-      {
-        name: 'og:image',
-        content: '/assets/images/social.png'
-      }
-    ])
-    head.push([
-      'meta',
-      {
-        name: 'twitter:image',
-        content: '/assets/images/social.png'
-      }
-    ])
-  }
 })

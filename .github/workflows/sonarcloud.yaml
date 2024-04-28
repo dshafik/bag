@@ -6,7 +6,7 @@ on:
 
 jobs:
   tests:
-    name: Tests
+    name: SonarCloud Scan
 
     runs-on: ubuntu-latest
 

@@ -36,7 +36,7 @@ class MagicCast implements CastsPropertySet
             is_subclass_of($propertyType, Bag::class, true) => $propertyType::from($value),
             is_subclass_of($propertyType, Collection::class, true) => $propertyType::make($value),
             is_subclass_of($propertyType, BackedEnum::class, true) => $propertyType::from($value),
-            is_subclass_of($propertyType, UnitEnum::class, true) => $propertyType::{$value},
+            is_subclass_of($propertyType, UnitEnum::class, true) => constant("{$propertyType}::{$value}"),
             default => $value,
         };
     }

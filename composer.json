@@ -3,7 +3,7 @@
     "description": "A comprehensive immutable value objects implementation",
     "type": "library",
     "require": {
-        "php": "^8.3",
+        "php": "^8.2",
         "illuminate/collections": "^11.3",
         "ramsey/uuid": "^4.7",
         "illuminate/validation": "^11.3",

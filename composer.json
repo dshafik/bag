@@ -3,25 +3,26 @@
     "description": "A comprehensive immutable value objects implementation",
     "type": "library",
     "require": {
-        "php": "^8.2",
-        "illuminate/collections": "^11.3",
-        "ramsey/uuid": "^4.7",
-        "illuminate/validation": "^11.3",
+        "php": "^8.2|^8.3",
         "brick/money": "^0.8.1",
-        "illuminate/support": "^11.3",
-        "prinsfrank/standards": "^3.8"
+        "illuminate/collections": "^10|^11",
+        "illuminate/database": "^10|^11",
+        "illuminate/support": "^10|^11",
+        "illuminate/validation": "^10|^11",
+        "prinsfrank/standards": "^3.8",
+        "ramsey/uuid": "^4.7"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11",
-        "fakerphp/faker": "^1.23",
-        "symfony/var-dumper": "*",
-        "orchestra/testbench": "^9.0",
-        "ramsey/conventional-commits": "dev-allow-sf-7",
         "captainhook/captainhook-phar": "^5.23",
-        "larastan/larastan": "^2.0",
         "captainhook/hook-installer": "^1.0",
+        "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^2.0",
         "laravel/pint": "^1.15",
-        "roave/security-advisories": "dev-latest"
+        "orchestra/testbench": "^8.0|^9.0",
+        "phpunit/phpunit": "^10.5|^11",
+        "ramsey/conventional-commits": "dev-allow-sf-7",
+        "roave/security-advisories": "dev-latest",
+        "symfony/var-dumper": "*"
     },
     "repositories": [
         {
@@ -38,7 +39,7 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\Unit\\": "tests/Unit",
-            "Tests\\Feature\\": "tests/Featur{{e",
+            "Tests\\Feature\\": "tests/Feature",
             "Tests\\Fixtures\\": "tests/Fixtures"
         }
 

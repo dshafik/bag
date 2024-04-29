@@ -4,7 +4,7 @@ Bag is a library for creating immutable value objects in PHP. It's a great way t
 
 ## Requirements
 
-Bag requires PHP 8.3+, and supports Laravel 11.x.
+Bag requires PHP 8.2+, and supports Laravel 10+.
 
 ## Installation
 

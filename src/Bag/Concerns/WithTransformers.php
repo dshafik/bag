@@ -18,7 +18,7 @@ use TypeError;
 trait WithTransformers
 {
     public const FROM_JSON = 'json';
-    protected const array TYPE_ALIASES = [
+    protected const TYPE_ALIASES = [
         'bool' => 'boolean',
         'boolean' => 'boolean',
         'int' => 'integer',

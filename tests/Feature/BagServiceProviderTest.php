@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use Bag\BagServiceProvider;
+use Illuminate\Http\Request;
 use Orchestra\Testbench\TestCase;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Tests\Fixtures\TestBag;
 
 class BagServiceProviderTest extends TestCase
 {
     public function testItResolvesValueFromRequest()
     {
-        $this->instance('request', $this->createTestRequest(new Request(
+        $this->instance('request', Request::createFromBase(new SymfonyRequest(
             server: ['CONTENT_TYPE' => 'application/json'],
             content: json_encode(
                 [

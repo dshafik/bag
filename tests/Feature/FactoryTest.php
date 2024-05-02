@@ -2,23 +2,40 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
+use Bag\Attributes\Factory as FactoryAttribute;
 use Bag\Collection;
+use Bag\Exceptions\MissingFactoryException;
+use Bag\Factory;
+use Bag\Traits\HasFactory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\BagWithFactory;
 use Tests\Fixtures\BagWithFactoryAndCollection;
+use Tests\Fixtures\BagWithInvalidFactoryAttribute;
+use Tests\Fixtures\BagWithoutFactoryAttribute;
 use Tests\Fixtures\Collections\BagWithFactoryAndCollectionCollection;
 use Tests\Fixtures\Factories\BagWithFactoryFactory;
 
+#[CoversClass(Factory::class)]
+#[CoversClass(HasFactory::class)]
+#[CoversClass(FactoryAttribute::class)]
+#[CoversClass(MissingFactoryException::class)]
 class FactoryTest extends TestCase
 {
     use WithFaker;
 
     public function testItResolvesFactory()
     {
+        $this->assertInstanceOf(BagWithFactoryFactory::class, BagWithFactory::factory());
+    }
+
+    public function testItResolvesFactoryUsingCache()
+    {
+        $this->assertInstanceOf(BagWithFactoryFactory::class, BagWithFactory::factory());
         $this->assertInstanceOf(BagWithFactoryFactory::class, BagWithFactory::factory());
     }
 
@@ -62,7 +79,7 @@ class FactoryTest extends TestCase
             ['name' => $this->faker->name(), 'age' => $this->faker->numberBetween(18, 100)],
         ];
 
-        $bags = BagWithFactory::factory()->count(3)->state(new Sequence(... $data))->make();
+        $bags = BagWithFactory::factory()->count(3)->state(new Sequence(...$data))->make();
 
         $this->assertInstanceOf(Collection::class, $bags);
         $this->assertCount(3, $bags);
@@ -71,6 +88,7 @@ class FactoryTest extends TestCase
             $this->assertSame($data[$index]['age'], $bag->age);
         });
     }
+
     public function testItMakesMultipleWithSequencesAndWrapsAround()
     {
         $data = [
@@ -79,7 +97,7 @@ class FactoryTest extends TestCase
             ['name' => $this->faker->name(), 'age' => $this->faker->numberBetween(18, 100)],
         ];
 
-        $bags = BagWithFactory::factory()->count(6)->state(new Sequence(... $data))->make();
+        $bags = BagWithFactory::factory()->count(6)->state(new Sequence(...$data))->make();
 
         $data = array_merge($data, $data);
 
@@ -101,5 +119,36 @@ class FactoryTest extends TestCase
             $this->assertSame('Davey Shafik', $bag->name);
             $this->assertSame(40, $bag->age);
         });
+    }
+
+    public function testItCreatesUsingSequence()
+    {
+        $data = [
+            ['name' => $this->faker->name(), 'age' => $this->faker->numberBetween(18, 100)],
+            ['name' => $this->faker->name(), 'age' => $this->faker->numberBetween(18, 100)],
+        ];
+
+        $bags = BagWithFactory::factory()->count(3)->sequence(... $data)->make();
+
+        $this->assertInstanceOf(Collection::class, $bags);
+        $this->assertSame($data[0], $bags[0]->toArray());
+        $this->assertSame($data[1], $bags[1]->toArray());
+        $this->assertSame($data[0], $bags[2]->toArray());
+    }
+
+    public function testItErrorsWithoutFactoryAttribute()
+    {
+        $this->expectException(MissingFactoryException::class);
+        $this->expectExceptionMessage('Bag "Tests\Fixtures\BagWithoutFactoryAttribute" missing factory attribute');
+
+        BagWithoutFactoryAttribute::factory();
+    }
+
+    public function testItErrorsWithInvalidFactoryAttribute()
+    {
+        $this->expectException(MissingFactoryException::class);
+        $this->expectExceptionMessage('Factory class "InvalidFactoryClass" for Bag "Tests\Fixtures\BagWithInvalidFactoryAttribute" not found');
+
+        BagWithInvalidFactoryAttribute::factory();
     }
 }

@@ -6,9 +6,9 @@ namespace Tests\Fixtures;
 
 use Bag\Attributes\MapName;
 use Bag\Bag;
-use Bag\Mappers\SnakeCaseMapper;
+use Bag\Mappers\SnakeCase;
 
-#[MapName(input: SnakeCaseMapper::class)]
+#[MapName(input: SnakeCase::class)]
 readonly class MappedInputNameClassBag extends Bag
 {
     public function __construct(

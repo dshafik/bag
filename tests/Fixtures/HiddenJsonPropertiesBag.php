@@ -8,9 +8,9 @@ use Bag\Attributes\Hidden;
 use Bag\Attributes\HiddenFromJson;
 use Bag\Attributes\MapName;
 use Bag\Bag;
-use Bag\Mappers\SnakeCaseMapper;
+use Bag\Mappers\SnakeCase;
 
-#[MapName(output: SnakeCaseMapper::class)]
+#[MapName(output: SnakeCase::class)]
 readonly class HiddenJsonPropertiesBag extends Bag
 {
     public function __construct(

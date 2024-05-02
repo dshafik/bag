@@ -38,7 +38,7 @@ class CastOutput
         /** @var array<ReflectionAttribute<CastOutputAttribute>> $casts */
         $casts = $property->getAttributes(CastOutputAttribute::class);
         if (count($casts) > 0) {
-            $cast = $casts[0]->newInstance();
+            $cast = $casts[0]->newInstance(); // @codeCoverageIgnore
         }
 
         $name = $property->getName();

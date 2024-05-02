@@ -6,14 +6,14 @@ namespace Tests\Fixtures;
 
 use Bag\Bag;
 
-readonly class VariadicBag extends Bag
+readonly class TypedVariadicBag extends Bag
 {
     public array $values;
 
     public function __construct(
         public string $name,
         public int $age,
-        mixed ...$values
+        bool ...$values
     ) {
         $this->values = $values;
     }

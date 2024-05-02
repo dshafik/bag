@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Concerns;
+namespace Tests\Feature\Concerns;
 
+use Bag\Attributes\Transforms;
+use Bag\Concerns\WithTransformers;
 use Illuminate\Database\Eloquent\Model;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\BagWithFactory;
 use Tests\Fixtures\BagWithTransformers;
 use Tests\Fixtures\Models\AlternativeTestModel;
 use Tests\Fixtures\Models\TestModel;
 use TypeError;
 
+#[CoversClass(WithTransformers::class)]
+#[CoversClass(Transforms::class)]
 class WithTransformersTest extends TestCase
 {
     public function testItTransformsFromStdClass(): void

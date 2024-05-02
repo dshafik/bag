@@ -19,11 +19,12 @@ Class-level mapping applies to all properties on the class. This is useful when 
 This is done by applying the mapper attribute to the class:
 
 ```php
+use Bag\Bag;
 use Bag\Attributes\MapName;
 use Bag\Mappers\SnakeCase;
 
 #[MapName(input: SnakeCase::class, output: SnakeCase::class)]
-class MyValue {
+class MyValue extends Bag {
     public function __construct(
         public string $myValue,
         public string $myOtherValue
@@ -76,10 +77,11 @@ The `Alias` mapper allows you to specify a custom alias for a specific property 
 In the following example we alias the input name `uuid` to the property `id`:
 
 ```php
+use Bag\Bag;
 use Bag\Attributes\MapInputName;
 use Bag\Mappers\Alias;
 
-class MyValue {
+class MyValue extends Bag {
     public function __construct(
         #[MapInputName(Alias::class, 'uuid')])]
         public string $id,
@@ -94,11 +96,11 @@ The `Stringable` mapper allows you to chain any of the [fluent string helper met
 The `Stringable` mapper accepts any number of transformations. To pass in arguments to a given transformation, use a colon `:` followed by a comma-separated list of arguments.
 
 ```php
-
+use Bag\Bag;
 use Bag\Mappers\SnakeCase;
 
 #[MapName(input: Stringable::class, inputParams: ['camel', 'kebab'], output: \Bag\Mappers\Stringable::class, outputParams: ['camel', 'kebab'])]
-class MyValue {
+class MyValue extends Bag {
     public function __construct(
         public string $myValue,
         public string $myOtherValue

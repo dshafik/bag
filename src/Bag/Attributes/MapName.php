@@ -14,8 +14,7 @@ class MapName
      * @param  class-string<MapperInterface>|null  $input
      * @param  class-string<MapperInterface>|null  $output
      */
-    public function __construct(public ?string $input = null, public ?string $output = null)
+    public function __construct(public ?string $input = null, public ?string $output = null, public array $inputParams = [], public array $outputParams = [])
     {
-
     }
 }

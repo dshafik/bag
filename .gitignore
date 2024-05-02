@@ -5,3 +5,4 @@ composer.lock
 tests/coverage
 node_modules/
 docs/.vitepress/dist/
+docs/.vitepress/cache/

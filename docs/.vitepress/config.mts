@@ -63,15 +63,17 @@ export default defineConfig({
           { text: 'Casting Values', link: '/casting' },
           { text: 'Mapping', link: '/mapping' },
           { text: 'Variadics', link: '/variadics' },
+          { text: 'Hiding Properties', link: '/hidden' },
           { text: 'Transformers', link: '/transformers' },
           { text: 'Validation', link: '/validation' },
-          { text: 'Testing', link: '/testing' },
+          { text: 'Factories / Testing', link: '/testing' },
         ]
       },
       {
         text: 'Other',
         items: [
           { text: 'Laravel Controller Injection', link: '/laravel-injection' },
+          { text: 'Why Bag?', link: '/why' },
           { text: 'Roadmap', link: '/roadmap' },
         ]
       },

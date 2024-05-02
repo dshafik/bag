@@ -1,0 +1,12 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "src/Bag"
+        ]
+    },
+    "mutators": {
+        "@default": true,
+        "ProtectedVisibility": false
+    }
+}

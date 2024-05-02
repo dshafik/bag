@@ -20,11 +20,11 @@ trait WithValidation
 
     public static function validate(LaravelCollection|array $values): bool
     {
-        $values = $values instanceof LaravelCollection ? $values->toArray() : $values;
+        $values = $values instanceof LaravelCollection ? $values->all() : $values;
 
-        $rules = static::getProperties(new ReflectionClass(static::class))->map(function (Value $property) {
-            return $property->validators;
-        })->flatten()->merge(static::rules());
+        $rules = static::getProperties(new ReflectionClass(static::class))->mapWithKeys(function (Value $property) {
+            return [$property->name => $property->validators->all()];
+        })->mergeRecursive(static::rules())->filter();
 
         if ($rules->isEmpty()) {
             return true;

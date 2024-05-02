@@ -23,10 +23,10 @@ class ValueCollection extends Collection
         return collect([
             'input' => $this->mapWithKeys(function (Value $property) {
                 return [$property->maps->inputName => $property->name];
-            }),
+            })->toBase(),
             'output' => $this->mapWithKeys(function (Value $property) {
                 return [$property->name => $property->maps->outputName];
-            }),
+            })->toBase(),
         ]);
     }
 }

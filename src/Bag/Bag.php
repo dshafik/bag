@@ -43,7 +43,7 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable
 
         $values = self::prepareInputValues(Collection::make($values));
 
-        return new static(...$values->toArray());
+        return new static(...$values->all());
     }
 
     public function with(mixed ...$values): static

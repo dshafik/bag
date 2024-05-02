@@ -22,6 +22,8 @@ class Rule
         }
 
         if (\count($arguments) === 0) {
+            $this->rule = $rule;
+
             return;
         }
 

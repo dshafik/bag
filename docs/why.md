@@ -13,12 +13,11 @@ should feel very familiar to anyone who has used it — _however_, it has severa
 
 ## Common Features
 
-- Value Casting (both in and out, although spatie/laravel-data calls outbound casting Transforming)
-- Mapping (both in and out) at the class and property level
-- Validation (although spatie/laravel-data does not support all Laravel validation options easily)
-- Nested Value Objects
-- Collections of Value Objects[*](#collections) 
-
+- [Value Casting](casting) (both in and out, although spatie/laravel-data calls outbound casting Transforming)
+  - Including nested Bag objects
+- [Name Mapping](mapping) (both in and out) at the class and property level
+- [Validation](validation) (although spatie/laravel-data does not support all Laravel validation options easily)
+- [Collections](collections) of Value Objects[*](#collections) 
 
 ## Immutability
 
@@ -39,8 +38,8 @@ Bag supports the use of [Variadic](variadics) during value object creation.
 
 ## Collections
 
-Bag uses Laravel Collections as the basis for its Collection classes, and supports them wherever Collections are used, however `Bag\Collection` is an immutable-safe variant that we recommend
-using whenever possible. Read more about [Collections](collections). 
+Bag uses Laravel Collections as the basis for its [Collection](collections) classes, and supports them wherever Collections are used, however `Bag\Collection` is an immutable-safe variant that we recommend
+using whenever possible. 
 
 spatie/laravel-data v3 uses a custom `DataCollection` class that is not based on Laravel collections and lacks many Collection features. v4 uses Laravel Collections, although it still 
 has [custom collection classes](https://spatie.be/docs/laravel-data/v4/as-a-data-transfer-object/collections) with varying levels of compatibility with Laravel Collections.

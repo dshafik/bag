@@ -38,9 +38,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\Unit\\": "tests/Unit",
-            "Tests\\Feature\\": "tests/Feature",
-            "Tests\\Fixtures\\": "tests/Fixtures"
+            "Tests\\": "tests"
         }
 
     },

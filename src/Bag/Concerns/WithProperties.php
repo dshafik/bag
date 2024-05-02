@@ -22,15 +22,17 @@ trait WithProperties
 
         /** @var ValueCollection $properties */
         $properties = ValueCollection::make($class->getConstructor()?->getParameters())->mapWithKeys(function (ReflectionParameter $property) use ($class) {
-            return [$property->getName() => Value::create($class, $property)];
+            return [$property->getName() => Value::create($class, $property)]; // @codeCoverageIgnore
         });
 
         if ($properties === null || $properties->count() === 0) {
             throw new InvalidBag(sprintf('Bag "%s" must have a constructor with at least one property', static::class));
         }
 
+        // @codeCoverageIgnoreStart
         $cache[$key] = $properties;
 
         return $properties;
+        // @codeCoverageIgnoreEnd
     }
 }

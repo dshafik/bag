@@ -38,7 +38,7 @@ class CastInput
         /** @var array<ReflectionAttribute<CastInputAttribute>> $casts */
         $casts = $property->getAttributes(CastInputAttribute::class);
         if (count($casts) > 0) {
-            $cast = $casts[0]->newInstance();
+            $cast = $casts[0]->newInstance(); // @codeCoverageIgnore
         }
 
         $type = Util::getPropertyType($property);

@@ -22,7 +22,8 @@
         "phpunit/phpunit": "^10.5|^11",
         "ramsey/conventional-commits": "dev-allow-sf-7",
         "roave/security-advisories": "dev-latest",
-        "symfony/var-dumper": "*"
+        "symfony/var-dumper": "*",
+        "infection/infection": "^0.28.1"
     },
     "repositories": [
         {
@@ -62,7 +63,8 @@
     "config": {
         "allow-plugins": {
             "captainhook/captainhook-phar": true,
-            "captainhook/hook-installer": true
+            "captainhook/hook-installer": true,
+            "infection/extension-installer": true
         }
     }
 }

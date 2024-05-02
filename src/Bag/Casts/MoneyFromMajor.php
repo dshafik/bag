@@ -4,45 +4,13 @@ declare(strict_types=1);
 
 namespace Bag\Casts;
 
-use BackedEnum;
-use Brick\Money\Money;
-use Illuminate\Support\Collection;
-use Override;
-use UnitEnum;
+use Brick\Money\Money as BrickMoney;
+use PrinsFrank\Standards\Currency\CurrencyAlpha3;
 
-class MoneyFromMajor implements CastsPropertySet, CastsPropertyGet
+class MoneyFromMajor extends MoneyFromMinor
 {
-    public function __construct(protected string $currencyProperty = 'currency', protected string $locale = 'en_US')
+    protected function makeMoney(mixed $amount, int|string|CurrencyAlpha3|null $currency): BrickMoney
     {
-    }
-
-    #[Override]
-    public function set(string $propertyType, string $propertyName, Collection $properties): mixed
-    {
-        $amount = $properties->first($propertyName);
-
-        if ($amount instanceof Money) {
-            return $amount;
-        }
-
-        $currency = $properties->get($this->currencyProperty);
-
-        if ($currency instanceof BackedEnum) {
-            $currency = $currency->value;
-        }
-
-        if ($currency instanceof UnitEnum) {
-            $currency = $currency->name;
-        }
-
-        return Money::of($amount, $currency);
-    }
-
-    #[Override]
-    public function get(string $propertyName, Collection $properties): mixed
-    {
-        /** @var Money $money */
-        $money = $properties->get($propertyName);
-        return $money->formatTo($this->locale);
+        return BrickMoney::of($amount, $currency);
     }
 }

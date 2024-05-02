@@ -37,8 +37,12 @@ class DateTime implements CastsPropertyGet, CastsPropertySet
 
         $value = $properties->get($propertyName);
 
-        if ($value instanceof DateTimeInterface) {
+        if ($value instanceof $this->dateTimeClass) {
             return $value;
+        }
+
+        if ($value instanceof DateTimeInterface) {
+            return $this->dateTimeClass::createFromFormat('U.u', $value->format('U.u'));
         }
 
         if ($this->strictMode) {

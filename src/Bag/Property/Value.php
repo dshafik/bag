@@ -46,12 +46,35 @@ class Value
             property: $property,
             type: $type,
             name: $name,
-            required: ! $property->isOptional(),
+            required: self::isRequired($property),
             maps: Map::create(classMap: $map, property: $property),
             inputCast: CastInput::create(property: $property),
             outputCast: CastOutput::create(property: $property),
             validators: ValidatorCollection::create(property: $property),
-            variadic: $property->isVariadic(),
+            variadic: self::isVariadic($property),
         );
+    }
+
+    protected static function isRequired(ReflectionProperty|ReflectionParameter $property)
+    {
+        if ($property instanceof ReflectionParameter) {
+            return !$property->isOptional();
+        }
+
+        /** @var ReflectionProperty $property */
+        if ($property->hasDefaultValue()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected static function isVariadic(ReflectionProperty|ReflectionParameter $property)
+    {
+        if ($property instanceof ReflectionParameter) {
+            return $property->isVariadic();
+        }
+
+        return false;
     }
 }

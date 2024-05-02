@@ -13,19 +13,38 @@ class Collection extends LaravelCollection
     #[Override]
     public function forget($keys)
     {
-        return (clone $this)->forget($keys);
+        return (clone $this)->forgetReal($keys);
+    }
+
+    protected function forgetReal($keys)
+    {
+        foreach ($this->getArrayableItems($keys) as $key) {
+            parent::offsetUnset($key);
+        }
+
+        return $this;
     }
 
     #[Override]
     public function pop($count = 1)
     {
-        return (clone $this)->pop($count);
+        return (clone $this)->popReal($count);
+    }
+
+    protected function popReal($count)
+    {
+        return parent::pop($count);
     }
 
     #[Override]
     public function prepend($value, $key = null)
     {
-        return (clone $this)->prepend($value, $key);
+        return (clone $this)->prependReal($value, $key);
+    }
+
+    protected function prependReal($value, $key)
+    {
+        return parent::prepend($value, $key);
     }
 
     #[Override]
@@ -37,13 +56,25 @@ class Collection extends LaravelCollection
     #[Override]
     public function push(...$values)
     {
-        return (clone $this)->push(...$values);
+        return (clone $this)->pushReal(...$values);
+    }
+
+    protected function pushReal(... $values)
+    {
+        return parent::push(...$values);
     }
 
     #[Override]
     public function put($key, $value)
     {
-        return (clone $this)->put($key, $value);
+        return (clone $this)->putReal($key, $value);
+    }
+
+    protected function putReal($key, $value)
+    {
+        parent::offsetSet($key, $value);
+
+        return $this;
     }
 
     #[Override]

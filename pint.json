@@ -11,6 +11,24 @@
         "blank_line_after_namespace": true,
         "blank_lines_before_namespace": true,
         "ordered_imports": true,
-        "blank_line_between_import_groups": false
+        "blank_line_between_import_groups": false,
+        "no_superfluous_phpdoc_tags": true,
+        "blank_line_before_statement": {
+            "statements": [
+                "break",
+                "continue",
+                "declare",
+                "return",
+                "throw",
+                "try"
+            ]
+        },
+        "single_quote": {
+            "strings_containing_single_quote_chars": true
+        },
+        "array_indentation": true,
+        "array_syntax": {
+            "syntax": "short"
+        }
     }
 }

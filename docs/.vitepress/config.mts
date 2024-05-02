@@ -1,4 +1,5 @@
-import {defineConfig, HeadConfig } from 'vitepress'
+import { defineConfig } from 'vitepress'
+import taskLists from "markdown-it-task-lists";
 
 const BASE_PATH = '/bag/'
 
@@ -60,6 +61,8 @@ export default defineConfig({
         items: [
           { text: 'Collections', link: '/collections' },
           { text: 'Casting Values', link: '/casting' },
+          { text: 'Mapping', link: '/mapping' },
+          { text: 'Variadics', link: '/variadics' },
           { text: 'Transformers', link: '/transformers' },
           { text: 'Validation', link: '/validation' },
           { text: 'Testing', link: '/testing' },
@@ -69,6 +72,7 @@ export default defineConfig({
         text: 'Other',
         items: [
           { text: 'Laravel Controller Injection', link: '/laravel-injection' },
+          { text: 'Roadmap', link: '/roadmap' },
         ]
       },
     ],
@@ -86,6 +90,10 @@ export default defineConfig({
     theme: {
       dark: 'monokai',
       light: 'github-light'
+    },
+
+    config: md => {
+        md.use(taskLists)
     }
   },
 })

@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Bag\Casts;
 
-use Attribute;
 use Bag\Bag;
 use Bag\Exceptions\InvalidCollection;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Collection as LaravelCollection;
 use Override;
 
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
 class CollectionOf implements CastsPropertySet
 {
     /**
@@ -21,13 +19,13 @@ class CollectionOf implements CastsPropertySet
     }
 
     /**
-     * @param  class-string<Collection>  $propertyType
+     * @param  class-string<LaravelCollection>  $propertyType
      */
     #[Override]
-    public function set(string $propertyType, string $propertyName, Collection $properties): mixed
+    public function set(string $propertyType, string $propertyName, LaravelCollection $properties): mixed
     {
-        if ($propertyType !== Collection::class && ! \is_subclass_of($propertyType, Collection::class, true)) {
-            throw new InvalidCollection(sprintf('The property %s->%s must be a subclass of Collection', $propertyType, $propertyName));
+        if ($propertyType !== LaravelCollection::class && ! \is_subclass_of($propertyType, LaravelCollection::class, true)) {
+            throw new InvalidCollection(sprintf('The property "%s" must be a subclass of %s', $propertyName, LaravelCollection::class));
         }
 
         return $propertyType::make($properties->get($propertyName))->map(fn ($item) => $this->valueClassname::from($item));

@@ -53,6 +53,8 @@ trait HasFactory
             throw new MissingFactoryException(sprintf('Factory class "%s" for Bag "%s" not found', $factoryClass, static::class));
         }
 
+        $cache[static::class] = $factoryClass;
+
         return $factoryClass;
     }
 }

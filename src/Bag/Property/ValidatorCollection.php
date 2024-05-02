@@ -12,7 +12,9 @@ class ValidatorCollection extends Collection
 {
     public static function create(\ReflectionParameter|\ReflectionProperty $property): self
     {
-        $validators = $property->getAttributes(Rule::class, ReflectionAttribute::IS_INSTANCEOF);
+        $validators = collect($property->getAttributes(Rule::class, ReflectionAttribute::IS_INSTANCEOF))->map(function (ReflectionAttribute $attribute) {
+            return $attribute->newInstance()->rule;
+        });
 
         return new self($validators);
     }

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Bag\Mappers;
 
-class CamelCaseMapper extends StringableMapper
+class SnakeCase extends Stringable
 {
     public function __construct()
     {
-        $this->stringOperations = ['camel'];
+        parent::__construct('snake');
     }
 }

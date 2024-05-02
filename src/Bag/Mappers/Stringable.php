@@ -6,7 +6,7 @@ namespace Bag\Mappers;
 
 use Illuminate\Support\Str;
 
-class StringableMapper implements MapperInterface
+class Stringable implements MapperInterface
 {
     /**
      * @var string[]

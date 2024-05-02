@@ -36,6 +36,7 @@ trait WithTransformers
             return collect($method->getAttributes(Transforms::class))->map(fn ($attribute) => $attribute->newInstance())->filter(function (Transforms $transformer) use ($from) {
                 $types = $transformer->types->filter(function (string $type) use ($from) {
                     $fromType = gettype($from);
+
                     return match (true) {
                         $type === 'json' && is_string($from) && Str::isJson($from) => true,
                         is_object($from) && $from::class === $type => true,
@@ -44,6 +45,7 @@ trait WithTransformers
                         default => false,
                     };
                 });
+
                 return $types->isNotEmpty();
             })->isNotEmpty();
         });
@@ -51,6 +53,7 @@ trait WithTransformers
         if ($methods->containsOneItem()) {
             /** @var ReflectionMethod $method */
             $method = $methods->first();
+
             return $method->invoke(null, $from);
         }
 
@@ -106,6 +109,7 @@ trait WithTransformers
             if ($key === false) {
                 return [$type => $transformerMethod['method']];
             }
+
             return [$key => $transformerMethod['method']];
         })->sortKeys()->first();
     }

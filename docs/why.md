@@ -28,7 +28,7 @@ spatie/laravel-data does not support immutable value objects, and as of PHP 8.3,
 
 ## Factory Support
 
-Bag [factories](factories) support many of the rich features and simple UX as Laravel Model Factories with the exception of not having a `create()` method (as value objects do not feature persistence). 
+Bag [factories](testing) support many of the rich features and simple UX as Laravel Model Factories with the exception of not having a `create()` method (as value objects do not feature persistence). 
 This includes support for [factory states](https://laravel.com/docs/11.x/eloquent-factories#factory-states) and [sequences](https://laravel.com/docs/11.x/eloquent-factories#sequences).
 
 spatie/laravel-data v3 does not support factories, while v4 has [rudimentary support](https://spatie.be/docs/laravel-data/v4/as-a-data-transfer-object/factories).

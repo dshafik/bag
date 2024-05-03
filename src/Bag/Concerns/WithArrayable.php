@@ -15,7 +15,7 @@ trait WithArrayable
     {
         $properties = $this->get();
 
-        return self::prepareOutputValues($properties->except($this->getHidden()))->toArray();
+        return $this->wrapValues(self::prepareOutputValues($properties->except($this->getHidden())))->toArray();
     }
 
     abstract public function get(?string $key = null): mixed;
@@ -23,4 +23,6 @@ trait WithArrayable
     abstract protected static function prepareOutputValues(Collection $values): Collection;
 
     abstract protected function getHidden(): LaravelCollection;
+
+    abstract protected function wrapValues(LaravelCollection $values): LaravelCollection;
 }

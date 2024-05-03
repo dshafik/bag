@@ -16,6 +16,7 @@ use Bag\Concerns\WithProperties;
 use Bag\Concerns\WithTransformers;
 use Bag\Concerns\WithValidation;
 use Bag\Concerns\WithVariadics;
+use Bag\Concerns\WithWrapping;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
@@ -33,6 +34,7 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable, Castable
     use WithOutput;
     use WithProperties;
     use WithTransformers;
+    use WithWrapping;
     use WithValidation;
     use WithVariadics;
 

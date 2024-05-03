@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Bag;
 
+use Bag\Concerns\WithWrapping;
 use Bag\Exceptions\ImmutableCollectionException;
 use Illuminate\Support\Collection as LaravelCollection;
 use Override;
 
 class Collection extends LaravelCollection
 {
+    use WithWrapping;
+
     #[Override]
     public function forget($keys)
     {
@@ -116,5 +119,15 @@ class Collection extends LaravelCollection
     public function __set($name, $value): void
     {
         throw new ImmutableCollectionException('Property writes not allowed on ' . static::class);
+    }
+
+    public function toArray()
+    {
+        return $this->wrapValues($this->toBase())->toBase()->toArray();
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->wrapValues($this->toBase())->toBase()->jsonSerialize();
     }
 }

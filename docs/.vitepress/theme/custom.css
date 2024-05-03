@@ -2,6 +2,7 @@
     --vp-font-family-base: "Source Sans 3", sans-serif;
     --vp-font-family-mono: "Source Code Pro", monospace;
     --vp-nav-logo-height: 64px;
+    --vp-code-line-highlight-color: var(--vp-badge-tip-bg);
 }
 
 header .title span {

@@ -12,7 +12,7 @@ use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use stdClass;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
-use Tests\Fixtures\TestBag;
+use Tests\Fixtures\Values\TestBag;
 
 #[CoversClass(CollectionOf::class)]
 class CollectionOfTest extends TestCase

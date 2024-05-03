@@ -9,10 +9,10 @@ use Bag\Concerns\WithTransformers;
 use Illuminate\Database\Eloquent\Model;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\BagWithFactory;
-use Tests\Fixtures\BagWithTransformers;
 use Tests\Fixtures\Models\AlternativeTestModel;
 use Tests\Fixtures\Models\TestModel;
+use Tests\Fixtures\Values\BagWithFactory;
+use Tests\Fixtures\Values\BagWithTransformers;
 use TypeError;
 
 #[CoversClass(WithTransformers::class)]
@@ -114,7 +114,7 @@ class WithTransformersTest extends TestCase
     public function testItErrorsWithInvalidType(): void
     {
         $this->expectException(TypeError::class);
-        $this->expectExceptionMessage('Tests\Fixtures\BagWithTransformers::from(): Argument #1 ($values): must be of type ArrayAccess|Traversable|Collection|LaravelCollection|Arrayable|array, double given');
+        $this->expectExceptionMessage('Tests\Fixtures\Values\BagWithTransformers::from(): Argument #1 ($values): must be of type ArrayAccess|Traversable|Collection|LaravelCollection|Arrayable|array, double given');
 
         BagWithTransformers::from(1.0);
     }

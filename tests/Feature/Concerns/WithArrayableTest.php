@@ -7,7 +7,7 @@ namespace Tests\Feature\Concerns;
 use Bag\Concerns\WithArrayable;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\TestBag;
+use Tests\Fixtures\Values\TestBag;
 
 #[CoversClass(WithArrayable::class)]
 class WithArrayableTest extends TestCase

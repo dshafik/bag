@@ -8,7 +8,7 @@ use Bag\Attributes\HiddenFromJson;
 use Bag\Concerns\WithJson;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\HiddenJsonPropertiesBag;
+use Tests\Fixtures\Values\HiddenJsonPropertiesBag;
 
 #[CoversClass(WithJson::class)]
 #[CoversClass(HiddenFromJson::class)]

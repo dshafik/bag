@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Tests\Fixtures\TestBag;
+use Tests\Fixtures\Values\TestBag;
 
 #[CoversClass(BagServiceProvider::class)]
 class BagServiceProviderTest extends TestCase

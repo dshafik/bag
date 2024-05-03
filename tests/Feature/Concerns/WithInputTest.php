@@ -11,9 +11,9 @@ use Bag\Exceptions\AdditionalPropertiesException;
 use Bag\Exceptions\MissingPropertiesException;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\MappedInputNameClassBag;
-use Tests\Fixtures\MappedNameClassBag;
-use Tests\Fixtures\TestBag;
+use Tests\Fixtures\Values\MappedInputNameClassBag;
+use Tests\Fixtures\Values\MappedNameClassBag;
+use Tests\Fixtures\Values\TestBag;
 
 #[CoversClass(WithInput::class)]
 #[CoversClass(WithOutput::class)]

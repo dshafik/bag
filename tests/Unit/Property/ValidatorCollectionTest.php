@@ -8,7 +8,7 @@ use Bag\Property\ValidatorCollection;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use ReflectionClass;
-use Tests\Fixtures\ValidateUsingAttributesBag;
+use Tests\Fixtures\Values\ValidateUsingAttributesBag;
 
 #[CoversClass(ValidatorCollection::class)]
 class ValidatorCollectionTest extends TestCase

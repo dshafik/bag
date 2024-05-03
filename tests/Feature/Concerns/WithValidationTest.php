@@ -8,10 +8,10 @@ use Bag\Concerns\WithValidation;
 use Illuminate\Validation\ValidationException;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\ValidateMappedNameClassBag;
-use Tests\Fixtures\ValidateUsingAttributesAndRulesMethodBag;
-use Tests\Fixtures\ValidateUsingAttributesBag;
-use Tests\Fixtures\ValidateUsingRulesMethodBag;
+use Tests\Fixtures\Values\ValidateMappedNameClassBag;
+use Tests\Fixtures\Values\ValidateUsingAttributesAndRulesMethodBag;
+use Tests\Fixtures\Values\ValidateUsingAttributesBag;
+use Tests\Fixtures\Values\ValidateUsingRulesMethodBag;
 
 #[CoversClass(WithValidation::class)]
 class WithValidationTest extends TestCase

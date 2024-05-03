@@ -16,7 +16,7 @@ use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Enums\TestBackedEnum;
 use Tests\Fixtures\Enums\TestUnitEnum;
-use Tests\Fixtures\TestBag;
+use Tests\Fixtures\Values\TestBag;
 
 #[CoversClass(MagicCast::class)]
 class MagicCastTest extends TestCase

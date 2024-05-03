@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Fixtures;
+namespace Tests\Fixtures\Values;
 
 use Bag\Attributes\Validation\Max;
 use Bag\Attributes\Validation\Required;

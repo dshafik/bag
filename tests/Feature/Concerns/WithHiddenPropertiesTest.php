@@ -8,7 +8,7 @@ use Bag\Attributes\Hidden;
 use Bag\Concerns\WithHiddenProperties;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\HiddenPropertiesBag;
+use Tests\Fixtures\Values\HiddenPropertiesBag;
 
 #[CoversClass(WithHiddenProperties::class)]
 #[CoversClass(Hidden::class)]

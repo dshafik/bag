@@ -9,8 +9,8 @@ use Bag\Concerns\WithCollections;
 use Illuminate\Foundation\Testing\WithFaker;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\BagWithCollection;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
+use Tests\Fixtures\Values\BagWithCollection;
 
 #[CoversClass(WithCollections::class)]
 #[CoversClass(Collection::class)]

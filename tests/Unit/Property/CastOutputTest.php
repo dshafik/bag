@@ -11,7 +11,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use ReflectionClass;
-use Tests\Fixtures\CastsDateBag;
+use Tests\Fixtures\Values\CastsDateBag;
 use Tests\TestCase;
 
 #[CoversClass(CastOutput::class)]

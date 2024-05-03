@@ -2,18 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests\Fixtures;
+namespace Tests\Fixtures\Values;
 
-use Bag\Attributes\Collection;
 use Bag\Attributes\Factory;
 use Bag\Bag;
 use Bag\Traits\HasFactory;
-use Tests\Fixtures\Collections\BagWithFactoryAndCollectionCollection;
 use Tests\Fixtures\Factories\BagWithFactoryFactory;
 
 #[Factory(BagWithFactoryFactory::class)]
-#[Collection(BagWithFactoryAndCollectionCollection::class)]
-readonly class BagWithFactoryAndCollection extends Bag
+readonly class BagWithFactory extends Bag
 {
     use HasFactory;
 

@@ -10,9 +10,9 @@ use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use ReflectionClass;
 use ReflectionParameter;
-use Tests\Fixtures\BagWithTransformers;
-use Tests\Fixtures\MappedNameClassBag;
-use Tests\Fixtures\TestBag;
+use Tests\Fixtures\Values\BagWithTransformers;
+use Tests\Fixtures\Values\MappedNameClassBag;
+use Tests\Fixtures\Values\TestBag;
 
 #[CoversClass(ValueCollection::class)]
 class ValueCollectionTest extends TestCase

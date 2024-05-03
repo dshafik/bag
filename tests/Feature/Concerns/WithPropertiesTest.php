@@ -7,9 +7,9 @@ namespace Tests\Feature\Concerns;
 use Bag\Concerns\WithProperties;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\NoConstructorBag;
-use Tests\Fixtures\NoPropertiesBag;
-use Tests\Fixtures\TestBag;
+use Tests\Fixtures\Values\NoConstructorBag;
+use Tests\Fixtures\Values\NoPropertiesBag;
+use Tests\Fixtures\Values\TestBag;
 
 #[CoversClass(WithProperties::class)]
 class WithPropertiesTest extends TestCase
@@ -17,7 +17,7 @@ class WithPropertiesTest extends TestCase
     public function testItRequiresAConstructor()
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Bag "Tests\Fixtures\NoConstructorBag" must have a constructor with at least one property');
+        $this->expectExceptionMessage('Bag "Tests\Fixtures\Values\NoConstructorBag" must have a constructor with at least one property');
 
         NoConstructorBag::from(['foo' => 'bar']);
     }
@@ -25,7 +25,7 @@ class WithPropertiesTest extends TestCase
     public function testItRequiresBagProperties()
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Bag "Tests\Fixtures\NoPropertiesBag" must have a constructor with at least one property');
+        $this->expectExceptionMessage('Bag "Tests\Fixtures\Values\NoPropertiesBag" must have a constructor with at least one property');
 
         NoPropertiesBag::from(['foo' => 'bar']);
     }

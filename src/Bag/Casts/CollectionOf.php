@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bag\Casts;
 
 use Bag\Bag;
+use Bag\Exceptions\BagNotFoundException;
 use Bag\Exceptions\InvalidCollection;
 use Illuminate\Support\Collection as LaravelCollection;
 use Override;
@@ -16,6 +17,9 @@ class CollectionOf implements CastsPropertySet
      */
     public function __construct(public string $valueClassname)
     {
+        if (!\class_exists($this->valueClassname)) {
+            throw new BagNotFoundException($this->valueClassname);
+        }
     }
 
     /**

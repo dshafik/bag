@@ -66,6 +66,7 @@ export default defineConfig({
           { text: 'Hiding Properties', link: '/hidden' },
           { text: 'Transformers', link: '/transformers' },
           { text: 'Validation', link: '/validation' },
+          { text: 'Wrapping', link: '/wrapping' },
           { text: 'Factories / Testing', link: '/testing' },
         ]
       },

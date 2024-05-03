@@ -26,7 +26,7 @@ trait WithJson
     {
         $properties = $this->get();
 
-        return self::prepareOutputValues($properties->except($this->getHidden()->merge($this->getHiddenFromJson())))->toArray();
+        return $this->wrapJsonValues(self::prepareOutputValues($properties->except($this->getHidden()->merge($this->getHiddenFromJson()))))->toArray();
     }
 
     protected function getHiddenFromJson(): LaravelCollection
@@ -51,4 +51,7 @@ trait WithJson
     abstract protected static function prepareOutputValues(Collection $values): Collection;
 
     abstract protected function getHidden(): LaravelCollection;
+
+    abstract protected function wrapValues(LaravelCollection $values): LaravelCollection
+    ;
 }

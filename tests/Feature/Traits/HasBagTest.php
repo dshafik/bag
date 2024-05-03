@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Traits;
+namespace Tests\Feature\Traits;
 
 use Bag\Attributes\Bag;
 use Bag\Exceptions\BagAttributeNotFoundException;

@@ -12,15 +12,15 @@ use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\WithFaker;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\BagWithCollection;
-use Tests\Fixtures\CastInputOutputBag;
-use Tests\Fixtures\CastsDateBag;
-use Tests\Fixtures\CastsDateInputBag;
-use Tests\Fixtures\CastsDateOutputBag;
-use Tests\Fixtures\CastVariadicCollectionBag;
-use Tests\Fixtures\CastVariadicDatetimeBag;
-use Tests\Fixtures\TypedVariadicBag;
-use Tests\Fixtures\VariadicBag;
+use Tests\Fixtures\Values\BagWithCollection;
+use Tests\Fixtures\Values\CastInputOutputBag;
+use Tests\Fixtures\Values\CastsDateBag;
+use Tests\Fixtures\Values\CastsDateInputBag;
+use Tests\Fixtures\Values\CastsDateOutputBag;
+use Tests\Fixtures\Values\CastVariadicCollectionBag;
+use Tests\Fixtures\Values\CastVariadicDatetimeBag;
+use Tests\Fixtures\Values\TypedVariadicBag;
+use Tests\Fixtures\Values\VariadicBag;
 
 #[CoversClass(WithCasts::class)]
 #[CoversClass(Cast::class)]

@@ -7,8 +7,8 @@ namespace Tests\Feature\Casts;
 use Bag\Casts\CollectionOf;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\BagWithLaravelCollectionOf;
-use Tests\Fixtures\TestBag;
+use Tests\Fixtures\Values\BagWithLaravelCollectionOf;
+use Tests\Fixtures\Values\TestBag;
 
 #[CoversClass(CollectionOf::class)]
 class CollectionOfTest extends TestCase

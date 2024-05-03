@@ -8,7 +8,7 @@ use Bag\Attributes\MapName;
 use Bag\Concerns\WithOutput;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\MappedOutputNameClassBag;
+use Tests\Fixtures\Values\MappedOutputNameClassBag;
 
 #[CoversClass(WithOutput::class)]
 #[CoversClass(MapName::class)]

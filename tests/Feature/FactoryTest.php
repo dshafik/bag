@@ -13,12 +13,12 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\BagWithFactory;
-use Tests\Fixtures\BagWithFactoryAndCollection;
-use Tests\Fixtures\BagWithInvalidFactoryAttribute;
-use Tests\Fixtures\BagWithoutFactoryAttribute;
 use Tests\Fixtures\Collections\BagWithFactoryAndCollectionCollection;
 use Tests\Fixtures\Factories\BagWithFactoryFactory;
+use Tests\Fixtures\Values\BagWithFactory;
+use Tests\Fixtures\Values\BagWithFactoryAndCollection;
+use Tests\Fixtures\Values\BagWithInvalidFactoryAttribute;
+use Tests\Fixtures\Values\BagWithoutFactoryAttribute;
 
 #[CoversClass(Factory::class)]
 #[CoversClass(HasFactory::class)]
@@ -139,7 +139,7 @@ class FactoryTest extends TestCase
     public function testItErrorsWithoutFactoryAttribute()
     {
         $this->expectException(MissingFactoryException::class);
-        $this->expectExceptionMessage('Bag "Tests\Fixtures\BagWithoutFactoryAttribute" missing factory attribute');
+        $this->expectExceptionMessage('Bag "Tests\Fixtures\Values\BagWithoutFactoryAttribute" missing factory attribute');
 
         BagWithoutFactoryAttribute::factory();
     }
@@ -147,7 +147,7 @@ class FactoryTest extends TestCase
     public function testItErrorsWithInvalidFactoryAttribute()
     {
         $this->expectException(MissingFactoryException::class);
-        $this->expectExceptionMessage('Factory class "InvalidFactoryClass" for Bag "Tests\Fixtures\BagWithInvalidFactoryAttribute" not found');
+        $this->expectExceptionMessage('Factory class "InvalidFactoryClass" for Bag "Tests\Fixtures\Values\BagWithInvalidFactoryAttribute" not found');
 
         BagWithInvalidFactoryAttribute::factory();
     }

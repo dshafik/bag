@@ -8,8 +8,8 @@ use Bag\Attributes\MapName;
 use Bag\Property\Map;
 use PHPUnit\Framework\Attributes\CoversClass;
 use ReflectionClass;
-use Tests\Fixtures\MappedNameClassBag;
-use Tests\Fixtures\MappedPropertyBag;
+use Tests\Fixtures\Values\MappedNameClassBag;
+use Tests\Fixtures\Values\MappedPropertyBag;
 use Tests\TestCase;
 
 #[CoversClass(Map::class)]

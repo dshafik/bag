@@ -7,8 +7,8 @@ namespace Tests\Feature\Concerns;
 use Bag\Concerns\WithVariadics;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Fixtures\TypedVariadicBag;
-use Tests\Fixtures\VariadicBag;
+use Tests\Fixtures\Values\TypedVariadicBag;
+use Tests\Fixtures\Values\VariadicBag;
 
 #[CoversClass(WithVariadics::class)]
 class WithVariadicsTest extends TestCase

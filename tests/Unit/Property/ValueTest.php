@@ -14,7 +14,7 @@ use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionProperty;
-use Tests\Fixtures\ValidateMappedNameClassBag;
+use Tests\Fixtures\Values\ValidateMappedNameClassBag;
 
 #[CoversClass(Value::class)]
 class ValueTest extends TestCase

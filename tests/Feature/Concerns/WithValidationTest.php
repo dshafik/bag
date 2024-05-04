@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Concerns;
 
+use Bag\Cache;
 use Bag\Concerns\WithValidation;
+use Bag\Exceptions\ComputedPropertyUninitializedException;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Validation\ValidationException;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Tests\Fixtures\Values\ComputedPropertyBag;
+use Tests\Fixtures\Values\ComputedPropertyMissingBag;
 use Tests\Fixtures\Values\ValidateMappedNameClassBag;
 use Tests\Fixtures\Values\ValidateUsingAttributesAndRulesMethodBag;
 use Tests\Fixtures\Values\ValidateUsingAttributesBag;
@@ -66,5 +72,31 @@ class WithValidationTest extends TestCase
     public function testItValidatesMappedNames()
     {
         $this->assertTrue(ValidateMappedNameClassBag::validate(collect(['nameGoesHere' => 'Davey Shafik', 'ageGoesHere' => 40])));
+    }
+
+    public function testItErrorsWithoutInitializedComputedProperty()
+    {
+        $this->expectException(ComputedPropertyUninitializedException::class);
+        $this->expectExceptionMessage('Property Tests\Fixtures\Values\ComputedPropertyMissingBag->dob must be computed');
+
+        ComputedPropertyMissingBag::from(['name' => 'Davey Shafik', 'age' => 40]);
+    }
+
+    public function testItValidatesComputedProperties()
+    {
+        Carbon::setTestNow(new CarbonImmutable('2024-05-04 14:43:23'));
+
+        $bag = ComputedPropertyBag::from(['name' => 'Davey Shafik', 'age' => 40]);
+        $this->assertSame('1984-05-04', $bag->dob->format('Y-m-d'));
+    }
+
+    public function testItUsesCacheForComputedProperties()
+    {
+        Cache::fake()->shouldReceive('store')->atLeast()->twice()->passthru();
+
+        Carbon::setTestNow(new CarbonImmutable('2024-05-04 14:43:23'));
+
+        ComputedPropertyBag::from(['name' => 'Davey Shafik', 'age' => 40]);
+        ComputedPropertyBag::from(['name' => 'Davey Shafik', 'age' => 40]);
     }
 }

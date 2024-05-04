@@ -13,12 +13,12 @@ trait WithArrayable
     #[Override]
     public function toArray(): array
     {
-        $properties = $this->getBag();
+        $properties = $this->get();
 
         return self::prepareOutputValues($properties->except($this->getHidden()))->toArray();
     }
 
-    abstract protected function getBag(): Collection;
+    abstract public function get(?string $key = null): mixed;
 
     abstract protected static function prepareOutputValues(Collection $values): Collection;
 

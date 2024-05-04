@@ -6,32 +6,31 @@ namespace Bag\Concerns;
 
 use Bag\Attributes\Wrap;
 use Bag\Attributes\WrapJson;
-use Bag\Cache;
+use Bag\Reflection;
 use Illuminate\Support\Collection as LaravelCollection;
-use ReflectionClass;
 
 trait WithWrapping
 {
     protected function wrapValues(LaravelCollection $values): LaravelCollection
     {
-        $wrapAttributes = Cache::remember('wrapValues', $this, fn () => (new ReflectionClass($this))->getAttributes(Wrap::class));
-        if (count($wrapAttributes) === 0) {
+        $wrapAttribute = Reflection::getAttribute(Reflection::getClass($this), Wrap::class);
+        if ($wrapAttribute === null) {
             return $values;
         }
 
-        return ($values::class)::make([$wrapAttributes[0]->newInstance()->wrapKey => $values]);
+        return ($values::class)::make([Reflection::getAttributeInstance($wrapAttribute)->wrapKey => $values]);
     }
 
     protected function wrapJsonValues(LaravelCollection $values): LaravelCollection
     {
-        $wrapAttributes = Cache::remember('wrapValuesJson', $this, fn () => (new ReflectionClass($this))->getAttributes(WrapJson::class));
-        if (count($wrapAttributes) === 0) {
-            $wrapAttributes = Cache::remember('wrapValues', $this, fn () => (new ReflectionClass($this))->getAttributes(Wrap::class));
-            if (count($wrapAttributes) === 0) {
+        $wrapAttribute = Reflection::getAttribute(Reflection::getClass($this), WrapJson::class);
+        if ($wrapAttribute === null) {
+            $wrapAttribute = Reflection::getAttribute(Reflection::getClass($this), Wrap::class);
+            if ($wrapAttribute === null) {
                 return $values;
             }
         }
 
-        return ($values::class)::make([$wrapAttributes[0]->newInstance()->wrapKey => $values]);
+        return ($values::class)::make([Reflection::getAttributeInstance($wrapAttribute)->wrapKey => $values]);
     }
 }

@@ -6,6 +6,7 @@ namespace Bag\Property;
 
 use Bag\Attributes\MapName;
 use Bag\Mappers\MapperInterface;
+use Bag\Reflection;
 use ReflectionAttribute;
 
 class Map
@@ -20,13 +21,12 @@ class Map
 
         $aliases = ['input' => $name, 'output' => $name];
 
-        $map = $classMap;
-
-        /** @var array<ReflectionAttribute<MapName>> $maps */
-        $maps = $property->getAttributes(name: MapName::class, flags: ReflectionAttribute::IS_INSTANCEOF);
-        if (count($maps) > 0) {
-            $map = $maps[0]->newInstance();
-        }
+        /** @var MapName $map */
+        $map = Reflection::getAttributeInstance(
+            $property,
+            MapName::class,
+            ReflectionAttribute::IS_INSTANCEOF
+        ) ?? $classMap;
 
         if ($map !== null && $map->input !== null) {
             $aliases['input'] = self::mapName(mapper: $map->input, params: $map->inputParams, name: $name);

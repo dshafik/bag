@@ -7,9 +7,9 @@ namespace Bag\Property;
 use Bag\Attributes\Cast;
 use Bag\Attributes\CastOutput as CastOutputAttribute;
 use Bag\Casts\CastsPropertyGet;
+use Bag\Reflection;
 use Bag\Util;
 use Illuminate\Support\Collection;
-use ReflectionAttribute;
 
 class CastOutput
 {
@@ -24,21 +24,19 @@ class CastOutput
     {
         $cast = null;
 
-        /** @var array<ReflectionAttribute<Cast>> $casts */
-        $casts = $property->getAttributes(Cast::class);
-        if (count($casts) > 0) {
-            $caster = $casts[0]->newInstance();
-            $args = $casts[0]->getArguments();
+        $castAttribute = Reflection::getAttribute($property, Cast::class);
+        if ($castAttribute !== null) {
+            $cast = Reflection::getAttributeInstance($castAttribute);
+            $args = Reflection::getAttributeArguments($castAttribute);
             $casterClass = $args[\array_key_first($args)];
-            if (\is_a($casterClass, CastsPropertyGet::class, true)) {
-                $cast = $caster;
+            if (!\is_a($casterClass, CastsPropertyGet::class, true)) {
+                $cast = null;
             }
         }
 
-        /** @var array<ReflectionAttribute<CastOutputAttribute>> $casts */
-        $casts = $property->getAttributes(CastOutputAttribute::class);
-        if (count($casts) > 0) {
-            $cast = $casts[0]->newInstance(); // @codeCoverageIgnore
+        $castAttribute = Reflection::getAttribute($property, CastOutputAttribute::class);
+        if ($castAttribute !== null) {
+            $cast = Reflection::getAttributeInstance($castAttribute); // @codeCoverageIgnore
         }
 
         $name = $property->getName();

@@ -10,6 +10,7 @@ use Bag\Cache;
 use Bag\Exceptions\ComputedPropertyUninitializedException;
 use Bag\Property\Value;
 use Bag\Property\ValueCollection;
+use Bag\Reflection;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection as LaravelCollection;
 use Illuminate\Translation\FileLoader;
@@ -30,7 +31,7 @@ trait WithValidation
     {
         $values = $values instanceof LaravelCollection ? $values->all() : $values;
 
-        $rules = static::getProperties(new ReflectionClass(static::class))->mapWithKeys(function (Value $property) {
+        $rules = static::getProperties(Reflection::getClass(static::class))->mapWithKeys(function (Value $property) {
             return [$property->name => $property->validators->all()];
         })->mergeRecursive(static::rules())->filter();
 
@@ -71,10 +72,8 @@ trait WithValidation
     protected static function computed(Bag $bag): void
     {
         $computedProperties = Cache::remember(__METHOD__, $bag::class, function () use ($bag) {
-            return collect((new ReflectionClass($bag))->getProperties())->filter(function (ReflectionProperty $property) {
-                $computedAttributes = $property->getAttributes(Computed::class);
-
-                return count($computedAttributes) > 0;
+            return collect(Reflection::getProperties($bag))->filter(function (ReflectionProperty $property) {
+                return Reflection::getAttribute($property, Computed::class) !== null;
             });
         });
 

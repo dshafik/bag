@@ -7,11 +7,11 @@ namespace Bag\Concerns;
 use ArrayAccess;
 use Bag\Attributes\Transforms;
 use Bag\Collection;
+use Bag\Reflection;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection as LaravelCollection;
 use Illuminate\Support\Str;
 use ReflectionAttribute;
-use ReflectionClass;
 use ReflectionMethod;
 use TypeError;
 
@@ -32,8 +32,8 @@ trait WithTransformers
 
     protected static function transform(mixed $from): ArrayAccess|iterable|Collection|LaravelCollection|Arrayable
     {
-        $methods = collect((new ReflectionClass(static::class))->getMethods(ReflectionMethod::IS_STATIC))->filter(function (ReflectionMethod $method) use ($from) {
-            return collect($method->getAttributes(Transforms::class))->map(fn ($attribute) => $attribute->newInstance())->filter(function (Transforms $transformer) use ($from) {
+        $methods = collect(Reflection::getClass(static::class)->getMethods(ReflectionMethod::IS_STATIC))->filter(function (ReflectionMethod $method) use ($from) {
+            return collect(Reflection::getAttributes($method, Transforms::class))->map(fn ($attribute) => Reflection::getAttributeInstance($attribute))->filter(function (Transforms $transformer) use ($from) {
                 $types = $transformer->types->filter(function (string $type) use ($from) {
                     $fromType = gettype($from);
 
@@ -75,8 +75,8 @@ trait WithTransformers
         /** @var Collection<string, array{transformer: Transforms, method: ReflectionMethod}> $transformers */
         $transformers = collect();
         $methods->each(function (ReflectionMethod $method) use (&$transformers) {
-            collect($method->getAttributes(Transforms::class))->each(function (ReflectionAttribute $attribute) use (&$transformers, $method) {
-                $transformer = $attribute->newInstance();
+            collect(Reflection::getAttributes($method, Transforms::class))->each(function (ReflectionAttribute $attribute) use (&$transformers, $method) {
+                $transformer = Reflection::getAttributeInstance($attribute);
                 $transformer->types->each(function (string $type) use (&$transformers, $transformer, $method) {
                     $transformers[$type] = ['transformer' => $transformer, 'method' => $method];
                 });

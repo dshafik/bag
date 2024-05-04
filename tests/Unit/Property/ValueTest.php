@@ -8,13 +8,13 @@ use Bag\Property\CastInput;
 use Bag\Property\CastOutput;
 use Bag\Property\ValidatorCollection;
 use Bag\Property\Value;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionProperty;
 use Tests\Fixtures\Values\ValidateMappedNameClassBag;
+use Tests\TestCase;
 
 #[CoversClass(Value::class)]
 class ValueTest extends TestCase

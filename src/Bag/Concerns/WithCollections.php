@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bag\Concerns;
 
 use Bag\Attributes;
+use Bag\Cache;
 use Bag\Collection;
 use ReflectionClass;
 
@@ -16,19 +17,17 @@ trait WithCollections
      */
     public static function collect(iterable $values = []): Collection
     {
-        static $cache = [];
+        $collection = Cache::remember(__METHOD__, static::class, function (): string {
+            $collection = Collection::class;
 
-        if (isset($cache[static::class])) {
-            return $cache[static::class]::make($values)->map(fn ($value): static => static::from($value));
-        }
+            $collectionAttributes = (new ReflectionClass(static::class))->getAttributes(Attributes\Collection::class);
+            if (count($collectionAttributes) > 0) {
+                $collection = $collectionAttributes[0]->newInstance()->collectionClass;
+            }
 
-        $cache[static::class] = Collection::class;
+            return $collection;
+        });
 
-        $collectionAttributes = (new ReflectionClass(static::class))->getAttributes(Attributes\Collection::class);
-        if (count($collectionAttributes) > 0) {
-            $cache[static::class] = $collectionAttributes[0]->newInstance()->collectionClass;
-        }
-
-        return $cache[static::class]::make($values)->map(fn ($value): static => static::from($value));
+        return ($collection)::make($values)->map(fn ($value): static => static::from($value));
     }
 }

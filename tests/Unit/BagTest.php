@@ -6,9 +6,9 @@ namespace Tests\Unit;
 
 use Bag\Bag;
 use Illuminate\Foundation\Testing\WithFaker;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Values\TestBag;
+use Tests\TestCase;
 
 #[CoversClass(Bag::class)]
 class BagTest extends TestCase

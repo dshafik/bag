@@ -8,7 +8,6 @@ use Bag\Attributes\Bag;
 use Bag\Exceptions\BagAttributeNotFoundException;
 use Bag\Exceptions\BagNotFoundException;
 use Bag\Traits\HasBag;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\ObjectToBagInvalidBag;
 use Tests\Fixtures\ObjectToBagNoAttribute;
@@ -16,6 +15,7 @@ use Tests\Fixtures\ObjectToBagPrivate;
 use Tests\Fixtures\ObjectToBagProtected;
 use Tests\Fixtures\ObjectToBagPublic;
 use Tests\Fixtures\Values\OptionalPropertiesBag;
+use Tests\TestCase;
 
 #[CoversClass(HasBag::class)]
 #[CoversClass(BagNotFoundException::class)]

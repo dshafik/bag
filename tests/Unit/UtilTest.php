@@ -8,8 +8,8 @@ use Bag\Exceptions\InvalidPropertyType;
 use Bag\Mappers\CamelCase;
 use Bag\Mappers\Stringable;
 use Bag\Util;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Tests\TestCase;
 
 #[CoversClass(Util::class)]
 class UtilTest extends TestCase

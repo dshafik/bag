@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Bag\Concerns;
 
 use Bag\Attributes\HiddenFromJson;
+use Bag\Cache;
 use Bag\Collection;
 use Illuminate\Support\Collection as LaravelCollection;
 use Override;
 use ReflectionClass;
 use ReflectionParameter;
 use SensitiveParameter;
-use WeakMap;
 
 trait WithJson
 {
@@ -31,25 +31,19 @@ trait WithJson
 
     protected function getHiddenFromJson(): LaravelCollection
     {
-        static $cache = new WeakMap();
+        return Cache::remember(__METHOD__, $this, function () {
+            $hidden = collect();
 
-        if (isset($cache[$this])) {
-            return $cache[$this];
-        }
+            collect((new ReflectionClass($this))->getConstructor()?->getParameters())->each(function (ReflectionParameter $parameter) use (&$hidden) {
+                $name = $parameter->getName();
+                $isHidden = ($parameter->getAttributes(HiddenFromJson::class)[0] ?? null) !== null || ($parameter->getAttributes(SensitiveParameter::class)[0] ?? null) !== null;
+                if ($isHidden) {
+                    $hidden->push($name);
+                }
+            });
 
-        $hidden = collect();
-
-        collect((new ReflectionClass($this))->getConstructor()?->getParameters())->each(function (ReflectionParameter $parameter) use (&$hidden) {
-            $name = $parameter->getName();
-            $isHidden = ($parameter->getAttributes(HiddenFromJson::class)[0] ?? null) !== null || ($parameter->getAttributes(SensitiveParameter::class)[0] ?? null) !== null;
-            if ($isHidden) {
-                $hidden->push($name);
-            }
+            return $hidden;
         });
-
-        $cache[$this] = $hidden;
-
-        return $hidden;
     }
 
     abstract public function get(?string $key = null): mixed;

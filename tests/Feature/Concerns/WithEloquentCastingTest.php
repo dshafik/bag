@@ -9,7 +9,6 @@ use Bag\Concerns\WithEloquentCasting;
 use Bag\Eloquent\Casts\AsBagCollection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Orchestra\Testbench\Attributes\WithEnv;
-use Orchestra\Testbench\TestCase;
 use function Orchestra\Testbench\workbench_path;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
@@ -17,6 +16,7 @@ use Tests\Fixtures\Models\CastedModel;
 use Tests\Fixtures\Values\BagWithCollection;
 use Tests\Fixtures\Values\HiddenPropertiesBag;
 use Tests\Fixtures\Values\TestBag;
+use Tests\TestCase;
 
 #[WithEnv('DB_CONNECTION', 'testing')]
 #[CoversClass(WithEloquentCasting::class)]

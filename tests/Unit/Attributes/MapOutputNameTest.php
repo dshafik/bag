@@ -6,8 +6,8 @@ namespace Tests\Unit\Attributes;
 
 use Bag\Attributes\MapOutputName;
 use Bag\Mappers\Stringable;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Tests\TestCase;
 
 #[CoversClass(MapOutputName::class)]
 class MapOutputNameTest extends TestCase

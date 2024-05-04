@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\Unit\Mappers;
 
 use Bag\Mappers\CamelCase;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Tests\TestCase;
 
 #[CoversClass(CamelCase::class)]
 class CamelCaseMapperTest extends TestCase

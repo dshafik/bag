@@ -8,9 +8,9 @@ use Bag\Attributes\Cast;
 use Bag\Attributes\CastInput as CastInputAttribute;
 use Bag\Casts\CastsPropertySet;
 use Bag\Casts\MagicCast;
+use Bag\Reflection;
 use Bag\Util;
 use Illuminate\Support\Collection;
-use ReflectionAttribute;
 
 class CastInput
 {
@@ -22,28 +22,26 @@ class CastInput
 
     public static function create(\ReflectionParameter|\ReflectionProperty $property): self
     {
-        $cast = new CastInputAttribute(MagicCast::class);
+        $cast = null;
 
-        /** @var array<ReflectionAttribute<Cast>> $casts */
-        $casts = $property->getAttributes(Cast::class);
-        if (count($casts) > 0) {
-            $caster = $casts[0]->newInstance();
-            $args = $casts[0]->getArguments();
+        $castAttribute = Reflection::getAttribute($property, Cast::class);
+        if ($castAttribute !== null) {
+            $cast = Reflection::getAttributeInstance($castAttribute);
+            $args = Reflection::getAttributeArguments($castAttribute);
             $casterClass = $args[\array_key_first($args)];
-            if (\is_a($casterClass, CastsPropertySet::class, true)) {
-                $cast = $caster;
+            if (!\is_a($casterClass, CastsPropertySet::class, true)) {
+                $cast = null;
             }
         }
 
-        /** @var array<ReflectionAttribute<CastInputAttribute>> $casts */
-        $casts = $property->getAttributes(CastInputAttribute::class);
-        if (count($casts) > 0) {
-            $cast = $casts[0]->newInstance(); // @codeCoverageIgnore
+        $castAttribute = Reflection::getAttribute($property, CastInputAttribute::class);
+        if ($castAttribute !== null) {
+            $cast = Reflection::getAttributeInstance($castAttribute); // @codeCoverageIgnore
         }
 
         $type = Util::getPropertyType($property);
 
-        return new self(propertyType: $type->getName(), caster: $cast);
+        return new self(propertyType: $type->getName(), caster: $cast ?? new CastInputAttribute(MagicCast::class));
     }
 
     public function __invoke(string $propertyName, Collection $properties): mixed

@@ -8,6 +8,7 @@ use Bag\Collection;
 use Bag\Exceptions\AdditionalPropertiesException;
 use Bag\Exceptions\MissingPropertiesException;
 use Bag\Property\ValueCollection;
+use Bag\Reflection;
 use Illuminate\Support\Collection as LaravelCollection;
 use ReflectionClass;
 
@@ -15,8 +16,7 @@ trait WithInput
 {
     protected static function prepareInputValues(Collection $values): Collection
     {
-        $class = new ReflectionClass(static::class);
-        $properties = self::getProperties($class);
+        $properties = self::getProperties(Reflection::getClass(static::class));
 
         $requiredProperties = $properties->required();
         $aliases = $properties->aliases();

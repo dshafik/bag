@@ -9,7 +9,7 @@ use Bag\Cache;
 use Bag\Collection;
 use Bag\Exceptions\MissingFactoryException;
 use Bag\Factory;
-use ReflectionClass;
+use Bag\Reflection;
 
 trait HasFactory
 {
@@ -37,19 +37,16 @@ trait HasFactory
     protected static function getFactoryClass()
     {
         return Cache::remember(__METHOD__, static::class, function () {
-            $factoryAttributes = (new ReflectionClass(static::class))->getAttributes(FactoryAttribute::class);
-            if (count($factoryAttributes) === 0) {
+            $factoryAttribute = Reflection::getAttributeInstance(Reflection::getClass(static::class), FactoryAttribute::class);
+            if ($factoryAttribute === null) {
                 throw new MissingFactoryException(sprintf('Bag "%s" missing factory attribute', static::class));
             }
 
-
-            $factoryClass = $factoryAttributes[0]->newInstance()->factoryClass;
-
-            if (!\class_exists($factoryClass)) {
-                throw new MissingFactoryException(sprintf('Factory class "%s" for Bag "%s" not found', $factoryClass, static::class));
+            if (!\class_exists($factoryAttribute->factoryClass)) {
+                throw new MissingFactoryException(sprintf('Factory class "%s" for Bag "%s" not found', $factoryAttribute->factoryClass, static::class));
             }
 
-            return $factoryClass;
+            return $factoryAttribute->factoryClass;
         });
     }
 }

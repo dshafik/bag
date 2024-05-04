@@ -8,6 +8,7 @@ use Bag\Cache;
 use Bag\Exceptions\InvalidBag;
 use Bag\Property\Value;
 use Bag\Property\ValueCollection;
+use Bag\Reflection;
 use ReflectionClass;
 use ReflectionParameter;
 
@@ -17,7 +18,7 @@ trait WithProperties
     {
         return Cache::remember(__METHOD__, static::class, function () use ($class) {
             /** @var ValueCollection $properties */
-            $properties = ValueCollection::make($class->getConstructor()?->getParameters())->mapWithKeys(function (ReflectionParameter $property) use ($class) {
+            $properties = ValueCollection::make(Reflection::getParameters(Reflection::getConstructor($class)))->mapWithKeys(function (ReflectionParameter $property) use ($class) {
                 return [$property->getName() => Value::create($class, $property)]; // @codeCoverageIgnore
             });
 

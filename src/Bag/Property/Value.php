@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bag\Property;
 
 use Bag\Attributes\MapName;
+use Bag\Reflection;
 use Bag\Util;
 use ReflectionClass;
 use ReflectionNamedType;
@@ -35,11 +36,7 @@ class Value
 
         $type = Util::getPropertyType($property);
 
-        $maps = $bag->getAttributes(name: MapName::class);
-        $map = null;
-        if (count($maps) > 0) {
-            $map = $maps[0]->newInstance();
-        }
+        $map = Reflection::getAttributeInstance($bag, MapName::class);
 
         return new self(
             bag: $bag,

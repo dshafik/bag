@@ -7,6 +7,7 @@ namespace Bag\Concerns;
 use Bag\Collection;
 use Bag\Property\Value;
 use Bag\Property\ValueCollection;
+use Bag\Reflection;
 use Illuminate\Support\Collection as LaravelCollection;
 use ReflectionClass;
 
@@ -14,7 +15,7 @@ trait WithOutput
 {
     protected static function prepareOutputValues(Collection $values): Collection
     {
-        $properties = self::getProperties(new ReflectionClass(static::class));
+        $properties = self::getProperties(Reflection::getClass(static::class));
 
         $aliases = $properties->aliases();
 

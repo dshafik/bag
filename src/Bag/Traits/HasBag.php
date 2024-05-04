@@ -9,20 +9,18 @@ use Bag\Bag;
 use Bag\Collection;
 use Bag\Exceptions\BagAttributeNotFoundException;
 use Bag\Exceptions\BagNotFoundException;
+use Bag\Reflection;
 use function get_object_vars;
-use ReflectionClass;
 
 trait HasBag
 {
     public function toBag(?int $propertyVisibility = null): Bag
     {
-        $bagAttributes = (new ReflectionClass($this))->getAttributes(BagAttribute::class);
-        $bagAttributesCount = count($bagAttributes);
-        if ($bagAttributesCount < 1) {
+        $bagAttribute = Reflection::getAttributeInstance(Reflection::getClass($this), BagAttribute::class);
+        if ($bagAttribute === null) {
             throw new BagAttributeNotFoundException('Bag attribute not found on class ' . static::class);
         }
 
-        $bagAttribute = $bagAttributes[0]->newInstance();
         $bagClass = $bagAttribute->bagClass;
 
         if (!\class_exists($bagClass)) {

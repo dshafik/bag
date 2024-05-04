@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Concerns;
 
+use Bag\Cache;
 use Bag\Collection;
 use Bag\Concerns\WithCollections;
 use Illuminate\Foundation\Testing\WithFaker;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\Values\BagWithCollection;
+use Tests\TestCase;
 
 #[CoversClass(WithCollections::class)]
 #[CoversClass(Collection::class)]
@@ -37,6 +38,8 @@ class WithCollectionsTest extends TestCase
     }
     public function testItUsesCache()
     {
+        Cache::fake()->shouldReceive('store')->atLeast()->twice()->passthru();
+
         $data = [
             ['name' => $this->faker->name(), 'age' => $this->faker->numberBetween(18, 100)],
             ['name' => $this->faker->name(), 'age' => $this->faker->numberBetween(18, 100)],

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Tests\Feature\Casts;
 
 use Bag\Casts\CollectionOf;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Values\BagWithLaravelCollectionOf;
 use Tests\Fixtures\Values\TestBag;
+use Tests\TestCase;
 
 #[CoversClass(CollectionOf::class)]
 class CollectionOfTest extends TestCase

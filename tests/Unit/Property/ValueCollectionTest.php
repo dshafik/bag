@@ -6,13 +6,13 @@ namespace Tests\Unit\Property;
 
 use Bag\Property\Value;
 use Bag\Property\ValueCollection;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use ReflectionClass;
 use ReflectionParameter;
 use Tests\Fixtures\Values\BagWithTransformers;
 use Tests\Fixtures\Values\MappedNameClassBag;
 use Tests\Fixtures\Values\TestBag;
+use Tests\TestCase;
 
 #[CoversClass(ValueCollection::class)]
 class ValueCollectionTest extends TestCase

@@ -6,10 +6,10 @@ namespace Tests\Feature\Concerns;
 
 use Bag\Attributes\MapName;
 use Bag\Concerns\WithOutput;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Values\HiddenPropertiesBag;
 use Tests\Fixtures\Values\MappedOutputNameClassBag;
+use Tests\TestCase;
 
 #[CoversClass(WithOutput::class)]
 #[CoversClass(MapName::class)]

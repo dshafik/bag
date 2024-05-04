@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Concerns;
 
 use Bag\Concerns\WithProperties;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Values\NoConstructorBag;
 use Tests\Fixtures\Values\NoPropertiesBag;
 use Tests\Fixtures\Values\TestBag;
+use Tests\TestCase;
 
 #[CoversClass(WithProperties::class)]
 class WithPropertiesTest extends TestCase

@@ -10,7 +10,6 @@ use Bag\Attributes\CastOutput;
 use Bag\Concerns\WithCasts;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\WithFaker;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Values\BagWithCollection;
 use Tests\Fixtures\Values\CastInputOutputBag;
@@ -21,6 +20,7 @@ use Tests\Fixtures\Values\CastVariadicCollectionBag;
 use Tests\Fixtures\Values\CastVariadicDatetimeBag;
 use Tests\Fixtures\Values\TypedVariadicBag;
 use Tests\Fixtures\Values\VariadicBag;
+use Tests\TestCase;
 
 #[CoversClass(WithCasts::class)]
 #[CoversClass(Cast::class)]

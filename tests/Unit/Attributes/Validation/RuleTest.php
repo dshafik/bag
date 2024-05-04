@@ -24,10 +24,10 @@ use Bag\Attributes\Validation\RequiredWithAll;
 use Bag\Attributes\Validation\Rule;
 use Bag\Attributes\Validation\Size;
 use Bag\Attributes\Validation\Str;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Fixtures\Enums\TestBackedEnum;
+use Tests\TestCase;
 
 #[CoversClass(Between::class)]
 #[CoversClass(Boolean::class)]

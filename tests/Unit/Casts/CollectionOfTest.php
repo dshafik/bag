@@ -8,11 +8,11 @@ use Bag\Casts\CollectionOf;
 use Bag\Collection;
 use Bag\Exceptions\InvalidCollection;
 use Illuminate\Support\Collection as LaravelCollection;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use stdClass;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\Values\TestBag;
+use Tests\TestCase;
 
 #[CoversClass(CollectionOf::class)]
 class CollectionOfTest extends TestCase

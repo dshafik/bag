@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\Unit\Mappers;
 
 use Bag\Mappers\Alias;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Tests\TestCase;
 
 #[CoversClass(Alias::class)]
 class AliasMapperTest extends TestCase

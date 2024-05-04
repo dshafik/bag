@@ -7,12 +7,12 @@ namespace Tests\Feature\Concerns;
 use Bag\Attributes\Transforms;
 use Bag\Concerns\WithTransformers;
 use Illuminate\Database\Eloquent\Model;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Models\AlternativeTestModel;
 use Tests\Fixtures\Models\TestModel;
 use Tests\Fixtures\Values\BagWithFactory;
 use Tests\Fixtures\Values\BagWithTransformers;
+use Tests\TestCase;
 use TypeError;
 
 #[CoversClass(WithTransformers::class)]

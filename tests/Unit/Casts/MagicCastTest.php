@@ -12,11 +12,11 @@ use DateTime;
 use DateTimeImmutable;
 use Illuminate\Support\Carbon as LaravelCarbon;
 use Illuminate\Support\Collection as LaravelCollection;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Enums\TestBackedEnum;
 use Tests\Fixtures\Enums\TestUnitEnum;
 use Tests\Fixtures\Values\TestBag;
+use Tests\TestCase;
 
 #[CoversClass(MagicCast::class)]
 class MagicCastTest extends TestCase

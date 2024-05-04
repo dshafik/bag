@@ -6,8 +6,8 @@ namespace Tests\Unit;
 
 use Bag\Collection;
 use Bag\Exceptions\ImmutableCollectionException;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Tests\TestCase;
 
 #[CoversClass(Collection::class)]
 class CollectionTest extends TestCase

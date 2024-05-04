@@ -7,10 +7,10 @@ namespace Tests\Unit\Casts;
 use Bag\Casts\MoneyFromMinor;
 use Brick\Money\Exception\UnknownCurrencyException;
 use Brick\Money\Money;
-use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PrinsFrank\Standards\Currency\CurrencyAlpha3;
 use Tests\Fixtures\Enums\TestCurrencyEnum;
+use Tests\TestCase;
 
 #[CoversClass(MoneyFromMinor::class)]
 class MoneyFromMinorTest extends TestCase

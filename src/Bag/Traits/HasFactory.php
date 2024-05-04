@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bag\Traits;
 
 use Bag\Attributes\Factory as FactoryAttribute;
+use Bag\Cache;
 use Bag\Collection;
 use Bag\Exceptions\MissingFactoryException;
 use Bag\Factory;
@@ -35,26 +36,20 @@ trait HasFactory
 
     protected static function getFactoryClass()
     {
-        static $cache = [];
-
-        if (isset($cache[static::class])) {
-            return $cache[static::class];
-        }
-
-        $factoryAttributes = (new ReflectionClass(static::class))->getAttributes(FactoryAttribute::class);
-        if (count($factoryAttributes) === 0) {
-            throw new MissingFactoryException(sprintf('Bag "%s" missing factory attribute', static::class));
-        }
+        return Cache::remember(__METHOD__, static::class, function () {
+            $factoryAttributes = (new ReflectionClass(static::class))->getAttributes(FactoryAttribute::class);
+            if (count($factoryAttributes) === 0) {
+                throw new MissingFactoryException(sprintf('Bag "%s" missing factory attribute', static::class));
+            }
 
 
-        $factoryClass = $factoryAttributes[0]->newInstance()->factoryClass;
+            $factoryClass = $factoryAttributes[0]->newInstance()->factoryClass;
 
-        if (!\class_exists($factoryClass)) {
-            throw new MissingFactoryException(sprintf('Factory class "%s" for Bag "%s" not found', $factoryClass, static::class));
-        }
+            if (!\class_exists($factoryClass)) {
+                throw new MissingFactoryException(sprintf('Factory class "%s" for Bag "%s" not found', $factoryClass, static::class));
+            }
 
-        $cache[static::class] = $factoryClass;
-
-        return $factoryClass;
+            return $factoryClass;
+        });
     }
 }

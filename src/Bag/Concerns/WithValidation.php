@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Bag\Concerns;
 
+use Bag\Attributes\Computed;
+use Bag\Bag;
 use Bag\Cache;
+use Bag\Exceptions\ComputedPropertyUninitializedException;
 use Bag\Property\Value;
 use Bag\Property\ValueCollection;
 use Illuminate\Filesystem\Filesystem;
@@ -14,6 +17,7 @@ use Illuminate\Translation\Translator;
 use Illuminate\Validation\Factory;
 use Illuminate\Validation\ValidationException;
 use ReflectionClass;
+use ReflectionProperty;
 
 trait WithValidation
 {
@@ -62,6 +66,25 @@ trait WithValidation
         }
 
         return true;
+    }
+
+    protected static function computed(Bag $bag): void
+    {
+        $computedProperties = Cache::remember(__METHOD__, $bag::class, function () use ($bag) {
+            return collect((new ReflectionClass($bag))->getProperties())->filter(function (ReflectionProperty $property) {
+                $computedAttributes = $property->getAttributes(Computed::class);
+
+                return count($computedAttributes) > 0;
+            });
+        });
+
+        $computedProperties->each(function (ReflectionProperty $property) use ($bag) {
+            if ($property->isInitialized($bag)) {
+                return;
+            }
+
+            throw new ComputedPropertyUninitializedException(sprintf('Property %s->%s must be computed', $bag::class, $property->name));
+        });
     }
 
     abstract protected static function getProperties(ReflectionClass $class): ValueCollection;

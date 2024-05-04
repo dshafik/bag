@@ -24,7 +24,7 @@ trait WithJson
     #[Override]
     public function jsonSerialize(): mixed
     {
-        $properties = $this->getBag();
+        $properties = $this->get();
 
         return self::prepareOutputValues($properties->except($this->getHidden()->merge($this->getHiddenFromJson())))->toArray();
     }
@@ -52,7 +52,7 @@ trait WithJson
         return $hidden;
     }
 
-    abstract protected function getBag(): Collection;
+    abstract public function get(?string $key = null): mixed;
 
     abstract protected static function prepareOutputValues(Collection $values): Collection;
 

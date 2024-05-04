@@ -37,11 +37,28 @@ trait WithOutput
         });
     }
 
-    protected function getBag(): Collection
+    public function get(?string $key = null): mixed
     {
         $value = $this;
 
-        return Collection::make((fn (): array => \get_object_vars($value))->bindTo(null)());
+        $values = Collection::make((fn (): array => \get_object_vars($value))->bindTo(null)());
+        if ($key !== null) {
+            return $values[$key];
+        }
+
+        return $values;
+    }
+
+    public function getRaw(?string $key = null): mixed
+    {
+        $value = $this;
+
+        $values = Collection::make(get_object_vars($value));
+        if ($key !== null) {
+            return $values[$key];
+        }
+
+        return $values;
     }
 
     abstract protected static function getProperties(ReflectionClass $class): ValueCollection;

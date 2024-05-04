@@ -7,6 +7,7 @@ namespace Bag;
 use Bag\Concerns\WithArrayable;
 use Bag\Concerns\WithCasts;
 use Bag\Concerns\WithCollections;
+use Bag\Concerns\WithEloquentCasting;
 use Bag\Concerns\WithHiddenProperties;
 use Bag\Concerns\WithInput;
 use Bag\Concerns\WithJson;
@@ -15,15 +16,17 @@ use Bag\Concerns\WithProperties;
 use Bag\Concerns\WithTransformers;
 use Bag\Concerns\WithValidation;
 use Bag\Concerns\WithVariadics;
+use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
 
-readonly class Bag implements Arrayable, Jsonable, JsonSerializable
+readonly class Bag implements Arrayable, Jsonable, JsonSerializable, Castable
 {
     use WithArrayable;
     use WithCasts;
     use WithCollections;
+    use WithEloquentCasting;
     use WithHiddenProperties;
     use WithInput;
     use WithJson;

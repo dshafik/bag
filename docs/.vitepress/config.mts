@@ -70,10 +70,16 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Laravel Integration',
+        items: [
+          { text: 'Controller Injection', link: '/laravel-injection' },
+          { text: 'Eloquent Casting', link: '/eloquent-casting' },
+        ]
+      },
+      {
         text: 'Other',
         items: [
           { text: 'Creating Bags from Objects', link: '/object-to-bag' },
-          { text: 'Laravel Controller Injection', link: '/laravel-injection' },
           { text: 'Why Bag?', link: '/why' },
           { text: 'Roadmap', link: '/roadmap' },
         ]

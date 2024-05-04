@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Bag\Concerns;
 
+use Bag\Cache;
 use Bag\Property\Value;
 use Bag\Property\ValueCollection;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection as LaravelCollection;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Translation\FileLoader;
+use Illuminate\Translation\Translator;
+use Illuminate\Validation\Factory;
 use Illuminate\Validation\ValidationException;
 use ReflectionClass;
 
@@ -30,10 +34,21 @@ trait WithValidation
             return true;
         }
 
-        $validator = Validator::make($values, $rules->toArray());
+        $validator = Cache::remember(__METHOD__, 'validator', function () {
+            $filesystem = new Filesystem();
+            $loader = new FileLoader($filesystem, [
+                __DIR__ . '/../../../vendor/laravel/framework/src/Illuminate/Translation/lang',
+                __DIR__ . '/../../../../vendor/laravel/framework/src/Illuminate/Translation/lang',
+                __DIR__ . '/../../../../../vendor/laravel/framework/src/Illuminate/Translation/lang',
+                __DIR__ . '/../../../../../../vendor/laravel/framework/src/Illuminate/Translation/lang',
+            ]);
+            $translator = new Translator($loader, 'en');
+
+            return new Factory($translator);
+        });
 
         try {
-            $validator->validate();
+            $validator->validate($values, $rules->toArray());
         } catch (ValidationException $exception) {
             if (method_exists(static::class, 'redirect')) {
                 $exception->redirectTo(app()->call([static::class, 'redirect']));

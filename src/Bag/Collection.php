@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Bag;
 
-use Bag\Concerns\WithWrapping;
+use Bag\Enums\OutputType;
 use Bag\Exceptions\ImmutableCollectionException;
+use Bag\Pipelines\OutputCollectionPipeline;
+use Bag\Pipelines\Values\CollectionOutput;
 use Illuminate\Support\Collection as LaravelCollection;
 use Override;
 
 class Collection extends LaravelCollection
 {
-    use WithWrapping;
-
     #[Override]
     public function forget($keys)
     {
@@ -121,13 +121,24 @@ class Collection extends LaravelCollection
         throw new ImmutableCollectionException('Property writes not allowed on ' . static::class);
     }
 
-    public function toArray()
+    public function toArray(): array
     {
-        return $this->wrapValues($this->toBase())->toBase()->toArray();
+        $output = new CollectionOutput($this, OutputType::ARRAY);
+
+        return OutputCollectionPipeline::process($output)->toArray();
     }
 
     public function jsonSerialize(): array
     {
-        return $this->wrapValues($this->toBase())->toBase()->jsonSerialize();
+        $output = new CollectionOutput($this, OutputType::JSON);
+
+        return OutputCollectionPipeline::process($output)->jsonSerialize();
+    }
+
+    public function unwrapped(): array
+    {
+        $output = new CollectionOutput($this, OutputType::UNWRAPPED);
+
+        return OutputCollectionPipeline::process($output)->toArray();
     }
 }

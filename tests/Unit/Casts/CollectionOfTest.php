@@ -6,6 +6,8 @@ namespace Tests\Unit\Casts;
 
 use Bag\Casts\CollectionOf;
 use Bag\Collection;
+use Bag\Exceptions\BagNotFoundException;
+use Bag\Exceptions\InvalidBag;
 use Bag\Exceptions\InvalidCollection;
 use Illuminate\Support\Collection as LaravelCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -119,6 +121,46 @@ class CollectionOfTest extends TestCase
         $this->expectExceptionMessage('The property "test" must be a subclass of Illuminate\Support\Collection');
 
         $cast = new CollectionOf(TestBag::class);
+        $cast->set(stdClass::class, 'test', collect(['test' => [
+            [
+                'name' => 'Davey Shafik',
+                'age' => 40,
+                'email' => 'davey@php.net',
+            ],
+            [
+                'name' => 'David Shafik',
+                'age' => 40,
+                'email' => 'david@example.org',
+            ],
+        ]]));
+    }
+
+    public function testItFailsWithInvalidBag()
+    {
+        $this->expectException(InvalidBag::class);
+        $this->expectExceptionMessage('CollectionOf class "Tests\Unit\Casts\CollectionOfTest" must extend Bag\Bag');
+
+        $cast = new CollectionOf(static::class);
+        $cast->set(stdClass::class, 'test', collect(['test' => [
+            [
+                'name' => 'Davey Shafik',
+                'age' => 40,
+                'email' => 'davey@php.net',
+            ],
+            [
+                'name' => 'David Shafik',
+                'age' => 40,
+                'email' => 'david@example.org',
+            ],
+        ]]));
+    }
+
+    public function testItFailsWithNonExistentBag()
+    {
+        $this->expectException(BagNotFoundException::class);
+        $this->expectExceptionMessage('The Bag class "test-string" does not exist');
+
+        $cast = new CollectionOf('test-string');
         $cast->set(stdClass::class, 'test', collect(['test' => [
             [
                 'name' => 'Davey Shafik',

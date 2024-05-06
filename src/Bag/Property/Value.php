@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Bag\Property;
 
 use Bag\Attributes\MapName;
-use Bag\Reflection;
-use Bag\Util;
+use Bag\Internal\Reflection;
+use Bag\Internal\Util;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;

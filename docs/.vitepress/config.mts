@@ -1,10 +1,11 @@
 import { defineConfig } from 'vitepress'
 import taskLists from "markdown-it-task-lists";
+import { withMermaid } from "vitepress-plugin-mermaid";
 
 const BASE_PATH = '/bag/'
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withMermaid({
   title: "Bag",
   description: "Immutable Value Objects for PHP 8.3+",
   base: BASE_PATH,
@@ -83,6 +84,7 @@ export default defineConfig({
         items: [
           { text: 'Creating Bags from Objects', link: '/object-to-bag' },
           { text: 'Why Bag?', link: '/why' },
+          { text: 'How Bag Works', link: '/how-bag-works' },
           { text: 'Roadmap', link: '/roadmap' },
         ]
       },

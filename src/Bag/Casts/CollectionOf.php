@@ -6,6 +6,7 @@ namespace Bag\Casts;
 
 use Bag\Bag;
 use Bag\Exceptions\BagNotFoundException;
+use Bag\Exceptions\InvalidBag;
 use Bag\Exceptions\InvalidCollection;
 use Illuminate\Support\Collection as LaravelCollection;
 use Override;
@@ -19,6 +20,10 @@ class CollectionOf implements CastsPropertySet
     {
         if (!\class_exists($this->valueClassname)) {
             throw new BagNotFoundException($this->valueClassname);
+        }
+
+        if (!\is_subclass_of($this->valueClassname, Bag::class)) {
+            throw new InvalidBag(sprintf('CollectionOf class "%s" must extend %s', $this->valueClassname, Bag::class));
         }
     }
 

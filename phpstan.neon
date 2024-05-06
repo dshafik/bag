@@ -4,10 +4,6 @@ parameters:
     paths:
         - src/
     level: 5
-    ignoreErrors:
-        -
-            message: '#^Unsafe usage of new static\(\)\.$#'
-            path: src/Bag/Bag.php
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
     treatPhpDocTypesAsCertain: false

@@ -7,8 +7,8 @@ namespace Bag\Property;
 use Bag\Attributes\Cast;
 use Bag\Attributes\CastOutput as CastOutputAttribute;
 use Bag\Casts\CastsPropertyGet;
-use Bag\Reflection;
-use Bag\Util;
+use Bag\Internal\Reflection;
+use Bag\Internal\Util;
 use Illuminate\Support\Collection;
 
 class CastOutput

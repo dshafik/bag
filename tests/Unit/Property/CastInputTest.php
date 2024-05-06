@@ -25,6 +25,7 @@ class CastInputTest extends TestCase
 
         $this->assertInstanceOf(CastInput::class, $castInput);
         $this->assertSame(CarbonImmutable::class, $this->prop($castInput, 'propertyType'));
+        $this->assertSame('date', $this->prop($castInput, 'name'));
         $this->assertSame(['format' => 'Y-m-d'], $this->prop($this->prop($castInput, 'caster'), 'parameters'));
         $this->assertSame(DateTime::class, $this->prop($this->prop($castInput, 'caster'), 'casterClassname'));
     }
@@ -35,10 +36,10 @@ class CastInputTest extends TestCase
         $caster->method('cast')
             ->willReturn('castedValue');
 
-        $castInput = new CastInput('string', $caster);
+        $castInput = new CastInput('string', 'propertName', $caster);
 
         $properties = new Collection(['propertyName' => 'propertyValue']);
 
-        $this->assertEquals('castedValue', $castInput->__invoke('propertyName', $properties));
+        $this->assertEquals('castedValue', $castInput->__invoke($properties));
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bag\Property;
 
 use Bag\Attributes\Validation\Rule;
-use Bag\Reflection;
+use Bag\Internal\Reflection;
 use Illuminate\Support\Collection;
 use ReflectionAttribute;
 

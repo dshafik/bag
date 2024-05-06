@@ -7,6 +7,7 @@ namespace Tests\Unit;
 use Bag\Collection;
 use Bag\Exceptions\ImmutableCollectionException;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Tests\Fixtures\Collections\WrappedCollection;
 use Tests\TestCase;
 
 #[CoversClass(Collection::class)]
@@ -120,5 +121,23 @@ class CollectionTest extends TestCase
         $this->expectExceptionMessage('Property writes not allowed on Bag\Collection');
         $collection = Collection::make(['foo' => 'bar']);
         $collection->baz = 'bat';
+    }
+
+    public function testItReturnsArray()
+    {
+        $collection = Collection::make(['foo' => 'bar']);
+        $this->assertSame(['foo' => 'bar'], $collection->toArray());
+    }
+
+    public function testItReturnsJson()
+    {
+        $collection = Collection::make(['foo' => 'bar']);
+        $this->assertSame('{"foo":"bar"}', $collection->toJson());
+    }
+
+    public function testItReturnsUnwrapped()
+    {
+        $collection = WrappedCollection::make(['foo' => 'bar']);
+        $this->assertSame(['foo' => 'bar'], $collection->unwrapped());
     }
 }

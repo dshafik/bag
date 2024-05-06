@@ -7,7 +7,7 @@
 
 header .title span {
     font-size: 32px;
-    font-family: var(--vp-font-family-mono);
+    font-family: var(--vp-font-family-mono), monospace;
 }
 
 header .title img {
@@ -16,4 +16,29 @@ header .title img {
 
 code {
     white-space: pre;
+}
+
+.mermaid rect, .mermaid polygon {
+    fill: var(--vp-c-default-soft) !important;
+    stroke: var(--vp-c-default-1) !important;
+}
+
+.mermaid-start > rect {
+    fill: var(--vp-c-indigo-soft) !important;
+    stroke: var(--vp-c-indigo-1) !important;
+}
+
+.mermaid-decision > polygon {
+    fill: var(--vp-custom-block-caution-bg) !important;
+    stroke: var(--vp-custom-block-caution-text) !important;
+}
+
+.mermaid-conditional > rect {
+    fill: var(--vp-c-purple-soft) !important;
+    stroke: var(--vp-c-purple-1) !important;
+}
+
+.mermaid-end > rect {
+    fill: var(--vp-c-success-soft) !important;
+    stroke: var(--vp-c-success-1) !important;
 }

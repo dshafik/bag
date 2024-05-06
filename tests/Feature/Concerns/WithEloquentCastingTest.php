@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\Models\CastedModel;
 use Tests\Fixtures\Values\BagWithCollection;
-use Tests\Fixtures\Values\HiddenPropertiesBag;
+use Tests\Fixtures\Values\HiddenParametersBag;
 use Tests\Fixtures\Values\TestBag;
 use Tests\TestCase;
 
@@ -156,7 +156,7 @@ class WithEloquentCastingTest extends TestCase
     public function testItStoresHiddenProperties()
     {
         CastedModel::create([
-            'hidden_bag' => HiddenPropertiesBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
+            'hidden_bag' => HiddenParametersBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
         ]);
 
         $this->assertDatabaseHas('testing', ['hidden_bag' => '{"name":"Davey Shafik","age":40,"email":"davey@php.net"}']);
@@ -165,12 +165,12 @@ class WithEloquentCastingTest extends TestCase
     public function testItRetrievesHiddenProperties()
     {
         CastedModel::create([
-            'hidden_bag' => HiddenPropertiesBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
+            'hidden_bag' => HiddenParametersBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
         ]);
 
         $model = CastedModel::first();
 
-        $this->assertInstanceOf(HiddenPropertiesBag::class, $model->hidden_bag);
+        $this->assertInstanceOf(HiddenParametersBag::class, $model->hidden_bag);
         $this->assertSame('Davey Shafik', $model->hidden_bag->name);
         $this->assertSame(40, $model->hidden_bag->age);
         $this->assertSame('davey@php.net', $model->hidden_bag->email);

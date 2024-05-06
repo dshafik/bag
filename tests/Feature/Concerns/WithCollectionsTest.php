@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Concerns;
 
-use Bag\Cache;
+use Bag\Attributes\Collection as CollectionAttribute;
 use Bag\Collection;
 use Bag\Concerns\WithCollections;
+use Bag\Internal\Cache;
 use Illuminate\Foundation\Testing\WithFaker;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
@@ -15,7 +16,7 @@ use Tests\TestCase;
 
 #[CoversClass(WithCollections::class)]
 #[CoversClass(Collection::class)]
-#[CoversClass(\Bag\Attributes\Collection::class)]
+#[CoversClass(CollectionAttribute::class)]
 class WithCollectionsTest extends TestCase
 {
     use WithFaker;
@@ -36,6 +37,7 @@ class WithCollectionsTest extends TestCase
             $this->assertSame($data[$index]['age'], $bag->age);
         });
     }
+
     public function testItUsesCache()
     {
         Cache::fake()->shouldReceive('store')->atLeast()->twice()->passthru();

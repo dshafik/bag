@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Bag\Traits;
 
 use Bag\Attributes\Factory as FactoryAttribute;
-use Bag\Cache;
 use Bag\Collection;
 use Bag\Exceptions\MissingFactoryException;
 use Bag\Factory;
-use Bag\Reflection;
+use Bag\Internal\Cache;
+use Bag\Internal\Reflection;
 
 trait HasFactory
 {

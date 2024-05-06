@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Bag\Concerns;
 
 use Bag\Attributes\Collection as CollectionAttribute;
-use Bag\Cache;
+use Bag\Bag;
 use Bag\Collection;
-use Bag\Reflection;
+use Bag\Internal\Cache;
+use Bag\Internal\Reflection;
 
 trait WithCollections
 {
@@ -24,6 +25,6 @@ trait WithCollections
             )?->collectionClass ?? Collection::class;
         });
 
-        return ($collection)::make($values)->map(fn ($value): static => static::from($value));
+        return ($collection)::make($values)->map(fn ($value): Bag => $value instanceof Bag ? $value : static::from($value));
     }
 }

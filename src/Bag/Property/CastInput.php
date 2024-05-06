@@ -8,14 +8,15 @@ use Bag\Attributes\Cast;
 use Bag\Attributes\CastInput as CastInputAttribute;
 use Bag\Casts\CastsPropertySet;
 use Bag\Casts\MagicCast;
-use Bag\Reflection;
-use Bag\Util;
+use Bag\Internal\Reflection;
+use Bag\Internal\Util;
 use Illuminate\Support\Collection;
 
 class CastInput
 {
     public function __construct(
         protected string $propertyType,
+        protected string $name,
         protected null|Cast|CastInputAttribute $caster
     ) {
     }
@@ -41,11 +42,11 @@ class CastInput
 
         $type = Util::getPropertyType($property);
 
-        return new self(propertyType: $type->getName(), caster: $cast ?? new CastInputAttribute(MagicCast::class));
+        return new self(propertyType: $type->getName(), name: $property->name, caster: $cast ?? new CastInputAttribute(MagicCast::class));
     }
 
-    public function __invoke(string $propertyName, Collection $properties): mixed
+    public function __invoke(Collection $properties): mixed
     {
-        return $this->caster->cast(propertyType: $this->propertyType, propertyName: $propertyName, properties: $properties);
+        return $this->caster->cast(propertyType: $this->propertyType, propertyName: $this->name, properties: $properties);
     }
 }

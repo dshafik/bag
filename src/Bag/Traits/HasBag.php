@@ -9,7 +9,7 @@ use Bag\Bag;
 use Bag\Collection;
 use Bag\Exceptions\BagAttributeNotFoundException;
 use Bag\Exceptions\BagNotFoundException;
-use Bag\Reflection;
+use Bag\Internal\Reflection;
 use function get_object_vars;
 
 trait HasBag

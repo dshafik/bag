@@ -45,9 +45,10 @@ class ValidationPipelineTest extends TestCase
     public function testItFailsValidationUsingRules()
     {
         $this->expectException(ValidationException::class);
-        $this->expectExceptionMessage('The name field is required. (and 1 more error)');
+        $this->expectExceptionMessage('The name field must be a string. (and 1 more error)');
 
         $input = new BagInput(ValidateUsingRulesMethodBag::class, [
+            'name' => 1234,
             'age' => 'testing',
         ]);
 
@@ -55,7 +56,7 @@ class ValidationPipelineTest extends TestCase
             ValidationPipeline::process($input);
         } catch (ValidationException $e) {
             $this->assertSame([
-                'name' => ['The name field is required.'],
+                'name' => ['The name field must be a string.'],
                 'age' => ['The age field must be an integer.']
             ], $e->errors());
 
@@ -78,9 +79,10 @@ class ValidationPipelineTest extends TestCase
     public function testItFailsValidationUsingAttributes()
     {
         $this->expectException(ValidationException::class);
-        $this->expectExceptionMessage('The name field is required. (and 1 more error)');
+        $this->expectExceptionMessage('The name field must be a string. (and 1 more error)');
 
         $input = new BagInput(ValidateUsingAttributesBag::class, [
+            'name' => 1234,
             'age' => 'testing',
         ]);
 
@@ -88,7 +90,7 @@ class ValidationPipelineTest extends TestCase
             ValidationPipeline::process($input);
         } catch (ValidationException $e) {
             $this->assertSame([
-                'name' => ['The name field is required.'],
+                'name' => ['The name field must be a string.'],
                 'age' => ['The age field must be an integer.']
             ], $e->errors());
 
@@ -111,9 +113,10 @@ class ValidationPipelineTest extends TestCase
     public function testItFailsValidationUsingBoth()
     {
         $this->expectException(ValidationException::class);
-        $this->expectExceptionMessage('The name field is required. (and 1 more error)');
+        $this->expectExceptionMessage('The name field must not be greater than 100 characters. (and 1 more error)');
 
         $input = new BagInput(ValidateUsingAttributesAndRulesMethodBag::class, [
+            'name' => \str_repeat('Davey Shafik', 40),
             'age' => 200,
         ]);
 
@@ -121,7 +124,7 @@ class ValidationPipelineTest extends TestCase
             ValidationPipeline::process($input);
         } catch (ValidationException $e) {
             $this->assertSame([
-                'name' => ['The name field is required.'],
+                'name' => ['The name field must not be greater than 100 characters.'],
                 'age' => ['The age field must not be greater than 100.']
             ], $e->errors());
 

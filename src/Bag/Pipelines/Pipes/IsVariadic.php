@@ -8,10 +8,10 @@ use Bag\Pipelines\Values\BagInput;
 
 readonly class IsVariadic
 {
-    public function __invoke(BagInput $input, callable $next)
+    public function __invoke(BagInput $input)
     {
         $input->variadic = $input->params->last()->variadic;
 
-        return $next($input);
+        return $input;
     }
 }

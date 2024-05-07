@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 
 readonly class CastOutputValues
 {
-    public function __invoke(BagOutput $output, callable $next)
+    public function __invoke(BagOutput $output)
     {
         $properties = $output->properties;
         $params = $output->params;
@@ -28,7 +28,7 @@ readonly class CastOutputValues
             return ($value->outputCast)($values);
         });
 
-        return $next($output);
+        return $output;
     }
 
     protected function castVariadic(ValueCollection $params, $values, $value): mixed

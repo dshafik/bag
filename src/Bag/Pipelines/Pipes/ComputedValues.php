@@ -13,7 +13,7 @@ use ReflectionProperty;
 
 readonly class ComputedValues
 {
-    public function __invoke(BagInput $input, callable $next)
+    public function __invoke(BagInput $input)
     {
         $computedProperties = Cache::remember(__METHOD__, $input->bagClassname, function () use ($input) {
             return collect(Reflection::getProperties($input->bag))->filter(function (ReflectionProperty $property) {
@@ -29,6 +29,6 @@ readonly class ComputedValues
             throw new ComputedPropertyUninitializedException(sprintf('Property %s->%s must be computed', $input->bagClassname, $property->name));
         });
 
-        return $next($input);
+        return $input;
     }
 }

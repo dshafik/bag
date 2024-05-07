@@ -8,7 +8,7 @@ use Bag\Pipelines\Values\BagInput;
 
 readonly class MapInput
 {
-    public function __invoke(BagInput $input, callable $next)
+    public function __invoke(BagInput $input)
     {
         $aliases = $input->params->aliases();
 
@@ -18,6 +18,6 @@ readonly class MapInput
             return [$key => $value];
         });
 
-        return $next($input);
+        return $input;
     }
 }

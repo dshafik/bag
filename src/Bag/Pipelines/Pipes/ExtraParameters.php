@@ -9,10 +9,10 @@ use Bag\Pipelines\Values\BagInput;
 
 readonly class ExtraParameters
 {
-    public function __invoke(BagInput $input, callable $next)
+    public function __invoke(BagInput $input)
     {
         if ($input->variadic) {
-            return $next($input);
+            return $input;
         }
 
         $extra = collect();
@@ -26,6 +26,6 @@ readonly class ExtraParameters
 
         $extra->whenNotEmpty(fn () => throw new AdditionalPropertiesException($extra));
 
-        return $next($input);
+        return $input;
     }
 }

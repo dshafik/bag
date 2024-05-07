@@ -13,10 +13,10 @@ use Bag\Property\Value;
 
 readonly class HideJsonValues
 {
-    public function __invoke(BagOutput $output, callable $next)
+    public function __invoke(BagOutput $output)
     {
         if ($output->outputType !== OutputType::JSON) {
-            return $next($output);
+            return $output;
         }
 
         $output->values = Cache::remember(__METHOD__, $output->bag, function () use ($output) {
@@ -38,6 +38,6 @@ readonly class HideJsonValues
             return $values;
         });
 
-        return $next($output);
+        return $output;
     }
 }

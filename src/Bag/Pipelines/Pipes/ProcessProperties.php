@@ -14,7 +14,7 @@ use ReflectionProperty;
 
 readonly class ProcessProperties
 {
-    public function __invoke(BagOutput $output, callable $next)
+    public function __invoke(BagOutput $output)
     {
         $output->properties = Cache::remember(__METHOD__, $output->bagClassname, function () use ($output) {
             $class = Reflection::getClass($output->bagClassname);
@@ -28,6 +28,6 @@ readonly class ProcessProperties
                 });
         });
 
-        return $next($output);
+        return $output;
     }
 }

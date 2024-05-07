@@ -15,7 +15,7 @@ use ReflectionParameter;
 
 readonly class ProcessParameters
 {
-    public function __invoke(BagInput|BagOutput $inputOrOutput, callable $next)
+    public function __invoke(BagInput|BagOutput $inputOrOutput)
     {
         $inputOrOutput->params = Cache::remember(__METHOD__, $inputOrOutput->bagClassname, function () use ($inputOrOutput) {
             $class = Reflection::getClass($inputOrOutput->bagClassname);
@@ -31,6 +31,6 @@ readonly class ProcessParameters
             return $params;
         });
 
-        return $next($inputOrOutput);
+        return $inputOrOutput;
     }
 }

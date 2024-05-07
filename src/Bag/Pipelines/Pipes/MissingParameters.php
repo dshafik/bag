@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 
 readonly class MissingParameters
 {
-    public function __invoke(BagInput $input, callable $next)
+    public function __invoke(BagInput $input)
     {
         /** @var Collection $required */
         $required = $input->params->required();
@@ -18,7 +18,7 @@ readonly class MissingParameters
 
         $required->whenNotEmpty(fn () => throw new MissingPropertiesException($required));
 
-        return $next($input);
+        return $input;
     }
 
 }

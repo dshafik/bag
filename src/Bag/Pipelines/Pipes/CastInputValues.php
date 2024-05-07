@@ -10,7 +10,7 @@ use Bag\Property\ValueCollection;
 
 readonly class CastInputValues
 {
-    public function __invoke(BagInput $input, callable $next)
+    public function __invoke(BagInput $input)
     {
         $properties = $input->params;
         $values = $input->values;
@@ -26,7 +26,7 @@ readonly class CastInputValues
             return ($property->inputCast)($values);
         });
 
-        return $next($input);
+        return $input;
     }
 
     protected function castVariadic(ValueCollection $properties, $values, $value): mixed

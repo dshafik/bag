@@ -8,10 +8,10 @@ use Bag\Pipelines\Values\BagOutput;
 
 final class GetValues
 {
-    public function __invoke(BagOutput $output, callable $next)
+    public function __invoke(BagOutput $output)
     {
         $output->values = $output->bag->getRaw();
 
-        return $next($output);
+        return $output;
     }
 }

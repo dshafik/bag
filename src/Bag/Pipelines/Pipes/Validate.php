@@ -17,7 +17,7 @@ use Illuminate\Validation\ValidationException;
 
 readonly class Validate
 {
-    public function __invoke(BagInput $input, callable $next)
+    public function __invoke(BagInput $input)
     {
         /** @var class-string<Bag> $bagClass */
         $bagClass = $input->bagClassname;
@@ -35,7 +35,7 @@ readonly class Validate
         })->mergeRecursive($rules)->filter();
 
         if ($rules->isEmpty()) {
-            return $next($input);
+            return $input;
         }
 
         $validator = Cache::remember(__METHOD__, 'validator', function () {
@@ -65,6 +65,6 @@ readonly class Validate
             throw $exception;
         }
 
-        return $next($input);
+        return $input;
     }
 }

@@ -33,7 +33,7 @@ class WithValidationTest extends TestCase
         $this->expectExceptionMessage('The name field must be a string. (and 1 more error)');
 
         try {
-            ValidateUsingRulesMethodBag::validate(collect(['name' => 1234]));
+            ValidateUsingRulesMethodBag::validate(collect(['name' => 1234, 'age' => 'string']));
         } catch (ValidationException $e) {
             $this->assertEquals(
                 [
@@ -41,7 +41,7 @@ class WithValidationTest extends TestCase
                         'The name field must be a string.',
                     ],
                     'age' => [
-                        'The age field is required.',
+                        'The age field must be an integer.',
                     ],
                 ],
                 $e->errors()

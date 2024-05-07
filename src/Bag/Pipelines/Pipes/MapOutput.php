@@ -9,12 +9,12 @@ use Bag\Pipelines\Values\BagOutput;
 
 readonly class MapOutput
 {
-    public function __invoke(BagOutput $output, callable $next)
+    public function __invoke(BagOutput $output)
     {
         if ($output->outputType === OutputType::RAW) {
             $output->output = $output->values;
 
-            return $next($output);
+            return $output;
         }
 
         $aliases = $output->params->aliases();
@@ -25,6 +25,6 @@ readonly class MapOutput
             return [$key => $value];
         });
 
-        return $next($output);
+        return $output;
     }
 }

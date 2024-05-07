@@ -13,10 +13,10 @@ use Bag\Pipelines\Values\BagOutput;
 
 readonly class Wrap
 {
-    public function __invoke(BagOutput $output, callable $next)
+    public function __invoke(BagOutput $output)
     {
         if ($output->outputType !== OutputType::ARRAY && $output->outputType !== OutputType::JSON) {
-            return $next($output);
+            return $output;
         }
 
         $wrapAttribute = null;
@@ -28,12 +28,12 @@ readonly class Wrap
         if ($wrapAttribute === null) {
             $wrapAttribute = Reflection::getAttribute(Reflection::getClass($output->bag), WrapAttribute::class);
             if ($wrapAttribute === null) {
-                return $next($output);
+                return $output;
             }
         }
 
         $output->output = Collection::make([Reflection::getAttributeInstance($wrapAttribute)->wrapKey => $output->output]);
 
-        return $next($output);
+        return $output;
     }
 }

@@ -8,10 +8,10 @@ use Bag\Pipelines\Values\BagInput;
 
 readonly class FillBag
 {
-    public function __invoke(BagInput $input, callable $next)
+    public function __invoke(BagInput $input)
     {
         $input->bag = new ($input->bagClassname)(... $input->values);
 
-        return $next($input);
+        return $input;
     }
 }

@@ -30,7 +30,7 @@ readonly class Transform
         'object' => 'object',
     ];
 
-    public function __invoke(BagInput $input, callable $next)
+    public function __invoke(BagInput $input)
     {
         $inputs = $input->input;
 
@@ -59,7 +59,7 @@ readonly class Transform
 
             $input->input = LaravelCollection::wrap($method->invoke(null, $inputs));
 
-            return $next($input);
+            return $input;
         }
 
         if ($methods->count() > 1) {
@@ -67,13 +67,13 @@ readonly class Transform
 
             $input->input = LaravelCollection::wrap($method->invoke(null, $inputs));
 
-            return $next($input);
+            return $input;
         }
 
         if (is_array($inputs) || is_iterable($inputs) || $inputs instanceof ArrayAccess || $inputs instanceof Arrayable || is_iterable($inputs)) {
             $input->input = LaravelCollection::wrap($inputs);
 
-            return $next($input);
+            return $input;
         }
 
         throw new TypeError(sprintf('%s::from(): Argument #1 ($values): must be of type ArrayAccess|Traversable|Collection|LaravelCollection|Arrayable|array, %s given', $input->bagClassname, gettype($inputs)));

@@ -1,6 +1,6 @@
 # How Bag Works
 
-Bag works by utilizing a pipelines to process the input and output data. 
+Bag works by utilizing pipelines to process the input and output data. 
 
 There are four pipelines:
 

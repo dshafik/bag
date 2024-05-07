@@ -29,13 +29,19 @@ code {
 }
 
 .mermaid-decision > polygon {
-    fill: var(--vp-custom-block-caution-bg) !important;
-    stroke: var(--vp-custom-block-caution-text) !important;
+    fill: var(--vp-c-yellow-soft) !important;
+    stroke: var(--vp-c-yellow-1) !important;
 }
 
 .mermaid-conditional > rect {
     fill: var(--vp-c-purple-soft) !important;
     stroke: var(--vp-c-purple-1) !important;
+}
+
+.mermaid-error > rect {
+    fill: var(--vp-c-danger-soft) !important;
+    stroke: var(--vp-c-danger-1) !important;
+
 }
 
 .mermaid-end > rect {

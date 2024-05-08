@@ -27,12 +27,12 @@ class CastOutputValuesTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
 
         $pipe = new CastOutputValues();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertIsString($output->values->get('output'));
         $this->assertSame('TESTING', $output->values->get('output'));
@@ -47,12 +47,12 @@ class CastOutputValuesTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
 
         $pipe = new CastOutputValues();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertIsArray($output->values->get('values'));
         $this->assertArrayHasKey('test', $output->values->get('values'));
@@ -68,12 +68,12 @@ class CastOutputValuesTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
 
         $pipe = new CastOutputValues();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertIsArray($output->values->get('values'));
         $this->assertArrayHasKey('test', $output->values->get('values'));

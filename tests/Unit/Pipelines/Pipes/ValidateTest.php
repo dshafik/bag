@@ -29,7 +29,7 @@ class ValidateTest extends TestCase
         $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
         $pipe = new Validate();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(BagInput::class, $input);
     }
@@ -42,7 +42,7 @@ class ValidateTest extends TestCase
         $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
         $pipe = new Validate();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(BagInput::class, $input);
     }
@@ -59,7 +59,7 @@ class ValidateTest extends TestCase
             $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
             $pipe = new Validate();
-            $pipe($input, fn ($input) => $input);
+            $pipe($input);
         } catch (ValidationException $e) {
             $this->assertEquals(
                 [
@@ -88,7 +88,7 @@ class ValidateTest extends TestCase
         $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
         $pipe = new Validate();
-        $pipe($input, fn ($input) => $input);
+        $pipe($input);
     }
 
     public function testItValidatesUsingAttributes()
@@ -102,7 +102,7 @@ class ValidateTest extends TestCase
         $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
         $pipe = new Validate();
-        $pipe($input, fn ($input) => $input);
+        $pipe($input);
     }
 
     public function testItValidatesUsingBoth()
@@ -117,7 +117,7 @@ class ValidateTest extends TestCase
             $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
             $pipe = new Validate();
-            $pipe($input, fn ($input) => $input);
+            $pipe($input);
         } catch (ValidationException $e) {
             $this->assertEquals(
                 [
@@ -147,7 +147,7 @@ class ValidateTest extends TestCase
             $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
             $pipe = new Validate();
-            $pipe($input, fn ($input) => $input);
+            $pipe($input);
         } catch (ValidationException $e) {
             $this->assertEquals(
                 [

@@ -31,12 +31,12 @@ class HideJsonValuesTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
 
         $pipe = new HideJsonValues();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'nameGoesHere' => 'Davey Shafik',
@@ -55,12 +55,12 @@ class HideJsonValuesTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::JSON);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
 
         $pipe = new HideJsonValues();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'nameGoesHere' => 'Davey Shafik',
@@ -79,12 +79,12 @@ class HideJsonValuesTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::JSON);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
 
         $pipe = new HideJsonValues();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'name' => 'Davey Shafik',

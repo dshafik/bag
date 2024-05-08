@@ -25,11 +25,11 @@ class CastInputValuesTest extends TestCase
             'input' => 'test',
             'output' => 'testing',
         ]));
-        $input = (new ProcessParameters())($input, fn ($input) => $input);
-        $input = (new MapInput())($input, fn ($input) => $input);
+        $input = (new ProcessParameters())($input);
+        $input = (new MapInput())($input);
 
         $pipe = new CastInputValues();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(Stringable::class, $input->values->get('input'));
         $this->assertSame('TEST', $input->values->get('input')->toString());
@@ -41,11 +41,11 @@ class CastInputValuesTest extends TestCase
             'input' => 'test',
             'output' => 'testing',
         ]));
-        $input = (new ProcessParameters())($input, fn ($input) => $input);
-        $input = (new MapInput())($input, fn ($input) => $input);
+        $input = (new ProcessParameters())($input);
+        $input = (new MapInput())($input);
 
         $pipe = new CastInputValues();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertIsString($input->values->get('output'));
         $this->assertSame('testing', $input->values->get('output'));
@@ -58,11 +58,11 @@ class CastInputValuesTest extends TestCase
             'age' => 40,
             'test' => '2024-04-30',
         ]));
-        $input = (new ProcessParameters())($input, fn ($input) => $input);
-        $input = (new MapInput())($input, fn ($input) => $input);
+        $input = (new ProcessParameters())($input);
+        $input = (new MapInput())($input);
 
         $pipe = new CastInputValues();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(CarbonImmutable::class, $input->values->get('test'));
         $this->assertSame('2024-04-30', $input->values->get('test')->format('Y-m-d'));
@@ -75,11 +75,11 @@ class CastInputValuesTest extends TestCase
             'age' => 40,
             'test' => true,
         ]));
-        $input = (new ProcessParameters())($input, fn ($input) => $input);
-        $input = (new MapInput())($input, fn ($input) => $input);
+        $input = (new ProcessParameters())($input);
+        $input = (new MapInput())($input);
 
         $pipe = new CastInputValues();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertTrue($input->values->get('test'));
     }

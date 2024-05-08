@@ -27,7 +27,7 @@ class WrapCollectionTest extends TestCase
         $output = new CollectionOutput($collection, OutputType::ARRAY);
 
         $pipe = new WrapCollection();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             [
@@ -49,7 +49,7 @@ class WrapCollectionTest extends TestCase
         $output = new CollectionOutput($collection, OutputType::UNWRAPPED);
 
         $pipe = new WrapCollection();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             [
@@ -73,7 +73,7 @@ class WrapCollectionTest extends TestCase
         $output = new CollectionOutput($collection, OutputType::ARRAY);
 
         $pipe = new WrapCollection();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'collection_wrapper' => [
@@ -99,7 +99,7 @@ class WrapCollectionTest extends TestCase
         $output = new CollectionOutput($collection, OutputType::JSON);
 
         $pipe = new WrapCollection();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'collection_json_wrapper' => [

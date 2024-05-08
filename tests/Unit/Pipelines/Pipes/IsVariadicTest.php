@@ -18,10 +18,10 @@ class IsVariadicTest extends TestCase
     public function testItIsVariadic()
     {
         $input = new BagInput(VariadicBag::class, collect());
-        $input = (new ProcessParameters())($input, fn ($input) => $input);
+        $input = (new ProcessParameters())($input);
 
         $pipe = new IsVariadic();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertTrue($input->variadic);
     }
@@ -29,10 +29,10 @@ class IsVariadicTest extends TestCase
     public function testItIsNotVariadic()
     {
         $input = new BagInput(TestBag::class, collect());
-        $input = (new ProcessParameters())($input, fn ($input) => $input);
+        $input = (new ProcessParameters())($input);
 
         $pipe = new IsVariadic();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertFalse($input->variadic);
     }

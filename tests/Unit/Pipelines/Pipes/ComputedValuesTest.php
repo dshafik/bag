@@ -33,7 +33,7 @@ class ComputedValuesTest extends TestCase
         $input->bag = new ComputedPropertyBag($input->values->get('name'), $input->values->get('age'));
 
         $pipe = new ComputedValues();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertSame('1984-05-04', $input->bag->dob->format('Y-m-d'));
     }
@@ -54,6 +54,6 @@ class ComputedValuesTest extends TestCase
         $this->expectException(ComputedPropertyUninitializedException::class);
         $this->expectExceptionMessage('Property Tests\Fixtures\Values\ComputedPropertyMissingBag->dob must be computed');
         $pipe = new ComputedValues();
-        $pipe($input, fn ($input) => $input);
+        $pipe($input);
     }
 }

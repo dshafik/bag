@@ -31,7 +31,7 @@ class MissingParametersTest extends TestCase
         $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
         $pipe = new MissingParameters();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(BagInput::class, $input);
     }
@@ -44,7 +44,7 @@ class MissingParametersTest extends TestCase
         $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
         $pipe = new MissingParameters();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(BagInput::class, $input);
 
@@ -56,7 +56,7 @@ class MissingParametersTest extends TestCase
         $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
         $pipe = new MissingParameters();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(BagInput::class, $input);
     }
@@ -74,6 +74,6 @@ class MissingParametersTest extends TestCase
         $this->expectException(MissingPropertiesException::class);
         $this->expectExceptionMessage('Missing required properties: email');
         $pipe = new MissingParameters();
-        $pipe($input, fn ($input) => $input);
+        $pipe($input);
     }
 }

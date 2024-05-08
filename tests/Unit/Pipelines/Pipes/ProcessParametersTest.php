@@ -25,7 +25,7 @@ class ProcessParametersTest extends TestCase
         $input = new BagInput(NoConstructorBag::class, collect(['foo' => 'bar']));
 
         $pipe = new ProcessParameters();
-        $pipe($input, fn ($input) => $input);
+        $pipe($input);
     }
 
     public function testItRequiresBagParameters()
@@ -36,7 +36,7 @@ class ProcessParametersTest extends TestCase
         $input = new BagInput(NoPropertiesBag::class, collect(['foo' => 'bar']));
 
         $pipe = new ProcessParameters();
-        $pipe($input, fn ($input) => $input);
+        $pipe($input);
     }
 
     public function testItHandlesParameters()
@@ -48,7 +48,7 @@ class ProcessParametersTest extends TestCase
         ]));
 
         $pipe = new ProcessParameters();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(ValueCollection::class, $input->params);
         $this->assertContainsOnlyInstancesOf(Value::class, $input->params);

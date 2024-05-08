@@ -23,11 +23,11 @@ class MapInputTest extends TestCase
             'age_goes_here' => 40,
             'email_goes_here' => 'davey@php.net',
         ]));
-        $input = (new ProcessParameters())($input, fn ($input) => $input);
-        $input = (new IsVariadic())($input, fn ($input) => $input);
+        $input = (new ProcessParameters())($input);
+        $input = (new IsVariadic())($input);
 
         $pipe = new MapInput();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertSame([
             'nameGoesHere' => 'Davey Shafik',
@@ -43,11 +43,11 @@ class MapInputTest extends TestCase
             'age_goes_here' => 40,
             'email_goes_here' => 'davey@php.net',
         ]));
-        $input = (new ProcessParameters())($input, fn ($input) => $input);
-        $input = (new IsVariadic())($input, fn ($input) => $input);
+        $input = (new ProcessParameters())($input);
+        $input = (new IsVariadic())($input);
 
         $pipe = new MapInput();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertSame([
             'nameGoesHere' => 'Davey Shafik',
@@ -63,11 +63,11 @@ class MapInputTest extends TestCase
             'ageGoesHere' => 40,
             'emailGoesHere' => 'davey@php.net',
         ]));
-        $input = (new ProcessParameters())($input, fn ($input) => $input);
-        $input = (new IsVariadic())($input, fn ($input) => $input);
+        $input = (new ProcessParameters())($input);
+        $input = (new IsVariadic())($input);
 
         $pipe = new MapInput();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertSame([
             'nameGoesHere' => 'Davey Shafik',

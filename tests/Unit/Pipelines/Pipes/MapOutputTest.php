@@ -25,12 +25,12 @@ class MapOutputTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::JSON);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
 
         $pipe = new MapOutput();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'name_goes_here' => 'Davey Shafik',
@@ -48,12 +48,12 @@ class MapOutputTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::RAW);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
 
         $pipe = new MapOutput();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'nameGoesHere' => 'Davey Shafik',

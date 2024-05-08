@@ -25,9 +25,9 @@ class GetValuesTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::JSON);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
-        $output = (new GetValues())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
+        $output = (new GetValues())($output);
 
         $this->assertSame($bag->getRaw()->toArray(), $output->values->toArray());
     }

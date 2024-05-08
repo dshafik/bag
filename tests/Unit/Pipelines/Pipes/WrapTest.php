@@ -29,13 +29,13 @@ class WrapTest extends TestCase
         $bag = BagWithFactory::factory()->make();
 
         $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
-        $output = (new MapOutput())($output, fn ($output) => $output);
+        $output = (new MapOutput())($output);
 
         $pipe = new Wrap();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'name' => 'Davey Shafik',
@@ -51,13 +51,13 @@ class WrapTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::UNWRAPPED);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
-        $output = (new MapOutput())($output, fn ($output) => $output);
+        $output = (new MapOutput())($output);
 
         $pipe = new Wrap();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'name' => 'Davey Shafik',
@@ -73,13 +73,13 @@ class WrapTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::RAW);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
-        $output = (new MapOutput())($output, fn ($output) => $output);
+        $output = (new MapOutput())($output);
 
         $pipe = new Wrap();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'name' => 'Davey Shafik',
@@ -95,13 +95,13 @@ class WrapTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
-        $output = (new MapOutput())($output, fn ($output) => $output);
+        $output = (new MapOutput())($output);
 
         $pipe = new Wrap();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'wrapper' => [
@@ -119,13 +119,13 @@ class WrapTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::JSON);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
-        $output = (new MapOutput())($output, fn ($output) => $output);
+        $output = (new MapOutput())($output);
 
         $pipe = new Wrap();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'wrapper' => [
@@ -143,13 +143,13 @@ class WrapTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
-        $output = (new MapOutput())($output, fn ($output) => $output);
+        $output = (new MapOutput())($output);
 
         $pipe = new Wrap();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'wrapper' => [
@@ -159,13 +159,13 @@ class WrapTest extends TestCase
         ], $output->output->toArray());
 
         $output = new BagOutput($bag, OutputType::JSON);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
-        $output = (new MapOutput())($output, fn ($output) => $output);
+        $output = (new MapOutput())($output);
 
         $pipe = new Wrap();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'json_wrapper' => [

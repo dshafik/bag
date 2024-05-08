@@ -22,7 +22,7 @@ class FillBagTest extends TestCase
         $input = (new MapInput())($input, fn (BagInput $input) => $input);
 
         $pipe = new FillBag();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(TestBag::class, $input->bag);
     }

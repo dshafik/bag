@@ -31,12 +31,12 @@ class HideValuesTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
 
         $pipe = new HideValues();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'name' => 'Davey Shafik',
@@ -54,12 +54,12 @@ class HideValuesTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
 
         $pipe = new HideValues();
-        $output = $pipe($output, fn ($output) => $output);
+        $output = $pipe($output);
 
         $this->assertSame([
             'name' => 'Davey Shafik',
@@ -78,12 +78,12 @@ class HideValuesTest extends TestCase
         ]);
 
         $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output, fn ($output) => $output);
-        $output = (new ProcessParameters())($output, fn ($output) => $output);
+        $output = (new ProcessProperties())($output);
+        $output = (new ProcessParameters())($output);
         $output->values = $bag->getRaw();
 
         $pipe = new HideValues();
-        $pipe($output, fn ($output) => $output);
-        $pipe($output, fn ($output) => $output);
+        $pipe($output);
+        $pipe($output);
     }
 }

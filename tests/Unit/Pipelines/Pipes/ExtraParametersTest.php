@@ -31,7 +31,7 @@ class ExtraParametersTest extends TestCase
         $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
         $pipe = new ExtraParameters();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(BagInput::class, $input);
     }
@@ -48,7 +48,7 @@ class ExtraParametersTest extends TestCase
         $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
         $pipe = new ExtraParameters();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(BagInput::class, $input);
     }
@@ -68,6 +68,6 @@ class ExtraParametersTest extends TestCase
         $this->expectException(AdditionalPropertiesException::class);
         $this->expectExceptionMessage('Additional properties found: test');
         $pipe = new ExtraParameters();
-        $pipe($input, fn ($input) => $input);
+        $pipe($input);
     }
 }

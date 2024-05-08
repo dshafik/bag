@@ -27,7 +27,7 @@ class TransformTest extends TestCase
         $input = new BagInput(BagWithTransformers::class, $values);
 
         $pipe = new Transform();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(Collection::class, $input->input);
         $this->assertSame('Davey Shafik', $input->input->get('name'));
@@ -42,7 +42,7 @@ class TransformTest extends TestCase
         $input = new BagInput(BagWithTransformers::class, $values);
 
         $pipe = new Transform();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(Collection::class, $input->input);
         $this->assertSame('Davey Shafik', $input->input->get('name'));
@@ -57,7 +57,7 @@ class TransformTest extends TestCase
         $input = new BagInput(BagWithTransformers::class, $values);
 
         $pipe = new Transform();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(Collection::class, $input->input);
         $this->assertSame('Davey Shafik', $input->input->get('name'));
@@ -72,7 +72,7 @@ class TransformTest extends TestCase
         $input = new BagInput(BagWithTransformers::class, $values);
 
         $pipe = new Transform();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(Collection::class, $input->input);
         $this->assertSame('Davey Shafik', $input->input->get('name'));
@@ -87,7 +87,7 @@ class TransformTest extends TestCase
         $input = new BagInput(BagWithTransformers::class, $values);
 
         $pipe = new Transform();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(Collection::class, $input->input);
         $this->assertSame('Davey Shafik', $input->input->get('name'));
@@ -101,7 +101,7 @@ class TransformTest extends TestCase
         $input = new BagInput(BagWithTransformers::class, 'Davey Shafik');
 
         $pipe = new Transform();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(Collection::class, $input->input);
         $this->assertSame('Davey Shafik', $input->input->get('name'));
@@ -111,7 +111,7 @@ class TransformTest extends TestCase
         $input = new BagInput(BagWithTransformers::class, 40);
 
         $pipe = new Transform();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(Collection::class, $input->input);
         $this->assertSame('Davey Shafik', $input->input->get('name'));
@@ -124,7 +124,7 @@ class TransformTest extends TestCase
         $input = new BagInput(BagWithTransformers::class, ['name' => 'Davey Shafik', 'age' => 40]);
 
         $pipe = new Transform();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(Collection::class, $input->input);
         $this->assertSame('Davey Shafik', $input->input->get('name'));
@@ -134,7 +134,7 @@ class TransformTest extends TestCase
         $input = new BagInput(BagWithTransformers::class, BagWithFactory::factory()->make(['name' => 'Davey Shafik', 'age' => 40]));
 
         $pipe = new Transform();
-        $input = $pipe($input, fn ($input) => $input);
+        $input = $pipe($input);
 
         $this->assertInstanceOf(Collection::class, $input->input);
         $this->assertSame('Davey Shafik', $input->input->get('name'));
@@ -150,6 +150,6 @@ class TransformTest extends TestCase
         $input = new BagInput(BagWithTransformers::class, 1.0);
 
         $pipe = new Transform();
-        $pipe($input, fn ($input) => $input);
+        $pipe($input);
     }
 }

@@ -75,8 +75,9 @@ export default withMermaid({
       {
         text: 'Laravel Integration',
         items: [
-          { text: 'Controller Injection', link: '/laravel-injection' },
-          { text: 'Eloquent Casting', link: '/eloquent-casting' },
+          { text: 'Controller Injection', link: '/laravel-controller-injection' },
+          { text: 'Route Parameter Binding', link: '/laravel-route-parameter-binding' },
+          { text: 'Eloquent Casting', link: '/laravel-eloquent-casting' },
         ]
       },
       {

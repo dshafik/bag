@@ -12,6 +12,7 @@ use Tests\Fixtures\Values\HiddenParametersBag;
 use Tests\Fixtures\Values\TestBag;
 
 /**
+ * @property int $id
  * @property TestBag $bag
  * @property HiddenParametersBag $hidden_bag
  * @property Collection $collection

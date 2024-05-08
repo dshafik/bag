@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tests\Fixtures;
+namespace Tests\Fixtures\Values;
 
 use Bag\Attributes\Bag;
 use Bag\Traits\HasBag;
-use Tests\Fixtures\Values\OptionalPropertiesBag;
 
-#[Bag(OptionalPropertiesBag::class, Bag::ALL)]
+#[Bag(OptionalPropertiesBag::class, Bag::PRIVATE)]
 class ObjectToBagPrivate
 {
     use HasBag;

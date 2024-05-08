@@ -20,8 +20,8 @@ should feel very familiar to anyone who has used it — _however_, it has severa
 - [Collections](collections) of Value Objects[*](#collections)
 - [Object to Bag](object-to-bag) conversion
 - [Wrapping](wrapping) of output arrays/JSON
-- [Eloquent Casting](eloquent-casting)
-- [Laravel Controller Injection](laravel-injection)
+- [Eloquent Casting](laravel-eloquent-casting)
+- [Laravel Controller Injection](laravel-controller-injection)
 
 ## Immutability
 

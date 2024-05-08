@@ -9,6 +9,7 @@ use Bag\Bag;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use DateTimeImmutable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection as LaravelCollection;
 use function is_subclass_of;
 use Override;
@@ -26,6 +27,7 @@ class MagicCast implements CastsPropertySet
             $propertyType === 'float' => (float) $value,
             $propertyType === 'bool' => (bool) $value,
             $propertyType === 'string' => (string) $value,
+            is_object($value) && $propertyType === $value::class => $value,
             is_string($value) && (
                 is_a($propertyType, \DateTime::class, true) ||
                 is_a($propertyType, DateTimeImmutable::class, true) ||
@@ -36,6 +38,7 @@ class MagicCast implements CastsPropertySet
             is_a($propertyType, LaravelCollection::class, true) || is_subclass_of($propertyType, LaravelCollection::class, true) => $propertyType::make($value),
             is_subclass_of($propertyType, BackedEnum::class, true) => $propertyType::from($value),
             is_subclass_of($propertyType, UnitEnum::class, true) => constant("{$propertyType}::{$value}"),
+            is_subclass_of($propertyType, Model::class) && \is_scalar($value) => $propertyType::findOrFail($value),
             default => $value,
         };
     }

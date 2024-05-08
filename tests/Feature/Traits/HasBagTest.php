@@ -9,11 +9,12 @@ use Bag\Exceptions\BagAttributeNotFoundException;
 use Bag\Exceptions\BagNotFoundException;
 use Bag\Traits\HasBag;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Tests\Fixtures\ObjectToBagAll;
 use Tests\Fixtures\ObjectToBagInvalidBag;
 use Tests\Fixtures\ObjectToBagNoAttribute;
-use Tests\Fixtures\ObjectToBagPrivate;
 use Tests\Fixtures\ObjectToBagProtected;
 use Tests\Fixtures\ObjectToBagPublic;
+use Tests\Fixtures\Values\ObjectToBagPrivate;
 use Tests\Fixtures\Values\OptionalPropertiesBag;
 use Tests\TestCase;
 
@@ -47,12 +48,23 @@ class HasBagTest extends TestCase
 
     public function testItCreatesBagWithPublicProtectedAndPrivateProperties(): void
     {
-        $object = new ObjectToBagPrivate('Davey Shafik', 40, 'davey@php.net');
+        $object = new ObjectToBagAll('Davey Shafik', 40, 'davey@php.net');
 
         /** @var OptionalPropertiesBag $bag */
         $bag = $object->toBag();
         $this->assertSame('Davey Shafik', $bag->name);
         $this->assertSame(40, $bag->age);
+        $this->assertSame('davey@php.net', $bag->email);
+    }
+
+    public function testItCreatesBagWithPrivateProperties(): void
+    {
+        $object = new ObjectToBagPrivate('Davey Shafik', 40, 'davey@php.net');
+
+        /** @var OptionalPropertiesBag $bag */
+        $bag = $object->toBag();
+        $this->assertNull($bag->name);
+        $this->assertNull($bag->age);
         $this->assertSame('davey@php.net', $bag->email);
     }
 

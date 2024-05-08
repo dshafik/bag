@@ -26,6 +26,7 @@ start("Bag::from($data)")
 --> process(Process Parameters) 
 --> variadic(Is Variadic?)
 --> mapInput(Map Input)
+--> laravelParams(Laravel Route Parameter Binding)
 -- Finalized Input Values --> missing(Missing Parameters) --> missingError{Error?}
 missingError -- Yes --> errorMissingParameters(MissingPropertiesException)
 missingError -- No --> extra(Extra Parameters) --> extraError{Error?}
@@ -51,6 +52,7 @@ click transform "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipe
 click process "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/ProcessParameters.php" _blank
 click variadic "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/IsVariadic.php" _blank
 click mapInput "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/MapInput.php" _blank
+click laravelParams "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/LaravelRouteParameters.php" _blank
 click missing "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/MissingParameters.php" _blank
 click extra "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/ExtraParameters.php" _blank
 click validate "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/Validate.php" _blank

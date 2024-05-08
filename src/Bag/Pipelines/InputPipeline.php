@@ -10,6 +10,7 @@ use Bag\Pipelines\Pipes\ComputedValues;
 use Bag\Pipelines\Pipes\ExtraParameters;
 use Bag\Pipelines\Pipes\FillBag;
 use Bag\Pipelines\Pipes\IsVariadic;
+use Bag\Pipelines\Pipes\LaravelRouteParameters;
 use Bag\Pipelines\Pipes\MapInput;
 use Bag\Pipelines\Pipes\MissingParameters;
 use Bag\Pipelines\Pipes\ProcessParameters;
@@ -28,6 +29,7 @@ class InputPipeline
             new ProcessParameters(),
             new IsVariadic(),
             new MapInput(),
+            new LaravelRouteParameters(),
             new MissingParameters(),
             new ExtraParameters(),
             new Validate(),

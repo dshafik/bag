@@ -1,4 +1,4 @@
-# Laravel Injection
+# Laravel Controller Injection
 
 Bag can automatically inject _validated_ Bag objects into your controllers using Laravel's automatic dependency injection. This can take
 the place of using Laravel's form request validation _and_ accessing the input data.

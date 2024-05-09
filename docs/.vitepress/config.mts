@@ -46,7 +46,7 @@ export default withMermaid({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Get Started', link: '/install' }
+      { text: 'Documentation', link: '/install' }
     ],
 
     sidebar: [
@@ -92,7 +92,7 @@ export default withMermaid({
     ],
 
     footer: {
-      message: 'Made with 🦁💖🏳️‍🌈 by Davey Shafik',
+      message: "Made with 🦁💖🏳️‍🌈 by <a href=\"https://www.daveyshafik.com\">Davey Shafik</a>.",
       copyright: "Released under the MIT License. Copyright © 2024 Davey Shafik.",
     },
 

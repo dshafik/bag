@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Bag\Property;
 
-use Bag\Attributes\MapName;
-use Bag\Internal\Reflection;
 use Bag\Internal\Util;
 use ReflectionClass;
 use ReflectionNamedType;
@@ -20,7 +18,7 @@ class Value
         public ReflectionNamedType $type,
         public string $name,
         public bool $required,
-        public Map $maps,
+        public MapCollection $maps,
         public CastInput $inputCast,
         public CastOutput $outputCast,
         public ValidatorCollection $validators,
@@ -36,15 +34,13 @@ class Value
 
         $type = Util::getPropertyType($property);
 
-        $map = Reflection::getAttributeInstance($bag, MapName::class);
-
         return new self(
             bag: $bag,
             property: $property,
             type: $type,
             name: $name,
             required: self::isRequired($property),
-            maps: Map::create(classMap: $map, property: $property),
+            maps: MapCollection::create(bagClass: $bag, property: $property),
             inputCast: CastInput::create(property: $property),
             outputCast: CastOutput::create(property: $property),
             validators: ValidatorCollection::create(property: $property),

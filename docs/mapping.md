@@ -5,12 +5,12 @@ transforming JSON `snake_case` to your codes `camelCase` and vice-versa.
 
 ## How Mapping Works
 
-Mapping should be thought of as aliasing property names. The input mapper determines what the _incoming_ alias should be by transforming the original property name, while the output mapper transform the property name and uses it for the _outgoing_ property name. This means
+Mapping should be thought of as aliasing property names. The input mapper determines what the _incoming_ aliases _could_ be by transforming the original property name, while the output mapper transform the property name and uses it for the _outgoing_ property name. This means
 that if you want to map a `propertyName` from the input `property_name` you would use a `SnakeCase` mapper, rather than a `camelCase` mapper.
 
 ## Mapping Names
 
-To map names use the `MapName`, `MapInputName`, or `MapOutputName` attributes. The `MapName` attribute can either be applied to the entire class, **or** to an individual property.
+To map names use the `Bag\Attributes\MapName`, `Bag\Attributes\MapInputName`, or `Bag\Attributes\MapOutputName` attributes. These attributes can either be applied to the entire class, **or** to an individual property.
 
 ### Class-level Mapping
 
@@ -18,12 +18,13 @@ Class-level mapping applies to all properties on the class. This is useful when 
 
 This is done by applying the mapper attribute to the class:
 
-```php
+```php{5,6}
 use Bag\Bag;
 use Bag\Attributes\MapName;
 use Bag\Mappers\SnakeCase;
 
-#[MapName(input: SnakeCase::class, output: SnakeCase::class)]
+#[MapInputName(SnakeCase::class)
+#[MapOutputName(SnakeCase::class)]
 class MyValue extends Bag {
     public function __construct(
         public string $myValue,
@@ -31,6 +32,24 @@ class MyValue extends Bag {
     ) {}
 }
 ```
+
+> [!NOTE]
+> The above is functionally equivelent to using:
+> ```php
+> #[MapName(input: SnakeCase::class, output: SnakeCase::class)]
+> ```
+> 
+> We recommend using the `MapInputName` and `MapOutputName` attributes as mapper arguments can be passed 
+> directly, rather than as an array of values to either the `inputParams` and/or `outputParams` arguments:
+> 
+> ```php
+> #[MapInputName(MapperName::class, 'param1', 'param2')]
+> #[MapOutputName(MapperName::class, 'param1', 'param2')]
+> 
+> // vs
+> 
+> #[MapName(input: MapperName::class, inputParams: ['param1', 'param2'], output: MapperName::class, outputParams: ['param1', 'param2'])]
+> ```
 
 In this above example, the `MyValue` class will map _all_ property names from `snake_case` to `camelCase` on both input and output, in this case, `my_value` to `myValue` and `my_other_value` to `myOtherValue`:
 
@@ -50,13 +69,8 @@ $value = MyValue::from([
 ]);
 ```
 
-You can specify either an `input` or `output`, or both arguments for the `MapName` attribute, or use the `MapInputName` and `MapOutputName` attributes to specify only one.
-
 > [!TIP]
 > You can specify a mapper on either the class or property level, or both. If you specify a mapper on both the class and property level, the property-level mapper will take precedence.
-
-> [!WARNING]
-> You may only specify _one_ mapper for a given class or property. If you need to apply multiple mappers, you should create a new mapper that combines the desired transformations.
 
 ## Built-in Mappers
 
@@ -76,7 +90,7 @@ The `Alias` mapper allows you to specify a custom alias for a specific property 
 
 In the following example we alias the input name `uuid` to the property `id`:
 
-```php
+```php{7}
 use Bag\Bag;
 use Bag\Attributes\MapInputName;
 use Bag\Mappers\Alias;
@@ -95,11 +109,12 @@ The `Stringable` mapper allows you to chain any of the [fluent string helper met
 
 The `Stringable` mapper accepts any number of transformations. To pass in arguments to a given transformation, use a colon `:` followed by a comma-separated list of arguments.
 
-```php
+```php{4,5}
 use Bag\Bag;
-use Bag\Mappers\SnakeCase;
+use Bag\Mappers\Stringable;
 
-#[MapName(input: Stringable::class, inputParams: ['camel', 'kebab'], output: \Bag\Mappers\Stringable::class, outputParams: ['camel', 'kebab'])]
+#[MapInputName(Stringable::class, 'camel', 'kebab')]
+#[MapOutputName(Stringable::class, 'camel', 'kebab')]
 class MyValue extends Bag {
     public function __construct(
         public string $myValue,
@@ -117,6 +132,28 @@ Input mapping is applied when calling `Bag::from()`. You can use either the orig
 
 Output mapping is applied when calling `$Bag->toArray()` or `$Bag->toJson()` (or when using `json_encode()`).
 
+## Mapping Hierarchy
+
+For input mapping, _all_ mappers are used, allowing _multiple_ mapped names to match to the same property. **The last _incoming_
+property name that matches will be the value used for the Bag.**
+
+The mapping hierarchy is as follows:
+
+- Class Level: `MapName(input)`
+  - Class Level: `MapInputName`
+    - Property Level: `MapName(input)`
+      - Property Level: `MapInputName`
+
+For output mapping, _only_ the last mapper is used. The mapping hierarchy is as follows:
+
+- Class Level: `MapName(output)`
+  - Class Level: `MapOutputName`
+    - PropertyLevel Level: `MapName(Output)`
+      - PropertyLevel Level: `MapOutputName`
+
+> [!NOTE]
+> The `MapName` and `MapOutputName` attributes can only be added once at each level. You can add as many `MapInputName` attributes as you like!
+
 ## Custom Mappers
 
 You can also create your own mappers by implementing the `\Bag\Mappers\MapperInterface` interface.
@@ -133,5 +170,22 @@ class Kebab implements MapperInterface {
     public function output(string $name): string {
         return Str::of($name)->camel()->kebab();
     }
+}
+```
+
+Then specify it in the Mapping attribute:
+
+```php{5,6}
+use \App\Values\Mappers\Kebab;
+use Bag\Bag;
+use Bag\Mappers\Stringable;
+
+#[MapInputName(Kebab::class)]
+#[MapOutputName(Kebab::class)]
+class MyValue extends Bag {
+    public function __construct(
+        public string $myValue,
+        public string $myOtherValue
+    ) {}
 }
 ```

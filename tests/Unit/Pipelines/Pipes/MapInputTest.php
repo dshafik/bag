@@ -36,6 +36,46 @@ class MapInputTest extends TestCase
         ], $input->values->toArray());
     }
 
+
+    public function testItMapsInputNamesMultipleAliases()
+    {
+        $input = new BagInput(MappedNameClassBag::class, collect([
+            'NAMEGOESHERE' => 'DAVEY SHAFIK',
+            'name_goes_here' => 'Davey_Shafik',
+            'age_goes_here' => 40,
+            'email_goes_here' => 'davey@php.net',
+        ]));
+        $input = (new ProcessParameters())($input);
+        $input = (new IsVariadic())($input);
+
+        $pipe = new MapInput();
+        $input = $pipe($input);
+
+        $this->assertSame([
+            'nameGoesHere' => 'Davey_Shafik',
+            'ageGoesHere' => 40,
+            'emailGoesHere' => 'davey@php.net',
+        ], $input->values->toArray());
+
+        $input = new BagInput(MappedNameClassBag::class, collect([
+            'name_goes_here' => 'Davey_Shafik',
+            'NAMEGOESHERE' => 'DAVEY SHAFIK',
+            'age_goes_here' => 40,
+            'email_goes_here' => 'davey@php.net',
+        ]));
+        $input = (new ProcessParameters())($input);
+        $input = (new IsVariadic())($input);
+
+        $pipe = new MapInput();
+        $input = $pipe($input);
+
+        $this->assertSame([
+            'nameGoesHere' => 'DAVEY SHAFIK',
+            'ageGoesHere' => 40,
+            'emailGoesHere' => 'davey@php.net',
+        ], $input->values->toArray());
+    }
+
     public function testItMapsInputNames()
     {
         $input = new BagInput(MappedInputNameClassBag::class, collect([

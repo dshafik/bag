@@ -51,8 +51,11 @@ class ValueCollectionTest extends TestCase
 
         $this->assertSame([
             'input' => [
+                'NAMEGOESHERE' => 'nameGoesHere',
                 'name_goes_here' => 'nameGoesHere',
+                'AGEGOESHERE' => 'ageGoesHere',
                 'age_goes_here' => 'ageGoesHere',
+                'EMAILGOESHERE' => 'emailGoesHere',
                 'email_goes_here' => 'emailGoesHere',
             ],
             'output' => [

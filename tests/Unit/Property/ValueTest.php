@@ -41,8 +41,8 @@ class ValueTest extends TestCase
 
         $this->assertTrue($value->required);
 
-        $this->assertSame('name_goes_here', $value->maps->inputName);
-        $this->assertSame('name_goes_here', $value->maps->outputName);
+        $this->assertSame(['name_goes_here'], $value->maps->get('input')->toArray());
+        $this->assertSame('name_goes_here', $value->maps->get('output'));
 
         $this->assertInstanceOf(CastInput::class, $value->inputCast);
         $this->assertInstanceOf(CastOutput::class, $value->outputCast);
@@ -75,8 +75,8 @@ class ValueTest extends TestCase
 
         $this->assertTrue($value->required);
 
-        $this->assertSame('name_goes_here', $value->maps->inputName);
-        $this->assertSame('name_goes_here', $value->maps->outputName);
+        $this->assertSame(['name_goes_here'], $value->maps->get('input')->toArray());
+        $this->assertSame('name_goes_here', $value->maps->get('output'));
 
         $this->assertInstanceOf(CastInput::class, $value->inputCast);
         $this->assertInstanceOf(CastOutput::class, $value->outputCast);

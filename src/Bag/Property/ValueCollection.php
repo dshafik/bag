@@ -8,11 +8,6 @@ use Illuminate\Support\Collection;
 
 class ValueCollection extends Collection
 {
-    public function __construct($items = [])
-    {
-        parent::__construct($items);
-    }
-
     public function required(): static
     {
         return $this->where('required', true);
@@ -21,11 +16,15 @@ class ValueCollection extends Collection
     public function aliases()
     {
         return collect([
-            'input' => $this->mapWithKeys(function (Value $property) {
-                return [$property->maps->inputName => $property->name];
-            })->toBase(),
+            'input' => $this->map(function (Value $property) {
+                return $property->maps['input'];
+            })->flatMap(function ($aliases, $name) {
+                return $aliases->mapWithKeys(function ($alias) use ($name) {
+                    return [$alias => $name];
+                });
+            }),
             'output' => $this->mapWithKeys(function (Value $property) {
-                return [$property->name => $property->maps->outputName];
+                return [$property->name => $property->maps['output']];
             })->toBase(),
         ]);
     }

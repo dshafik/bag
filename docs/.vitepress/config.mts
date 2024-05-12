@@ -87,12 +87,6 @@ export default withMermaid({
           { text: 'How Bag Works', link: '/how-bag-works' },
           { text: 'Roadmap', link: '/roadmap' },
         ]
-      },
-      {
-        text: 'Advanced',
-        items: [
-          { text: 'Custom Bags', link: '/advanced/custom-bags' }
-        ]
       }
     ],
 

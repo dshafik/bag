@@ -1,8 +1,7 @@
-import { defineConfig } from 'vitepress'
 import taskLists from "markdown-it-task-lists";
 import { withMermaid } from "vitepress-plugin-mermaid";
 
-const BASE_PATH = '/bag/'
+const BASE_PATH = '/'
 
 // https://vitepress.dev/reference/site-config
 export default withMermaid({
@@ -89,6 +88,12 @@ export default withMermaid({
           { text: 'Roadmap', link: '/roadmap' },
         ]
       },
+      {
+        text: 'Advanced',
+        items: [
+          { text: 'Custom Bags', link: '/advanced/custom-bags' }
+        ]
+      }
     ],
 
     footer: {

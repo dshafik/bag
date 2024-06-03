@@ -24,7 +24,7 @@
         "ramsey/conventional-commits": "dev-allow-sf-7",
         "roave/security-advisories": "dev-latest",
         "symfony/var-dumper": "*",
-        "infection/infection": "^0.28.1"
+        "infection/infection": "^0.28.1 || ^0.29.0"
     },
     "repositories": [
         {

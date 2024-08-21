@@ -10,11 +10,12 @@ use Bag\Concerns\WithCollections;
 use Bag\Internal\Cache;
 use Illuminate\Foundation\Testing\WithFaker;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\Values\BagWithCollection;
 use Tests\TestCase;
 
-#[CoversClass(WithCollections::class)]
+#[CoversTrait(WithCollections::class)]
 #[CoversClass(Collection::class)]
 #[CoversClass(CollectionAttribute::class)]
 class WithCollectionsTest extends TestCase

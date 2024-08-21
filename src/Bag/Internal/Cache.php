@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bag\Internal;
 
 use Mockery;
+use Mockery\MockInterface;
 use WeakMap;
 
 /**
@@ -12,7 +13,7 @@ use WeakMap;
  */
 class Cache
 {
-    public static ?self $instance = null;
+    public static self|MockInterface|null $instance = null;
 
     /**
      * @var array<WeakMap>

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Concerns;
 
 use Bag\Concerns\WithArrayable;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
 use Tests\Fixtures\Values\TestBag;
 use Tests\TestCase;
 
-#[CoversClass(WithArrayable::class)]
+#[CoversTrait(WithArrayable::class)]
 class WithArrayableTest extends TestCase
 {
     public function testItIsArrayable()

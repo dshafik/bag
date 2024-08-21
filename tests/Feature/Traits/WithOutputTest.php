@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Tests\Feature\Traits;
 
 use Bag\Concerns\WithOutput;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
 use Tests\Fixtures\Values\HiddenParametersBag;
 use Tests\Fixtures\Values\MappedOutputNameClassBag;
 use Tests\Fixtures\Values\WrappedBag;
 use Tests\TestCase;
 
-#[CoversClass(WithOutput::class)]
+#[CoversTrait(WithOutput::class)]
 class WithOutputTest extends TestCase
 {
     public function testItMapsOutputNames()

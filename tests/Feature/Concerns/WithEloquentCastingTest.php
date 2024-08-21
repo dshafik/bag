@@ -11,6 +11,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Orchestra\Testbench\Attributes\WithEnv;
 use function Orchestra\Testbench\workbench_path;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\Models\CastedModel;
 use Tests\Fixtures\Values\BagWithCollection;
@@ -19,7 +20,7 @@ use Tests\Fixtures\Values\TestBag;
 use Tests\TestCase;
 
 #[WithEnv('DB_CONNECTION', 'testing')]
-#[CoversClass(WithEloquentCasting::class)]
+#[CoversTrait(WithEloquentCasting::class)]
 #[CoversClass(AsBagCollection::class)]
 class WithEloquentCastingTest extends TestCase
 {

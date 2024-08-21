@@ -12,6 +12,7 @@ use Bag\Traits\HasFactory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
 use Tests\Fixtures\Collections\BagWithFactoryAndCollectionCollection;
 use Tests\Fixtures\Factories\BagWithFactoryFactory;
 use Tests\Fixtures\Values\BagWithFactory;
@@ -21,7 +22,7 @@ use Tests\Fixtures\Values\BagWithoutFactoryAttribute;
 use Tests\TestCase;
 
 #[CoversClass(Factory::class)]
-#[CoversClass(HasFactory::class)]
+#[CoversTrait(HasFactory::class)]
 #[CoversClass(FactoryAttribute::class)]
 #[CoversClass(MissingFactoryException::class)]
 class FactoryTest extends TestCase

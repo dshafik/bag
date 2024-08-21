@@ -6,12 +6,12 @@ namespace Tests\Feature\Concerns;
 
 use Bag\Concerns\WithJson;
 use Bag\Internal\Cache;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
 use Tests\Fixtures\Values\HiddenJsonParametersBag;
 use Tests\Fixtures\Values\TestBag;
 use Tests\TestCase;
 
-#[CoversClass(WithJson::class)]
+#[CoversTrait(WithJson::class)]
 class WithJsonTest extends TestCase
 {
     public function testItEncodesJson()

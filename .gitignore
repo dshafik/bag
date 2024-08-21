@@ -6,3 +6,6 @@ tests/coverage
 node_modules/
 docs/.vitepress/dist/
 docs/.vitepress/cache/
+/coverage.xml
+/coverage-phpunit.xml
+/tests/mutation.html

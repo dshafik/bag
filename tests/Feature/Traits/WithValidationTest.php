@@ -10,7 +10,7 @@ use Bag\Internal\Cache;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Validation\ValidationException;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
 use Tests\Fixtures\Values\ComputedPropertyBag;
 use Tests\Fixtures\Values\ComputedPropertyMissingBag;
 use Tests\Fixtures\Values\ValidateMappedNameClassBag;
@@ -19,7 +19,7 @@ use Tests\Fixtures\Values\ValidateUsingAttributesBag;
 use Tests\Fixtures\Values\ValidateUsingRulesMethodBag;
 use Tests\TestCase;
 
-#[CoversClass(WithValidation::class)]
+#[CoversTrait(WithValidation::class)]
 class WithValidationTest extends TestCase
 {
     public function testItValidates()

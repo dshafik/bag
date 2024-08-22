@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bag;
 
+use Bag\Console\Commands\MakeBagCommand;
 use Bag\Internal\Cache;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -22,5 +23,11 @@ class BagServiceProvider extends ServiceProvider
                 fn () => Cache::remember('request', $class, fn () =>  $class::from($this->app->get('request')->all()))
             );
         });
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                MakeBagCommand::class,
+            ]);
+        }
     }
 }

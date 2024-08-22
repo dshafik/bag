@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bag;
 
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Collection as LaravelCollection;
 
 /**
@@ -12,6 +13,8 @@ use Illuminate\Support\Collection as LaravelCollection;
  */
 abstract class Factory
 {
+    use WithFaker;
+
     protected int $count = 1;
 
     protected LaravelCollection $state;

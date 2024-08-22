@@ -77,6 +77,7 @@ export default withMermaid({
           { text: 'Controller Injection', link: '/laravel-controller-injection' },
           { text: 'Route Parameter Binding', link: '/laravel-route-parameter-binding' },
           { text: 'Eloquent Casting', link: '/laravel-eloquent-casting' },
+          { text: 'Generating Bag Classes', link: '/laravel-artisan-make-bag-command' },
         ]
       },
       {

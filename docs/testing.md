@@ -20,6 +20,20 @@ class MyValueFactory extends Factory {
 }
 ```
 
+### Faker Integration
+
+Factories include [Faker](https://fakerphp.org) support out of the box. You can use the `$faker` property to generate random values:
+
+```php
+return [
+    'name' => $this->faker->name(),
+    'age' => $this->faker->numberBetween(18, 65),
+];
+```
+
+> [!TIP]
+> You can also generate factory classes automatically using the [`artisan make:bag`](/laravel-artisan-make-bag-command) command.
+
 ## Using a Factory
 
 Before you can use a Factory, you must first add both the `Factory` attribute and the `HasFactory` trait to your Bag object:

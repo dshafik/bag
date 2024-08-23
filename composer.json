@@ -18,7 +18,7 @@
         "captainhook/captainhook-phar": "^5.23",
         "captainhook/hook-installer": "^1.0",
         "fakerphp/faker": "^1.23",
-        "infection/infection": "^0.28.1",
+        "infection/infection": "^0.28.1 || ^0.29.0",
         "larastan/larastan": "^2.0",
         "laravel/pint": "^1.15",
         "laravel/prompts": "^0.1.25",

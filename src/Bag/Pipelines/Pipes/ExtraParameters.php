@@ -16,7 +16,7 @@ readonly class ExtraParameters
         }
 
         $extra = collect();
-        $input->values->each(function ($_, $key) use ($input, $extra) {
+        $input->values->each(function (mixed $_, string $key) use ($input, $extra) {
             if ($input->params->has($key)) {
                 return;
             }

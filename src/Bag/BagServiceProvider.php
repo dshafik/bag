@@ -11,7 +11,7 @@ use Illuminate\Support\ServiceProvider;
 
 class BagServiceProvider extends ServiceProvider
 {
-    public function register()
+    public function register(): void
     {
         $this->app->beforeResolving(Bag::class, function (string $class, array $parameters, Application $app) {
             if ($this->app->has($class)) {

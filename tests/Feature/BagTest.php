@@ -1,62 +1,46 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Feature;
-
-use Bag\Bag;
-use Illuminate\Foundation\Testing\WithFaker;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Values\TestBag;
-use Tests\TestCase;
 
-#[CoversClass(Bag::class)]
-class BagTest extends TestCase
-{
-    use WithFaker;
+test('it creates value from array', function () {
+    $value = TestBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+        'email' => 'davey@php.net',
+    ]);
 
-    public function testItCreatesValueFromArray()
-    {
-        $value = TestBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-            'email' => 'davey@php.net',
-        ]);
+    expect($value->name)->toBe('Davey Shafik')
+        ->and($value->age)->toBe(40)
+        ->and($value->email)->toBe('davey@php.net');
+});
 
-        $this->assertSame('Davey Shafik', $value->name);
-        $this->assertSame(40, $value->age);
-        $this->assertSame('davey@php.net', $value->email);
-    }
+test('it creates new instance using with named args', function () {
+    $value = TestBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 39,
+        'email' => 'davey@php.net',
+    ]);
 
-    public function testItCreatesNewInstanceUsingWithNamedArgs()
-    {
-        $value = TestBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 39,
-            'email' => 'davey@php.net',
-        ]);
+    $value2 = $value->with(age: 40, email: 'test@example.org');
 
-        $value2 = $value->with(age: 40, email: 'test@example.org');
+    expect($value)->not->toBe($value2)
+        ->and($value2->name)->toBe('Davey Shafik')
+        ->and($value2->age)->toBe(40)
+        ->and($value2->email)->toBe('test@example.org');
+});
 
-        $this->assertNotSame($value, $value2);
-        $this->assertSame('Davey Shafik', $value2->name);
-        $this->assertSame(40, $value2->age);
-        $this->assertSame('test@example.org', $value2->email);
-    }
+test('it creates new instance using with array', function () {
+    $value = TestBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 39,
+        'email' => 'davey@php.net',
+    ]);
 
-    public function testItCreatesNewInstanceUsingWithArray()
-    {
-        $value = TestBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 39,
-            'email' => 'davey@php.net',
-        ]);
+    $value2 = $value->with(['age' => 40, 'email' => 'test@example.org']);
 
-        $value2 = $value->with(['age' => 40, 'email' => 'test@example.org']);
-
-        $this->assertNotSame($value, $value2);
-        $this->assertSame('Davey Shafik', $value2->name);
-        $this->assertSame(40, $value2->age);
-        $this->assertSame('test@example.org', $value2->email);
-    }
-}
+    expect($value)->not->toBe($value2)
+        ->and($value2->name)->toBe('Davey Shafik')
+        ->and($value2->age)->toBe(40)
+        ->and($value2->email)->toBe('test@example.org');
+});

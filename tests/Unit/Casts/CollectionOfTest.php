@@ -1,28 +1,34 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Unit\Casts;
-
 use Bag\Casts\CollectionOf;
 use Bag\Collection;
 use Bag\Exceptions\BagNotFoundException;
 use Bag\Exceptions\InvalidBag;
 use Bag\Exceptions\InvalidCollection;
 use Illuminate\Support\Collection as LaravelCollection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use stdClass;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\Values\TestBag;
-use Tests\TestCase;
 
-#[CoversClass(CollectionOf::class)]
-class CollectionOfTest extends TestCase
-{
-    public function testItCreatesLaravelCollectionOfBags()
-    {
-        $cast = new CollectionOf(TestBag::class);
-        $collection = $cast->set(LaravelCollection::class, 'test', collect(['test' => [
+test('it creates laravel collection of bags', function () {
+    $cast = new CollectionOf(TestBag::class);
+    $collection = $cast->set(LaravelCollection::class, 'test', collect(['test' => [
+        [
+            'name' => 'Davey Shafik',
+            'age' => 40,
+            'email' => 'davey@php.net',
+        ],
+        [
+            'name' => 'David Shafik',
+            'age' => 40,
+            'email' => 'david@example.org',
+        ],
+    ]]));
+
+    expect($collection)
+        ->toBeInstanceOf(LaravelCollection::class)
+        ->toContainOnlyInstancesOf(TestBag::class)
+        ->and($collection->toArray())->toBe([
             [
                 'name' => 'Davey Shafik',
                 'age' => 40,
@@ -33,11 +39,29 @@ class CollectionOfTest extends TestCase
                 'age' => 40,
                 'email' => 'david@example.org',
             ],
-        ]]));
+        ]);
 
-        $this->assertInstanceOf(LaravelCollection::class, $collection);
-        $this->assertContainsOnlyInstancesOf(TestBag::class, $collection);
-        $this->assertSame([
+});
+
+test('it creates collection of bags', function () {
+    $cast = new CollectionOf(TestBag::class);
+    $collection = $cast->set(Collection::class, 'test', collect(['test' => [
+        [
+            'name' => 'Davey Shafik',
+            'age' => 40,
+            'email' => 'davey@php.net',
+        ],
+        [
+            'name' => 'David Shafik',
+            'age' => 40,
+            'email' => 'david@example.org',
+        ],
+    ]]));
+
+    expect($collection)
+        ->toBeInstanceOf(Collection::class)
+        ->toContainOnlyInstancesOf(TestBag::class)
+        ->and($collection->toArray())->toBe([
             [
                 'name' => 'Davey Shafik',
                 'age' => 40,
@@ -48,13 +72,29 @@ class CollectionOfTest extends TestCase
                 'age' => 40,
                 'email' => 'david@example.org',
             ],
-        ], $collection->toArray());
-    }
+        ]);
 
-    public function testItCreatesCollectionOfBags()
-    {
-        $cast = new CollectionOf(TestBag::class);
-        $collection = $cast->set(Collection::class, 'test', collect(['test' => [
+});
+
+test('it creates custom collection of bags', function () {
+    $cast = new CollectionOf(TestBag::class);
+    $collection = $cast->set(BagWithCollectionCollection::class, 'test', collect(['test' => [
+        [
+            'name' => 'Davey Shafik',
+            'age' => 40,
+            'email' => 'davey@php.net',
+        ],
+        [
+            'name' => 'David Shafik',
+            'age' => 40,
+            'email' => 'david@example.org',
+        ],
+    ]]));
+
+    expect($collection)
+        ->toBeInstanceOf(BagWithCollectionCollection::class)
+        ->toContainOnlyInstancesOf(TestBag::class)
+        ->and($collection->toArray())->toBe([
             [
                 'name' => 'Davey Shafik',
                 'age' => 40,
@@ -65,113 +105,63 @@ class CollectionOfTest extends TestCase
                 'age' => 40,
                 'email' => 'david@example.org',
             ],
-        ]]));
+        ]);
 
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertContainsOnlyInstancesOf(TestBag::class, $collection);
-        $this->assertSame([
-            [
-                'name' => 'Davey Shafik',
-                'age' => 40,
-                'email' => 'davey@php.net',
-            ],
-            [
-                'name' => 'David Shafik',
-                'age' => 40,
-                'email' => 'david@example.org',
-            ],
-        ], $collection->toArray());
-    }
+});
 
-    public function testItCreatesCustomCollectionOfBags()
-    {
-        $cast = new CollectionOf(TestBag::class);
-        $collection = $cast->set(BagWithCollectionCollection::class, 'test', collect(['test' => [
-            [
-                'name' => 'Davey Shafik',
-                'age' => 40,
-                'email' => 'davey@php.net',
-            ],
-            [
-                'name' => 'David Shafik',
-                'age' => 40,
-                'email' => 'david@example.org',
-            ],
-        ]]));
+test('it fails with invalid collection', function () {
+    $this->expectException(InvalidCollection::class);
+    $this->expectExceptionMessage('The property "test" must be a subclass of Illuminate\Support\Collection');
 
-        $this->assertInstanceOf(BagWithCollectionCollection::class, $collection);
-        $this->assertContainsOnlyInstancesOf(TestBag::class, $collection);
-        $this->assertSame([
-            [
-                'name' => 'Davey Shafik',
-                'age' => 40,
-                'email' => 'davey@php.net',
-            ],
-            [
-                'name' => 'David Shafik',
-                'age' => 40,
-                'email' => 'david@example.org',
-            ],
-        ], $collection->toArray());
-    }
+    $cast = new CollectionOf(TestBag::class);
+    $cast->set(\stdClass::class, 'test', collect(['test' => [
+        [
+            'name' => 'Davey Shafik',
+            'age' => 40,
+            'email' => 'davey@php.net',
+        ],
+        [
+            'name' => 'David Shafik',
+            'age' => 40,
+            'email' => 'david@example.org',
+        ],
+    ]]));
+});
 
-    public function testItFailsWithInvalidCollection()
-    {
-        $this->expectException(InvalidCollection::class);
-        $this->expectExceptionMessage('The property "test" must be a subclass of Illuminate\Support\Collection');
+test('it fails with invalid bag', function () {
+    $this->expectException(InvalidBag::class);
+    $this->expectExceptionMessage('CollectionOf class "P\Tests\Unit\Casts\CollectionOfTest" must extend Bag\Bag');
 
-        $cast = new CollectionOf(TestBag::class);
-        $cast->set(stdClass::class, 'test', collect(['test' => [
-            [
-                'name' => 'Davey Shafik',
-                'age' => 40,
-                'email' => 'davey@php.net',
-            ],
-            [
-                'name' => 'David Shafik',
-                'age' => 40,
-                'email' => 'david@example.org',
-            ],
-        ]]));
-    }
+    $cast = new CollectionOf(static::class);
+    $cast->set(\stdClass::class, 'test', collect(['test' => [
+        [
+            'name' => 'Davey Shafik',
+            'age' => 40,
+            'email' => 'davey@php.net',
+        ],
+        [
+            'name' => 'David Shafik',
+            'age' => 40,
+            'email' => 'david@example.org',
+        ],
+    ]]));
+});
 
-    public function testItFailsWithInvalidBag()
-    {
-        $this->expectException(InvalidBag::class);
-        $this->expectExceptionMessage('CollectionOf class "Tests\Unit\Casts\CollectionOfTest" must extend Bag\Bag');
+test('it fails with non existent bag', function () {
+    $this->expectException(BagNotFoundException::class);
+    $this->expectExceptionMessage('The Bag class "test-string" does not exist');
 
-        $cast = new CollectionOf(static::class);
-        $cast->set(stdClass::class, 'test', collect(['test' => [
-            [
-                'name' => 'Davey Shafik',
-                'age' => 40,
-                'email' => 'davey@php.net',
-            ],
-            [
-                'name' => 'David Shafik',
-                'age' => 40,
-                'email' => 'david@example.org',
-            ],
-        ]]));
-    }
-
-    public function testItFailsWithNonExistentBag()
-    {
-        $this->expectException(BagNotFoundException::class);
-        $this->expectExceptionMessage('The Bag class "test-string" does not exist');
-
-        $cast = new CollectionOf('test-string');
-        $cast->set(stdClass::class, 'test', collect(['test' => [
-            [
-                'name' => 'Davey Shafik',
-                'age' => 40,
-                'email' => 'davey@php.net',
-            ],
-            [
-                'name' => 'David Shafik',
-                'age' => 40,
-                'email' => 'david@example.org',
-            ],
-        ]]));
-    }
-}
+    $cast = new CollectionOf('test-string');
+    $cast->set(\stdClass::class, 'test', collect(['test' => [
+        [
+            'name' => 'Davey Shafik',
+            'age' => 40,
+            'email' => 'davey@php.net',
+        ],
+        [
+            'name' => 'David Shafik',
+            'age' => 40,
+            'email' => 'david@example.org',
+        ],
+    ]]));
+});

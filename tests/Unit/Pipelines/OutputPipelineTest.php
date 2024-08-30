@@ -1,171 +1,161 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Unit\Pipelines;
-
 use Bag\Enums\OutputType;
 use Bag\Pipelines\OutputPipeline;
 use Bag\Pipelines\Values\BagOutput;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Values\TestBag;
 use Tests\Fixtures\Values\WrappedBag;
 use Tests\Fixtures\Values\WrappedBothBag;
 use Tests\Fixtures\Values\WrappedJsonBag;
-use Tests\TestCase;
 
-#[CoversClass(BagOutput::class)]
-#[CoversClass(OutputPipeline::class)]
-class OutputPipelineTest extends TestCase
-{
-    public function testItGetArray()
-    {
-        $bag = TestBag::from([
+test('it get array', function () {
+    $bag = TestBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+        'email' => 'davey@php.net'
+    ]);
+
+    $output = new BagOutput($bag, OutputType::ARRAY);
+
+    $result = OutputPipeline::process($output);
+
+    expect($result)
+        ->toBeArray()
+        ->toBe([
             'name' => 'Davey Shafik',
             'age' => 40,
             'email' => 'davey@php.net'
         ]);
+});
 
-        $output = new BagOutput($bag, OutputType::ARRAY);
+test('it get array wrapped', function () {
+    $bag = WrappedBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+    ]);
 
-        $result = OutputPipeline::process($output);
+    $output = new BagOutput($bag, OutputType::ARRAY);
 
-        $this->assertIsArray($result);
-        $this->assertSame([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-            'email' => 'davey@php.net'
-        ], $result);
-    }
+    $result = OutputPipeline::process($output);
 
-    public function testItGetArrayWrapped()
-    {
-        $bag = WrappedBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-        ]);
-
-        $output = new BagOutput($bag, OutputType::ARRAY);
-
-        $result = OutputPipeline::process($output);
-
-        $this->assertIsArray($result);
-        $this->assertSame([
+    expect($result)
+        ->toBeArray()
+        ->toBe([
             'wrapper' => [
                 'name' => 'Davey Shafik',
                 'age' => 40,
             ]
-        ], $result);
-    }
-
-    public function testItGetsJson()
-    {
-        $bag = TestBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-            'email' => 'davey@php.net'
         ]);
+});
 
-        $output = new BagOutput($bag, OutputType::JSON);
+test('it gets json', function () {
+    $bag = TestBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+        'email' => 'davey@php.net'
+    ]);
 
-        $result = OutputPipeline::process($output);
+    $output = new BagOutput($bag, OutputType::JSON);
 
-        $this->assertIsArray($result);
-        $this->assertSame([
+    $result = OutputPipeline::process($output);
+
+    expect($result)
+        ->toBeArray()
+        ->toBe([
             'name' => 'Davey Shafik',
             'age' => 40,
             'email' => 'davey@php.net',
-        ], $result);
-    }
-
-
-    public function testItGetJsonWrapped()
-    {
-        $bag = WrappedBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
         ]);
+});
 
-        $output = new BagOutput($bag, OutputType::JSON);
+test('it get json wrapped', function () {
+    $bag = WrappedBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+    ]);
 
-        $result = OutputPipeline::process($output);
+    $output = new BagOutput($bag, OutputType::JSON);
 
-        $this->assertIsArray($result);
-        $this->assertSame([
+    $result = OutputPipeline::process($output);
+
+    expect($result)
+        ->toBeArray()
+        ->toBe([
             'wrapper' => [
                 'name' => 'Davey Shafik',
                 'age' => 40,
             ]
-        ], $result);
-    }
-
-    public function testItGetsBothWrapped()
-    {
-        $bag = WrappedBothBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
         ]);
+});
 
-        $output = new BagOutput($bag, OutputType::ARRAY);
+test('it gets both wrapped', function () {
+    $bag = WrappedBothBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+    ]);
 
-        $result = OutputPipeline::process($output);
+    $output = new BagOutput($bag, OutputType::ARRAY);
 
-        $this->assertIsArray($result);
-        $this->assertSame([
+    $result = OutputPipeline::process($output);
+
+    expect($result)
+        ->toBeArray()
+        ->toBe([
             'wrapper' => [
                 'name' => 'Davey Shafik',
                 'age' => 40,
             ]
-        ], $result);
+        ]);
 
-        $output = new BagOutput($bag, OutputType::JSON);
+    $output = new BagOutput($bag, OutputType::JSON);
 
-        $result = OutputPipeline::process($output);
+    $result = OutputPipeline::process($output);
 
-        $this->assertIsArray($result);
-        $this->assertSame([
+    expect($result)
+        ->toBeArray()
+        ->toBe([
             'json_wrapper' => [
                 'name' => 'Davey Shafik',
                 'age' => 40,
             ]
-        ], $result);
-    }
-
-    public function testItGetJsonOnlyWrapped()
-    {
-        $bag = WrappedJsonBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
         ]);
+});
 
-        $output = new BagOutput($bag, OutputType::JSON);
+test('it get json only wrapped', function () {
+    $bag = WrappedJsonBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+    ]);
 
-        $result = OutputPipeline::process($output);
+    $output = new BagOutput($bag, OutputType::JSON);
 
-        $this->assertIsArray($result);
-        $this->assertSame([
+    $result = OutputPipeline::process($output);
+
+    expect($result)
+        ->toBeArray()
+        ->toBe([
             'wrapper' => [
                 'name' => 'Davey Shafik',
                 'age' => 40,
             ]
-        ], $result);
-    }
+        ]);
+});
 
-    public function testItGetsUnwrapped()
-    {
-        $bag = WrappedBag::from([
+test('it gets unwrapped', function () {
+    $bag = WrappedBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+    ]);
+
+    $output = new BagOutput($bag, OutputType::UNWRAPPED);
+
+    $result = OutputPipeline::process($output);
+
+    expect($result)
+        ->toBeArray()
+        ->toBe([
             'name' => 'Davey Shafik',
             'age' => 40,
         ]);
-
-        $output = new BagOutput($bag, OutputType::UNWRAPPED);
-
-        $result = OutputPipeline::process($output);
-
-        $this->assertIsArray($result);
-        $this->assertSame([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-        ], $result);
-    }
-}
+});

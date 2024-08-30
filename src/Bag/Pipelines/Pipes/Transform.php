@@ -35,7 +35,7 @@ readonly class Transform
         $inputs = $input->input;
 
         $methods = collect(Reflection::getClass($input->bagClassname)->getMethods(ReflectionMethod::IS_STATIC))->filter(function (ReflectionMethod $method) use ($inputs) {
-            return collect(Reflection::getAttributes($method, Transforms::class))->map(fn ($attribute) => Reflection::getAttributeInstance($attribute))->filter(function (Transforms $transformer) use ($inputs) {
+            return collect(Reflection::getAttributes($method, Transforms::class))->map(fn (ReflectionAttribute $attribute) => Reflection::getAttributeInstance($attribute))->filter(function (Transforms $transformer) use ($inputs) {
                 $types = $transformer->types->filter(function (string $type) use ($inputs) {
                     $fromType = gettype($inputs);
 

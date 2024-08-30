@@ -17,7 +17,7 @@ readonly class CastOutputValues
         $params = $output->params;
         $values = $output->values;
 
-        $output->values = $output->values->map(function ($value, $key) use ($properties, $params, $values) {
+        $output->values = $output->values->map(function (mixed $value, string $key) use ($properties, $params, $values) {
             if ($params[$key]->variadic) {
                 return $this->castVariadic($params, $values, $value);
             }
@@ -31,12 +31,12 @@ readonly class CastOutputValues
         return $output;
     }
 
-    protected function castVariadic(ValueCollection $params, $values, $value): mixed
+    protected function castVariadic(ValueCollection $params, Collection $values, mixed $value): mixed
     {
         /** @var Value $last */
         $last = $params->last();
 
-        return Collection::wrap($value)->map(function ($value) use ($last, $values) {
+        return Collection::wrap($value)->map(function (mixed $value) use ($last, $values) {
             return ($last->outputCast)($values->put($last->name, $value));
         })->toArray();
     }

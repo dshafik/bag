@@ -155,7 +155,7 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
         return true;
     }
 
-    protected function updateBag(string $namespace, string $name, string $classFile, ?string $factory, ?string $collection)
+    protected function updateBag(string $namespace, string $name, string $classFile, ?string $factory, ?string $collection): void
     {
         require_once $classFile;
 
@@ -374,7 +374,7 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
         return true;
     }
 
-    protected function ensureDirectory(string $directory)
+    protected function ensureDirectory(string $directory): void
     {
         if (!\file_exists($directory)) {
             mkdir($directory, recursive: true);

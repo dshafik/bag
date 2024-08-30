@@ -1,45 +1,33 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Unit\Property;
-
 use Bag\Attributes\Cast;
 use Bag\Casts\DateTime;
 use Bag\Property\CastInput;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use ReflectionClass;
 use Tests\Fixtures\Values\CastsDateBag;
-use Tests\TestCase;
 
-#[CoversClass(CastInput::class)]
-class CastInputTest extends TestCase
-{
-    public function testItCreates()
-    {
-        $param = (new ReflectionClass(CastsDateBag::class))->getConstructor()->getParameters()[0];
+test('it creates', function () {
+    $param = (new \ReflectionClass(CastsDateBag::class))->getConstructor()->getParameters()[0];
 
-        $castInput = CastInput::create($param);
+    $castInput = CastInput::create($param);
 
-        $this->assertInstanceOf(CastInput::class, $castInput);
-        $this->assertSame(CarbonImmutable::class, $this->prop($castInput, 'propertyType'));
-        $this->assertSame('date', $this->prop($castInput, 'name'));
-        $this->assertSame(['format' => 'Y-m-d'], $this->prop($this->prop($castInput, 'caster'), 'parameters'));
-        $this->assertSame(DateTime::class, $this->prop($this->prop($castInput, 'caster'), 'casterClassname'));
-    }
+    expect($castInput)->toBeInstanceOf(CastInput::class)
+        ->and(property($castInput, 'propertyType'))->toBe(CarbonImmutable::class)
+        ->and(property($castInput, 'name'))->toBe('date')
+        ->and(property(property($castInput, 'caster'), 'parameters'))->toBe(['format' => 'Y-m-d'])
+        ->and(property(property($castInput, 'caster'), 'casterClassname'))->toBe(DateTime::class);
+});
 
-    public function testItCasts()
-    {
-        $caster = $this->createMock(Cast::class);
-        $caster->method('cast')
-            ->willReturn('castedValue');
+test('it casts', function () {
+    $caster = $this->createMock(Cast::class);
+    $caster->method('cast')
+        ->willReturn('castedValue');
 
-        $castInput = new CastInput('string', 'propertName', $caster);
+    $castInput = new CastInput('string', 'propertyName', $caster);
 
-        $properties = new Collection(['propertyName' => 'propertyValue']);
+    $properties = new Collection(['propertyName' => 'propertyValue']);
 
-        $this->assertEquals('castedValue', $castInput->__invoke($properties));
-    }
-}
+    expect($castInput->__invoke($properties))->toEqual('castedValue');
+});

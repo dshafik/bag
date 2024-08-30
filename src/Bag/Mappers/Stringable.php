@@ -26,7 +26,7 @@ class Stringable implements MapperInterface
         $outputName = Str::of($inputName);
         foreach ($this->stringOperations as $stringOperation) {
             $stringOperation = Str::of($stringOperation)->explode(':');
-            $args = $stringOperation->map(fn ($op) => Str::of($op)->explode(',')->toArray())->flatten()->skip(1)->toArray();
+            $args = $stringOperation->map(fn (string $op) => Str::of($op)->explode(',')->toArray())->flatten()->skip(1)->toArray();
             $outputName = $outputName->{$stringOperation->first()}(...$args);
         }
 

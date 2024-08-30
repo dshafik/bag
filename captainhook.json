@@ -42,7 +42,7 @@
                 ]
             },
             {
-                "action": "vendor/bin/phpunit --testdox",
+                "action": "vendor/bin/pest --coverage --min=80",
                 "conditions": [
                     {
                         "exec": "\\CaptainHook\\App\\Hook\\Condition\\FileStaged\\OfType",

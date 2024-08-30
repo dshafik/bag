@@ -22,21 +22,21 @@ class Cache
 
     public static array $cacheArray = [];
 
-    public static function fake()
+    public static function fake(): MockInterface
     {
         self::$instance = Mockery::mock(static::class);
 
         return self::$instance;
     }
 
-    public static function spy()
+    public static function spy(): MockInterface
     {
         self::$instance = Mockery::spy(static::class);
 
         return self::$instance;
     }
 
-    public static function reset()
+    public static function reset(): void
     {
         self::clear();
         self::$instance = null;
@@ -81,7 +81,7 @@ class Cache
         return self::$cacheArray[$store][$key];
     }
 
-    protected static function clear()
+    protected static function clear(): void
     {
         self::$cacheArray = self::$cacheWeakMap = [];
     }

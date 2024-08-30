@@ -2,125 +2,100 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Internal;
-
+use Bag\Attributes\Collection;
 use Bag\Internal\Reflection;
 use PHPUnit\Framework\Attributes\CoversClass;
-use ReflectionClass;
-use ReflectionMethod;
-use Tests\TestCase;
+use Tests\Fixtures\Values\BagWithCollection;
 
-#[CoversClass(Reflection::class)]
-class ReflectionTest extends TestCase
-{
-    public function testItGetsClass()
-    {
-        $class = Reflection::getClass(static::class);
-        $this->assertSame(static::class, $class->getName());
-    }
+test('it gets class', function () {
+    $class = Reflection::getClass(static::class);
+    expect($class->getName())->toBe(static::class);
+});
 
-    public function testItGetsClassWithReflectionClass()
-    {
-        $class = Reflection::getClass(new ReflectionClass(static::class));
-        $this->assertSame(static::class, $class->getName());
-    }
+test('it gets class with reflection class', function () {
+    $class = Reflection::getClass(new \ReflectionClass(static::class));
+    expect($class->getName())->toBe(static::class);
+});
 
-    public function testItGetsConstructor()
-    {
-        $constructor = Reflection::getConstructor(static::class);
-        $this->assertInstanceOf(ReflectionMethod::class, $constructor);
-        $this->assertSame('__construct', $constructor->getName());
-    }
+test('it gets constructor', function () {
+    $constructor = Reflection::getConstructor(static::class);
+    expect($constructor)->toBeInstanceOf(\ReflectionMethod::class)
+        ->and($constructor->getName())->toBe('__construct');
+});
 
-    public function testItGetsConstructorOnExistingReflectionClass()
-    {
-        $class = new ReflectionClass(static::class);
-        $constructor = Reflection::getConstructor($class);
-        $this->assertInstanceOf(ReflectionMethod::class, $constructor);
-        $this->assertSame('__construct', $constructor->getName());
-    }
+test('it gets constructor on existing reflection class', function () {
+    $class = new \ReflectionClass(static::class);
+    $constructor = Reflection::getConstructor($class);
+    expect($constructor)->toBeInstanceOf(\ReflectionMethod::class)
+        ->and($constructor->getName())->toBe('__construct');
+});
 
-    public function testItReturnsNullWhenNoConstructor()
-    {
-        $this->assertNull(Reflection::getConstructor(Reflection::class));
-    }
+test('it returns null when no constructor', function () {
+    expect(Reflection::getConstructor(Reflection::class))->toBeNull();
+});
 
-    public function testItGetsProperties()
-    {
-        $properties = Reflection::getProperties(static::class);
-        $this->assertIsArray($properties);
-    }
+test('it gets properties', function () {
+    $properties = Reflection::getProperties(static::class);
+    expect($properties)->toBeArray();
+});
 
-    public function testItReturnsEmptyWhenGettingPropertiesOnNull()
-    {
-        $this->assertEmpty(Reflection::getProperties(null));
-    }
+test('it returns empty when getting properties on null', function () {
+    expect(Reflection::getProperties(null))->toBeEmpty();
+});
 
-    public function testItGetsParameters()
-    {
-        $method = new ReflectionMethod(static::class, 'setUp');
-        $parameters = Reflection::getParameters($method);
-        $this->assertIsArray($parameters);
-    }
+test('it gets parameters', function () {
+    $method = new \ReflectionMethod(static::class, 'setUp');
+    $parameters = Reflection::getParameters($method);
+    expect($parameters)->toBeArray();
+});
 
-    public function testItReturnsEmptyWhenGettingParametersOnNull()
-    {
-        $this->assertEmpty(Reflection::getParameters(null));
-    }
+test('it returns empty when getting parameters on null', function () {
+    expect(Reflection::getParameters(null))->toBeEmpty();
+});
 
-    public function testItGetsAttributes()
-    {
-        $class = new ReflectionClass(static::class);
-        $attributes = Reflection::getAttributes($class, CoversClass::class);
-        $this->assertIsArray($attributes);
-    }
+test('it gets attributes', function () {
+    $class = new \ReflectionClass(static::class);
+    $attributes = Reflection::getAttributes($class, CoversClass::class);
+    expect($attributes)->toBeArray();
+});
 
-    public function testItReturnsEmptyWhenGettingAttributesOnNull()
-    {
-        $this->assertEmpty(Reflection::getAttributes(null, CoversClass::class));
-    }
+test('it returns empty when getting attributes on null', function () {
+    expect(Reflection::getAttributes(null, CoversClass::class))->toBeEmpty();
+});
 
-    public function testItGetsAttribute()
-    {
-        $class = new ReflectionClass(static::class);
-        $attribute = Reflection::getAttribute($class, CoversClass::class);
-        $this->assertInstanceOf(\ReflectionAttribute::class, $attribute);
-    }
+test('it gets attribute', function () {
+    $class = new \ReflectionClass(BagWithCollection::class);
+    $attribute = Reflection::getAttribute($class, Collection::class);
+    expect($attribute)->toBeInstanceOf(\ReflectionAttribute::class);
+});
 
-    public function testItReturnsNullWhenGettingNonExistentAttribute()
-    {
-        $class = new ReflectionClass(static::class);
-        $this->assertNull(Reflection::getAttribute($class, 'NonExistentAttribute'));
-    }
+test('it returns null when getting non existent attribute', function () {
+    $class = new \ReflectionClass(static::class);
+    expect(Reflection::getAttribute($class, 'NonExistentAttribute'))->toBeNull();
+});
 
-    public function testItReturnsNullWhenGettingAttributeOnNull()
-    {
-        $this->assertNull(Reflection::getAttribute(null, CoversClass::class));
-    }
+test('it returns null when getting attribute on null', function () {
+    expect(Reflection::getAttribute(null, CoversClass::class))->toBeNull();
+});
 
-    public function testItGetsAttributeInstance()
-    {
-        $class = new ReflectionClass(static::class);
-        $instance = Reflection::getAttributeInstance($class, CoversClass::class);
-        $this->assertIsObject($instance);
-    }
+test('it gets attribute instance', function () {
+    $class = new \ReflectionClass(BagWithCollection::class);
+    $instance = Reflection::getAttributeInstance($class, Collection::class);
+    expect($instance)->toBeObject();
+});
 
-    public function testItReturnsNullWhenGettingAttributeInstanceWithNonExistentAttribute()
-    {
-        $class = new ReflectionClass(static::class);
-        $this->assertNull(Reflection::getAttributeInstance($class, 'NonExistentAttribute'));
-    }
+test('it returns null when getting attribute instance with non existent attribute', function () {
+    $class = new \ReflectionClass(static::class);
+    expect(Reflection::getAttributeInstance($class, 'NonExistentAttribute'))->toBeNull();
+});
 
-    public function testItReturnsNullWhenGettingAttributeInstanceOnNull()
-    {
-        $this->assertNull(Reflection::getAttributeInstance(null, CoversClass::class));
-    }
+test('it returns null when getting attribute instance on null', function () {
+    expect(Reflection::getAttributeInstance(null, CoversClass::class))->toBeNull();
+});
 
-    public function testItGetsAttributeArguments()
-    {
-        $class = Reflection::getClass(static::class);
-        $attribute = Reflection::getAttribute($class, CoversClass::class);
-        $arguments = Reflection::getAttributeArguments($attribute);
-        $this->assertIsArray($arguments);
-    }
-}
+test('it gets attribute arguments', function () {
+    $class = Reflection::getClass(BagWithCollection::class);
+    $attribute = Reflection::getAttribute($class, Collection::class);
+    $arguments = Reflection::getAttributeArguments($attribute);
+    expect($arguments)->toBeArray();
+});

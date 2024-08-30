@@ -1,184 +1,155 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Feature\Concerns;
-
 use Bag\Collection;
-use Bag\Concerns\WithEloquentCasting;
-use Bag\Eloquent\Casts\AsBagCollection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Orchestra\Testbench\Attributes\WithEnv;
-use function Orchestra\Testbench\workbench_path;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversTrait;
+use function Pest\Laravel\assertDatabaseHas;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\Models\CastedModel;
 use Tests\Fixtures\Values\BagWithCollection;
 use Tests\Fixtures\Values\HiddenParametersBag;
 use Tests\Fixtures\Values\TestBag;
-use Tests\TestCase;
 
-#[WithEnv('DB_CONNECTION', 'testing')]
-#[CoversTrait(WithEloquentCasting::class)]
-#[CoversClass(AsBagCollection::class)]
-class WithEloquentCastingTest extends TestCase
-{
-    use DatabaseTransactions;
+uses(DatabaseTransactions::class);
 
-    public function testItStoresBag()
-    {
-        CastedModel::create([
-            'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
-        ]);
+test('it stores bag', function () {
+    CastedModel::create([
+        'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
+    ]);
 
-        $this->assertDatabaseHas('testing', ['bag' => '{"name":"Davey Shafik","age":40,"email":"davey@php.net"}']);
-    }
+    assertDatabaseHas('testing', ['bag' => '{"name":"Davey Shafik","age":40,"email":"davey@php.net"}']);
+});
 
-    public function testItDoesNotStoreNull()
-    {
-        CastedModel::create([
-            'bag' => null,
-        ]);
+test('it does not store null', function () {
+    CastedModel::create([
+        'bag' => null,
+    ]);
 
-        $this->assertDatabaseHas('testing', ['bag' => null]);
-    }
+    assertDatabaseHas('testing', ['bag' => null]);
+});
 
-    public function testItRetrievesBag()
-    {
-        CastedModel::create([
-            'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
-        ]);
+test('it retrieves bag', function () {
+    CastedModel::create([
+        'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
+    ]);
 
-        /** @var CastedModel $model */
-        $model = CastedModel::first();
+    /** @var CastedModel $model */
+    $model = CastedModel::first();
 
-        $this->assertInstanceOf(TestBag::class, $model->bag);
-        $this->assertSame('Davey Shafik', $model->bag->name);
-        $this->assertSame(40, $model->bag->age);
-        $this->assertSame('davey@php.net', $model->bag->email);
-        $this->assertNull($model->collection);
-    }
+    expect($model->bag)->toBeInstanceOf(TestBag::class)
+        ->and($model->bag->name)->toBe('Davey Shafik')
+        ->and($model->bag->age)->toBe(40)
+        ->and($model->bag->email)->toBe('davey@php.net')
+        ->and($model->collection)->toBeNull();
+});
 
-    public function testItDoesNotRetrieveNullBag()
-    {
-        CastedModel::create([
-            'bag' => null,
-        ]);
+test('it does not retrieve null bag', function () {
+    CastedModel::create([
+        'bag' => null,
+    ]);
 
-        /** @var CastedModel $model */
-        $model = CastedModel::first();
+    /** @var CastedModel $model */
+    $model = CastedModel::first();
 
-        $this->assertNull($model->bag);
-    }
+    expect($model->bag)->toBeNull();
+});
 
-    public function testItStoresCollection()
-    {
-        CastedModel::create([
-            'collection' => [
-                TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
-                TestBag::from(['name' => 'Example Person', 'age' => 39, 'email' => 'testing@example.org']),
-            ]
-        ]);
+test('it stores collection', function () {
+    CastedModel::create([
+        'collection' => [
+            TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
+            TestBag::from(['name' => 'Example Person', 'age' => 39, 'email' => 'testing@example.org']),
+        ]
+    ]);
 
-        $this->assertDatabaseHas('testing', ['collection' => '[{"name":"Davey Shafik","age":40,"email":"davey@php.net"},{"name":"Example Person","age":39,"email":"testing@example.org"}]']);
-    }
+    assertDatabaseHas('testing', ['collection' => '[{"name":"Davey Shafik","age":40,"email":"davey@php.net"},{"name":"Example Person","age":39,"email":"testing@example.org"}]']);
+});
 
-    public function testItDoesNotStoreNullCollection()
-    {
-        CastedModel::create([
-            'collection' => null
-        ]);
+test('it does not store null collection', function () {
+    CastedModel::create([
+        'collection' => null
+    ]);
 
-        $this->assertDatabaseHas('testing', ['collection' => null]);
-    }
+    assertDatabaseHas('testing', ['collection' => null]);
+});
 
-    public function testItRetrievesCollection()
-    {
-        CastedModel::create([
-            'collection' => [
-                TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
-                TestBag::from(['name' => 'Example Person', 'age' => 39, 'email' => 'testing@example.org']),
-            ]
-        ]);
+test('it retrieves collection', function () {
+    CastedModel::create([
+        'collection' => [
+            TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
+            TestBag::from(['name' => 'Example Person', 'age' => 39, 'email' => 'testing@example.org']),
+        ]
+    ]);
 
-        /** @var CastedModel $model */
-        $model = CastedModel::first();
+    /** @var CastedModel $model */
+    $model = CastedModel::first();
 
-        $this->assertInstanceOf(Collection::class, $model->collection);
-        $this->assertCount(2, $model->collection);
-        $this->assertContainsOnlyInstancesOf(TestBag::class, $model->collection);
-        $this->assertSame('Davey Shafik', $model->collection[0]->name);
-        $this->assertSame(40, $model->collection[0]->age);
-        $this->assertSame('davey@php.net', $model->collection[0]->email);
-        $this->assertSame('Example Person', $model->collection[1]->name);
-        $this->assertSame(39, $model->collection[1]->age);
-        $this->assertSame('testing@example.org', $model->collection[1]->email);
-    }
+    expect($model->collection)
+        ->toBeInstanceOf(Collection::class)
+        ->toHaveCount(2)
+        ->toContainOnlyInstancesOf(TestBag::class)
+        ->and($model->collection[0]->name)->toBe('Davey Shafik')
+        ->and($model->collection[0]->age)->toBe(40)
+        ->and($model->collection[0]->email)->toBe('davey@php.net')
+        ->and($model->collection[1]->name)->toBe('Example Person')
+        ->and($model->collection[1]->age)->toBe(39)
+        ->and($model->collection[1]->email)->toBe('testing@example.org');
 
-    public function testItDoesNotRetrieveNullCollection()
-    {
-        CastedModel::create([
-            'collection' => null
-        ]);
+});
 
-        /** @var CastedModel $model */
-        $model = CastedModel::first();
+test('it does not retrieve null collection', function () {
+    CastedModel::create([
+        'collection' => null
+    ]);
 
-        $this->assertNull($model->collection);
-    }
+    /** @var CastedModel $model */
+    $model = CastedModel::first();
 
-    public function testItStoresCustomCollection()
-    {
-        CastedModel::create([
-            'custom_collection' => BagWithCollection::collect([
-                BagWithCollection::from(['name' => 'Davey Shafik', 'age' => 40]),
-            ]),
-        ]);
+    expect($model->collection)->toBeNull();
+});
 
-        $this->assertDatabaseHas('testing', ['custom_collection' => '[{"name":"Davey Shafik","age":40}]']);
-    }
+test('it stores custom collection', function () {
+    CastedModel::create([
+        'custom_collection' => BagWithCollection::collect([
+            BagWithCollection::from(['name' => 'Davey Shafik', 'age' => 40]),
+        ]),
+    ]);
 
-    public function testItRetrievesCustomCollection()
-    {
-        CastedModel::create([
-            'custom_collection' => BagWithCollection::collect([
-                BagWithCollection::from(['name' => 'Davey Shafik', 'age' => 40]),
-            ]),
-        ]);
+    assertDatabaseHas('testing', ['custom_collection' => '[{"name":"Davey Shafik","age":40}]']);
+});
 
-        $model = CastedModel::first();
+test('it retrieves custom collection', function () {
+    CastedModel::create([
+        'custom_collection' => BagWithCollection::collect([
+            BagWithCollection::from(['name' => 'Davey Shafik', 'age' => 40]),
+        ]),
+    ]);
 
-        $this->assertInstanceOf(BagWithCollectionCollection::class, $model->custom_collection);
-        $this->assertCount(1, $model->custom_collection);
-        $this->assertContainsOnlyInstancesOf(BagWithCollection::class, $model->custom_collection);
-    }
+    $model = CastedModel::first();
 
-    public function testItStoresHiddenProperties()
-    {
-        CastedModel::create([
-            'hidden_bag' => HiddenParametersBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
-        ]);
+    expect($model->custom_collection)
+        ->toBeInstanceOf(BagWithCollectionCollection::class)
+        ->toHaveCount(1)
+        ->toContainOnlyInstancesOf(BagWithCollection::class);
+});
 
-        $this->assertDatabaseHas('testing', ['hidden_bag' => '{"name":"Davey Shafik","age":40,"email":"davey@php.net"}']);
-    }
+test('it stores hidden properties', function () {
+    CastedModel::create([
+        'hidden_bag' => HiddenParametersBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
+    ]);
 
-    public function testItRetrievesHiddenProperties()
-    {
-        CastedModel::create([
-            'hidden_bag' => HiddenParametersBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
-        ]);
+    assertDatabaseHas('testing', ['hidden_bag' => '{"name":"Davey Shafik","age":40,"email":"davey@php.net"}']);
+});
 
-        $model = CastedModel::first();
+test('it retrieves hidden properties', function () {
+    CastedModel::create([
+        'hidden_bag' => HiddenParametersBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
+    ]);
 
-        $this->assertInstanceOf(HiddenParametersBag::class, $model->hidden_bag);
-        $this->assertSame('Davey Shafik', $model->hidden_bag->name);
-        $this->assertSame(40, $model->hidden_bag->age);
-        $this->assertSame('davey@php.net', $model->hidden_bag->email);
-    }
+    $model = CastedModel::first();
 
-    protected function defineDatabaseMigrations()
-    {
-        $this->loadMigrationsFrom(workbench_path('database/migrations'));
-    }
-}
+    expect($model->hidden_bag)->toBeInstanceOf(HiddenParametersBag::class)
+        ->and($model->hidden_bag->name)->toBe('Davey Shafik')
+        ->and($model->hidden_bag->age)->toBe(40)
+        ->and($model->hidden_bag->email)->toBe('davey@php.net');
+});

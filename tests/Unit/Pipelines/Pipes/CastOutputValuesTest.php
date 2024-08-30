@@ -1,82 +1,70 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Unit\Pipelines\Pipes;
-
 use Bag\Enums\OutputType;
 use Bag\Pipelines\Pipes\CastOutputValues;
 use Bag\Pipelines\Pipes\ProcessParameters;
 use Bag\Pipelines\Pipes\ProcessProperties;
 use Bag\Pipelines\Values\BagOutput;
 use Carbon\CarbonImmutable;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Values\CastInputOutputBag;
 use Tests\Fixtures\Values\CastVariadicDatetimeBag;
 use Tests\Fixtures\Values\VariadicBag;
-use Tests\TestCase;
 
-#[CoversClass(CastOutputValues::class)]
-class CastOutputValuesTest extends TestCase
-{
-    public function testItCastsOutputValues()
-    {
-        $bag = CastInputOutputBag::from([
-            'input' => 'test',
-            'output' => 'testing',
-        ]);
+test('it casts output values', function () {
+    $bag = CastInputOutputBag::from([
+        'input' => 'test',
+        'output' => 'testing',
+    ]);
 
-        $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output);
-        $output = (new ProcessParameters())($output);
-        $output->values = $bag->getRaw();
+    $output = new BagOutput($bag, OutputType::ARRAY);
+    $output = (new ProcessProperties())($output);
+    $output = (new ProcessParameters())($output);
+    $output->values = $bag->getRaw();
 
-        $pipe = new CastOutputValues();
-        $output = $pipe($output);
+    $pipe = new CastOutputValues();
+    $output = $pipe($output);
 
-        $this->assertIsString($output->values->get('output'));
-        $this->assertSame('TESTING', $output->values->get('output'));
-    }
+    expect($output->values->get('output'))->toBeString()
+        ->and($output->values->get('output'))->toBe('TESTING');
+});
 
-    public function testItDoesNotCastMixedVariadicOutput()
-    {
-        $bag = VariadicBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-            'test' => 'testing'
-        ]);
+test('it does not cast mixed variadic output', function () {
+    $bag = VariadicBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+        'test' => 'testing'
+    ]);
 
-        $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output);
-        $output = (new ProcessParameters())($output);
-        $output->values = $bag->getRaw();
+    $output = new BagOutput($bag, OutputType::ARRAY);
+    $output = (new ProcessProperties())($output);
+    $output = (new ProcessParameters())($output);
+    $output->values = $bag->getRaw();
 
-        $pipe = new CastOutputValues();
-        $output = $pipe($output);
+    $pipe = new CastOutputValues();
+    $output = $pipe($output);
 
-        $this->assertIsArray($output->values->get('values'));
-        $this->assertArrayHasKey('test', $output->values->get('values'));
-        $this->assertSame('testing', $output->values->get('values')['test']);
-    }
+    expect($output->values->get('values'))->toBeArray()
+        ->and($output->values->get('values'))->toHaveKey('test')
+        ->and($output->values->get('values')['test'])->toBe('testing');
+});
 
-    public function testItCastsVariadicOutput()
-    {
-        $bag = CastVariadicDatetimeBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-            'test' => new CarbonImmutable('2024-04-30')
-        ]);
+test('it casts variadic output', function () {
+    $bag = CastVariadicDatetimeBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+        'test' => new CarbonImmutable('2024-04-30')
+    ]);
 
-        $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output);
-        $output = (new ProcessParameters())($output);
-        $output->values = $bag->getRaw();
+    $output = new BagOutput($bag, OutputType::ARRAY);
+    $output = (new ProcessProperties())($output);
+    $output = (new ProcessParameters())($output);
+    $output->values = $bag->getRaw();
 
-        $pipe = new CastOutputValues();
-        $output = $pipe($output);
+    $pipe = new CastOutputValues();
+    $output = $pipe($output);
 
-        $this->assertIsArray($output->values->get('values'));
-        $this->assertArrayHasKey('test', $output->values->get('values'));
-        $this->assertSame('2024-04-30', $output->values->get('values')['test']);
-    }
-}
+    expect($output->values->get('values'))->toBeArray()
+        ->and($output->values->get('values'))->toHaveKey('test')
+        ->and($output->values->get('values')['test'])->toBe('2024-04-30');
+});

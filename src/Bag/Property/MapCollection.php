@@ -15,7 +15,7 @@ use ReflectionClass;
 
 class MapCollection extends Collection
 {
-    public static function create(ReflectionClass $bagClass, \ReflectionParameter|\ReflectionProperty $property)
+    public static function create(ReflectionClass $bagClass, \ReflectionParameter|\ReflectionProperty $property): self
     {
         $name = $property->getName();
 

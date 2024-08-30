@@ -48,7 +48,7 @@ class Value
         );
     }
 
-    protected static function isRequired(ReflectionProperty|ReflectionParameter $property)
+    protected static function isRequired(ReflectionProperty|ReflectionParameter $property): bool
     {
         if ($property instanceof ReflectionParameter) {
             return !$property->isOptional();
@@ -62,7 +62,7 @@ class Value
         return true;
     }
 
-    protected static function isVariadic(ReflectionProperty|ReflectionParameter $property)
+    protected static function isVariadic(ReflectionProperty|ReflectionParameter $property): bool
     {
         if ($property instanceof ReflectionParameter) {
             return $property->isVariadic();

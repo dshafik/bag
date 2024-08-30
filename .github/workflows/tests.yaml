@@ -34,26 +34,8 @@ jobs:
       - name: Install dependencies with composer
         run: composer update --no-ansi --no-interaction --no-progress
 
-      - name: Run tests with phpunit/phpunit
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
-  mutation:
-    name: Mutation Testing
-    runs-on: 'ubuntu-latest'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - name: Run tests with pest
+        run: vendor/bin/pest --coverage --min=80
 
-      - name: Setup PHP with Xdebug
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.3
-          coverage: xdebug
-          extensions: mbstring, intl, fileinfo, sqlite3, pdo_sqlite
-
-      - name: Install dependencies with composer
-        run: composer update --no-ansi --no-interaction --no-progress
-
-      - name: Run mutation tests
-        run: vendor/bin/infection --min-covered-msi=80
+      - name: Run type coverage with pest
+        run: vendor/bin/pest --type-coverage --min=99 --memory-limit=-1

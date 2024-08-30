@@ -1,69 +1,50 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Feature\Concerns;
-
-use Bag\Attributes\Collection as CollectionAttribute;
-use Bag\Collection;
-use Bag\Concerns\WithCollections;
 use Bag\Internal\Cache;
-use Illuminate\Foundation\Testing\WithFaker;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversTrait;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\Values\BagWithCollection;
-use Tests\TestCase;
 
-#[CoversTrait(WithCollections::class)]
-#[CoversClass(Collection::class)]
-#[CoversClass(CollectionAttribute::class)]
-class WithCollectionsTest extends TestCase
-{
-    use WithFaker;
+test('it creates custom collections', function () {
+    $data = [
+        ['name' => fake()->name(), 'age' => fake()->numberBetween(18, 100)],
+        ['name' => fake()->name(), 'age' => fake()->numberBetween(18, 100)],
+    ];
 
-    public function testItCreatesCustomCollections()
-    {
-        $data = [
-            ['name' => $this->faker->name(), 'age' => $this->faker->numberBetween(18, 100)],
-            ['name' => $this->faker->name(), 'age' => $this->faker->numberBetween(18, 100)],
-        ];
+    $collection = BagWithCollection::collect($data);
 
-        $collection = BagWithCollection::collect($data);
+    expect($collection)->toBeInstanceOf(BagWithCollectionCollection::class)
+        ->and($collection)->toHaveCount(2);
 
-        $this->assertInstanceOf(BagWithCollectionCollection::class, $collection);
-        $this->assertCount(2, $collection);
-        $collection->each(function (BagWithCollection $bag, $index) use ($data) {
-            $this->assertSame($data[$index]['name'], $bag->name);
-            $this->assertSame($data[$index]['age'], $bag->age);
-        });
-    }
+    $collection->each(function (BagWithCollection $bag, $index) use ($data) {
+        expect($bag->name)->toBe($data[$index]['name'])
+            ->and($bag->age)->toBe($data[$index]['age']);
+    });
+});
 
-    public function testItUsesCache()
-    {
-        Cache::fake()->shouldReceive('store')->atLeast()->twice()->passthru();
+test('it uses cache', function () {
+    Cache::fake()->shouldReceive('store')->atLeast()->twice()->passthru();
 
-        $data = [
-            ['name' => $this->faker->name(), 'age' => $this->faker->numberBetween(18, 100)],
-            ['name' => $this->faker->name(), 'age' => $this->faker->numberBetween(18, 100)],
-        ];
+    $data = [
+        ['name' => fake()->name(), 'age' => fake()->numberBetween(18, 100)],
+        ['name' => fake()->name(), 'age' => fake()->numberBetween(18, 100)],
+    ];
 
-        $collection = BagWithCollection::collect($data);
+    $collection = BagWithCollection::collect($data);
 
-        $this->assertInstanceOf(BagWithCollectionCollection::class, $collection);
-        $this->assertCount(2, $collection);
-        $collection->each(function (BagWithCollection $bag, $index) use ($data) {
-            $this->assertSame($data[$index]['name'], $bag->name);
-            $this->assertSame($data[$index]['age'], $bag->age);
-        });
+    expect($collection)->toBeInstanceOf(BagWithCollectionCollection::class)
+        ->and($collection)->toHaveCount(2);
+    $collection->each(function (BagWithCollection $bag, $index) use ($data) {
+        expect($bag->name)->toBe($data[$index]['name'])
+            ->and($bag->age)->toBe($data[$index]['age']);
+    });
 
-        $collection = BagWithCollection::collect($data);
+    $collection = BagWithCollection::collect($data);
 
-        $this->assertInstanceOf(BagWithCollectionCollection::class, $collection);
-        $this->assertCount(2, $collection);
-        $collection->each(function (BagWithCollection $bag, $index) use ($data) {
-            $this->assertSame($data[$index]['name'], $bag->name);
-            $this->assertSame($data[$index]['age'], $bag->age);
-        });
-    }
-}
+    expect($collection)->toBeInstanceOf(BagWithCollectionCollection::class)
+        ->and($collection)->toHaveCount(2);
+    $collection->each(function (BagWithCollection $bag, $index) use ($data) {
+        expect($bag->name)->toBe($data[$index]['name'])
+            ->and($bag->age)->toBe($data[$index]['age']);
+    });
+});

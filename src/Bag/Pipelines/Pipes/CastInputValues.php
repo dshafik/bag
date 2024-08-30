@@ -7,6 +7,7 @@ namespace Bag\Pipelines\Pipes;
 use Bag\Pipelines\Values\BagInput;
 use Bag\Property\Value;
 use Bag\Property\ValueCollection;
+use Illuminate\Support\Collection;
 
 readonly class CastInputValues
 {
@@ -15,7 +16,7 @@ readonly class CastInputValues
         $properties = $input->params;
         $values = $input->values;
 
-        $input->values = $input->values->map(function ($value, $key) use ($properties, $values) {
+        $input->values = $input->values->map(function (mixed $value, string $key) use ($properties, $values) {
             if (!isset($properties[$key])) {
                 return $this->castVariadic($properties, $values, $value);
             }
@@ -29,7 +30,7 @@ readonly class CastInputValues
         return $input;
     }
 
-    protected function castVariadic(ValueCollection $properties, $values, $value): mixed
+    protected function castVariadic(ValueCollection $properties, Collection $values, mixed $value): mixed
     {
         /** @var Value $last */
         $last = $properties->last();

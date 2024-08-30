@@ -13,13 +13,13 @@ class ValueCollection extends Collection
         return $this->where('required', true);
     }
 
-    public function aliases()
+    public function aliases(): Collection
     {
         return collect([
             'input' => $this->map(function (Value $property) {
                 return $property->maps['input'];
-            })->flatMap(function ($aliases, $name) {
-                return $aliases->mapWithKeys(function ($alias) use ($name) {
+            })->flatMap(function (Collection $aliases, string $name) {
+                return $aliases->mapWithKeys(function (string $alias) use ($name) {
                     return [$alias => $name];
                 });
             }),

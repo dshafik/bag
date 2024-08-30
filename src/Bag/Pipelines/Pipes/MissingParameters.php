@@ -14,7 +14,7 @@ readonly class MissingParameters
     {
         /** @var Collection $required */
         $required = $input->params->required();
-        $input->values->each(fn ($_, $key) => $required->forget($key));
+        $input->values->each(fn (mixed $_, string $key) => $required->forget($key));
 
         $required->whenNotEmpty(fn () => throw new MissingPropertiesException($required));
 

@@ -1,132 +1,114 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Feature\Traits;
-
-use Bag\Concerns\WithOutput;
-use PHPUnit\Framework\Attributes\CoversTrait;
 use Tests\Fixtures\Values\HiddenParametersBag;
 use Tests\Fixtures\Values\MappedOutputNameClassBag;
 use Tests\Fixtures\Values\WrappedBag;
-use Tests\TestCase;
 
-#[CoversTrait(WithOutput::class)]
-class WithOutputTest extends TestCase
-{
-    public function testItMapsOutputNames()
-    {
-        $value = MappedOutputNameClassBag::from([
-            'nameGoesHere' => 'Davey Shafik',
-            'ageGoesHere' => 40,
-            'emailGoesHere' => 'davey@php.net',
-        ]);
+test('it maps output names', function () {
+    $value = MappedOutputNameClassBag::from([
+        'nameGoesHere' => 'Davey Shafik',
+        'ageGoesHere' => 40,
+        'emailGoesHere' => 'davey@php.net',
+    ]);
 
-        $this->assertSame('Davey Shafik', $value->nameGoesHere);
-        $this->assertSame(40, $value->ageGoesHere);
-        $this->assertSame('davey@php.net', $value->emailGoesHere);
-
-        $this->assertSame([
+    expect($value->nameGoesHere)->toBe('Davey Shafik')
+        ->and($value->ageGoesHere)->toBe(40)
+        ->and($value->emailGoesHere)->toBe('davey@php.net')
+        ->and($value->toArray())->toBe([
             'name_goes_here' => 'Davey Shafik',
             'age_goes_here' => 40,
             'email_goes_here' => 'davey@php.net',
-        ], $value->toArray());
-    }
-
-    public function testItGetsValues()
-    {
-        $value = MappedOutputNameClassBag::from([
-            'nameGoesHere' => 'Davey Shafik',
-            'ageGoesHere' => 40,
-            'emailGoesHere' => 'davey@php.net'
         ]);
 
-        $values = $value->get();
+});
 
-        $this->assertSame('Davey Shafik', $values['nameGoesHere']);
-        $this->assertSame(40, $values['ageGoesHere']);
-        $this->assertSame('davey@php.net', $values['emailGoesHere']);
-    }
+test('it gets values', function () {
+    $value = MappedOutputNameClassBag::from([
+        'nameGoesHere' => 'Davey Shafik',
+        'ageGoesHere' => 40,
+        'emailGoesHere' => 'davey@php.net'
+    ]);
 
-    public function testItGetsValuesWithoutHidden()
-    {
-        $value = HiddenParametersBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-            'email' => 'davey@php.net'
-        ]);
+    $values = $value->get();
 
-        $values = $value->get();
+    expect($values['nameGoesHere'])->toBe('Davey Shafik')
+        ->and($values['ageGoesHere'])->toBe(40)
+        ->and($values['emailGoesHere'])->toBe('davey@php.net');
+});
 
-        $this->assertSame('Davey Shafik', $values['name']);
-        $this->assertSame(40, $values['age']);
-        $this->assertArrayNotHasKey('email', $values);
-    }
+test('it gets values without hidden', function () {
+    $value = HiddenParametersBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+        'email' => 'davey@php.net'
+    ]);
 
-    public function testItGetsValue()
-    {
-        $value = MappedOutputNameClassBag::from([
-            'nameGoesHere' => 'Davey Shafik',
-            'ageGoesHere' => 40,
-            'emailGoesHere' => 'davey@php.net'
-        ]);
+    $values = $value->get();
 
-        $name = $value->get('nameGoesHere');
+    expect($values['name'])->toBe('Davey Shafik')
+        ->and($values['age'])->toBe(40)
+        ->and($values)->not->toHaveKey('email');
+});
 
-        $this->assertSame('Davey Shafik', $name);
-    }
+test('it gets value', function () {
+    $value = MappedOutputNameClassBag::from([
+        'nameGoesHere' => 'Davey Shafik',
+        'ageGoesHere' => 40,
+        'emailGoesHere' => 'davey@php.net'
+    ]);
 
-    public function testItDoesNotGetHiddenValue()
-    {
-        $value = HiddenParametersBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-            'email' => 'davey@php.net'
-        ]);
+    $name = $value->get('nameGoesHere');
 
-        $value = $value->get('email');
+    expect($name)->toBe('Davey Shafik');
+});
 
-        $this->assertNull($value);
-    }
+test('it does not get hidden value', function () {
+    $value = HiddenParametersBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+        'email' => 'davey@php.net'
+    ]);
 
-    public function testItGetsRawValues()
-    {
-        $value = HiddenParametersBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-            'email' => 'davey@php.net'
-        ]);
+    $value = $value->get('email');
 
-        $values = $value->getRaw();
+    expect($value)->toBeNull();
+});
 
-        $this->assertSame('Davey Shafik', $values['name']);
-        $this->assertSame(40, $values['age']);
-        $this->assertSame('davey@php.net', $values['email']);
-    }
+test('it gets raw values', function () {
+    $value = HiddenParametersBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+        'email' => 'davey@php.net'
+    ]);
 
-    public function testItGetsRawValue()
-    {
-        $value = HiddenParametersBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-            'email' => 'davey@php.net'
-        ]);
+    $values = $value->getRaw();
 
-        $email = $value->getRaw('email');
+    expect($values['name'])->toBe('Davey Shafik')
+        ->and($values['age'])->toBe(40)
+        ->and($values['email'])->toBe('davey@php.net');
+});
 
-        $this->assertSame('davey@php.net', $email);
-    }
+test('it gets raw value', function () {
+    $value = HiddenParametersBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+        'email' => 'davey@php.net'
+    ]);
 
-    public function testItGetsUnwrapped()
-    {
-        $value = WrappedBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-        ]);
+    $email = $value->getRaw('email');
 
-        $this->assertSame([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-        ], $value->unwrapped());
-    }
-}
+    expect($email)->toBe('davey@php.net');
+});
+
+test('it gets unwrapped', function () {
+    $value = WrappedBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+    ]);
+
+    expect($value->unwrapped())->toBe([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+    ]);
+});

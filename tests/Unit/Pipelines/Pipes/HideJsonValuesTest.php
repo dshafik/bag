@@ -1,10 +1,6 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Unit\Pipelines\Pipes;
-
-use Bag\Attributes\HiddenFromJson;
 use Bag\Enums\OutputType;
 use Bag\Pipelines\Pipes\HideJsonValues;
 use Bag\Pipelines\Pipes\ProcessParameters;
@@ -12,83 +8,74 @@ use Bag\Pipelines\Pipes\ProcessProperties;
 use Bag\Pipelines\Values\BagOutput;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Values\ComputedPropertyHiddenBag;
 use Tests\Fixtures\Values\HiddenJsonParametersBag;
-use Tests\TestCase;
 
-#[CoversClass(HideJsonValues::class)]
-#[CoversClass(HiddenFromJson::class)]
-class HideJsonValuesTest extends TestCase
-{
-    public function testItDoesNotHideJsonUnlessOutputtingJson()
-    {
-        $bag = HiddenJsonParametersBag::from([
-            'nameGoesHere' => 'Davey Shafik',
-            'ageGoesHere' => 40,
-            'emailGoesHere' => 'davey@php.net',
-            'passwordGoesHere' => 'hunter2',
-        ]);
+test('it does not hide json unless outputting json', function () {
+    $bag = HiddenJsonParametersBag::from([
+        'nameGoesHere' => 'Davey Shafik',
+        'ageGoesHere' => 40,
+        'emailGoesHere' => 'davey@php.net',
+        'passwordGoesHere' => 'hunter2',
+    ]);
 
-        $output = new BagOutput($bag, OutputType::ARRAY);
-        $output = (new ProcessProperties())($output);
-        $output = (new ProcessParameters())($output);
-        $output->values = $bag->getRaw();
+    $output = new BagOutput($bag, OutputType::ARRAY);
+    $output = (new ProcessProperties())($output);
+    $output = (new ProcessParameters())($output);
+    $output->values = $bag->getRaw();
 
-        $pipe = new HideJsonValues();
-        $output = $pipe($output);
+    $pipe = new HideJsonValues();
+    $output = $pipe($output);
 
-        $this->assertSame([
-            'nameGoesHere' => 'Davey Shafik',
-            'ageGoesHere' => 40,
-            'emailGoesHere' => 'davey@php.net',
-            'passwordGoesHere' => 'hunter2',
-        ], $output->values->toArray());
-    }
-    public function testItIgnoresHiddenPropertiesInJson()
-    {
-        $bag = HiddenJsonParametersBag::from([
-            'nameGoesHere' => 'Davey Shafik',
-            'ageGoesHere' => 40,
-            'emailGoesHere' => 'davey@php.net',
-            'passwordGoesHere' => 'hunter2',
-        ]);
+    expect($output->values->toArray())->toBe([
+        'nameGoesHere' => 'Davey Shafik',
+        'ageGoesHere' => 40,
+        'emailGoesHere' => 'davey@php.net',
+        'passwordGoesHere' => 'hunter2',
+    ]);
+});
 
-        $output = new BagOutput($bag, OutputType::JSON);
-        $output = (new ProcessProperties())($output);
-        $output = (new ProcessParameters())($output);
-        $output->values = $bag->getRaw();
+test('it ignores hidden properties in json', function () {
+    $bag = HiddenJsonParametersBag::from([
+        'nameGoesHere' => 'Davey Shafik',
+        'ageGoesHere' => 40,
+        'emailGoesHere' => 'davey@php.net',
+        'passwordGoesHere' => 'hunter2',
+    ]);
 
-        $pipe = new HideJsonValues();
-        $output = $pipe($output);
+    $output = new BagOutput($bag, OutputType::JSON);
+    $output = (new ProcessProperties())($output);
+    $output = (new ProcessParameters())($output);
+    $output->values = $bag->getRaw();
 
-        $this->assertSame([
-            'nameGoesHere' => 'Davey Shafik',
-            'ageGoesHere' => 40,
-            'passwordGoesHere' => 'hunter2',
-        ], $output->values->toArray());
-    }
+    $pipe = new HideJsonValues();
+    $output = $pipe($output);
 
-    public function testItHidesComputedProperties()
-    {
-        Carbon::setTestNow(new CarbonImmutable('2024-05-04 14:43:23'));
+    expect($output->values->toArray())->toBe([
+        'nameGoesHere' => 'Davey Shafik',
+        'ageGoesHere' => 40,
+        'passwordGoesHere' => 'hunter2',
+    ]);
+});
 
-        $bag = ComputedPropertyHiddenBag::from([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-        ]);
+test('it hides computed properties', function () {
+    Carbon::setTestNow(new CarbonImmutable('2024-05-04 14:43:23'));
 
-        $output = new BagOutput($bag, OutputType::JSON);
-        $output = (new ProcessProperties())($output);
-        $output = (new ProcessParameters())($output);
-        $output->values = $bag->getRaw();
+    $bag = ComputedPropertyHiddenBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+    ]);
 
-        $pipe = new HideJsonValues();
-        $output = $pipe($output);
+    $output = new BagOutput($bag, OutputType::JSON);
+    $output = (new ProcessProperties())($output);
+    $output = (new ProcessParameters())($output);
+    $output->values = $bag->getRaw();
 
-        $this->assertSame([
-            'name' => 'Davey Shafik',
-            'age' => 40,
-        ], $output->values->toArray());
-    }
-}
+    $pipe = new HideJsonValues();
+    $output = $pipe($output);
+
+    expect($output->values->toArray())->toBe([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+    ]);
+});

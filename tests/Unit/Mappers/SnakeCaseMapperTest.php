@@ -1,27 +1,16 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Unit\Mappers;
-
 use Bag\Mappers\SnakeCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\TestCase;
 
-#[CoversClass(SnakeCase::class)]
-class SnakeCaseMapperTest extends TestCase
-{
-    public function testItTransformsToSnakeCase()
-    {
-        $mapper = new SnakeCase();
+test('it transforms to snake case', function () {
+    $mapper = new SnakeCase();
 
-        $this->assertSame('some_words_here', $mapper('someWordsHere'));
-    }
+    expect($mapper('someWordsHere'))->toBe('some_words_here');
+});
 
-    public function testItLeavesSnakeCaseAlone()
-    {
-        $mapper = new SnakeCase();
+test('it leaves snake case alone', function () {
+    $mapper = new SnakeCase();
 
-        $this->assertSame('some_words_here', $mapper('some_words_here'));
-    }
-}
+    expect($mapper('some_words_here'))->toBe('some_words_here');
+});

@@ -1,170 +1,154 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Unit\Casts;
-
 use Bag\Casts\MagicCast;
 use Bag\Collection;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
-use DateTime;
-use DateTimeImmutable;
 use Illuminate\Support\Carbon as LaravelCarbon;
 use Illuminate\Support\Collection as LaravelCollection;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Enums\TestBackedEnum;
 use Tests\Fixtures\Enums\TestUnitEnum;
 use Tests\Fixtures\Values\TestBag;
-use Tests\TestCase;
 
-#[CoversClass(MagicCast::class)]
-class MagicCastTest extends TestCase
-{
-    public function testItCastsInt()
-    {
-        $cast = new MagicCast();
+test('it casts int', function () {
+    $cast = new MagicCast();
 
-        $int = $cast->set('int', 'test', collect(['test' => 1]));
-        $this->assertIsInt($int);
-        $this->assertSame(1, $int);
+    $int = $cast->set('int', 'test', collect(['test' => 1]));
+    expect($int)
+        ->toBeInt()
+        ->toBe(1);
 
-        $int = $cast->set('int', 'test', collect(['test' => 1.7]));
-        $this->assertIsInt($int);
-        $this->assertSame(1, $int);
-    }
+    $int = $cast->set('int', 'test', collect(['test' => 1.7]));
+    expect($int)
+        ->toBeInt()
+        ->toBe(1);
+});
 
-    public function testItCastsFloat()
-    {
-        $cast = new MagicCast();
+test('it casts float', function () {
+    $cast = new MagicCast();
 
-        $float = $cast->set('float', 'test', collect(['test' => 1]));
-        $this->assertIsFloat($float);
-        $this->assertSame(1.0, $float);
+    $float = $cast->set('float', 'test', collect(['test' => 1]));
+    expect($float)
+        ->toBeFloat()
+        ->toBe(1.0);
 
-        $float = $cast->set('float', 'test', collect(['test' => 1.7]));
-        $this->assertIsFloat($float);
-        $this->assertSame(1.7, $float);
-    }
+    $float = $cast->set('float', 'test', collect(['test' => 1.7]));
+    expect($float)
+        ->toBeFloat()
+        ->toBe(1.7);
+});
 
-    public function testItCastsBoolean()
-    {
-        $cast = new MagicCast();
+test('it casts boolean', function () {
+    $cast = new MagicCast();
 
-        $boolean = $cast->set('bool', 'test', collect(['test' => 0]));
-        $this->assertFalse($boolean);
+    $boolean = $cast->set('bool', 'test', collect(['test' => 0]));
+    expect($boolean)->toBeFalse();
 
-        $boolean = $cast->set('bool', 'test', collect(['test' => 1]));
-        $this->assertTrue($boolean);
-    }
+    $boolean = $cast->set('bool', 'test', collect(['test' => 1]));
+    expect($boolean)->toBeTrue();
+});
 
-    public function testItCastsString()
-    {
-        $cast = new MagicCast();
+test('it casts string', function () {
+    $cast = new MagicCast();
 
-        $string = $cast->set('string', 'test', collect(['test' => 'testing']));
-        $this->assertIsString($string);
-        $this->assertSame('testing', $string);
+    $string = $cast->set('string', 'test', collect(['test' => 'testing']));
+    expect($string)
+        ->toBeString()
+        ->toBe('testing');
 
-        $string = $cast->set('string', 'test', collect(['test' => 1234]));
-        $this->assertIsString($string);
-        $this->assertSame('1234', $string);
-    }
+    $string = $cast->set('string', 'test', collect(['test' => 1234]));
+    expect($string)
+        ->toBeString()
+        ->toBe('1234');
+});
 
-    public function testItCastsDateTimes()
-    {
-        $cast = new MagicCast();
+test('it casts date times', function () {
+    $cast = new MagicCast();
 
-        $date = $cast->set(DateTime::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
-        $this->assertInstanceOf(DateTime::class, $date);
-        $this->assertSame('2024-04-30 11:43:41', $date->format('Y-m-d H:i:s'));
+    $date = $cast->set(\DateTime::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
+    expect($date)->toBeInstanceOf(\DateTime::class)
+        ->and($date->format('Y-m-d H:i:s'))->toBe('2024-04-30 11:43:41');
 
-        $date = $cast->set(DateTimeImmutable::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
-        $this->assertInstanceOf(DateTimeImmutable::class, $date);
-        $this->assertSame('2024-04-30 11:43:41', $date->format('Y-m-d H:i:s'));
+    $date = $cast->set(\DateTimeImmutable::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
+    expect($date)->toBeInstanceOf(\DateTimeImmutable::class)
+        ->and($date->format('Y-m-d H:i:s'))->toBe('2024-04-30 11:43:41');
 
-        $date = $cast->set(Carbon::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
-        $this->assertInstanceOf(Carbon::class, $date);
-        $this->assertSame('2024-04-30 11:43:41', $date->format('Y-m-d H:i:s'));
+    $date = $cast->set(Carbon::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
+    expect($date)->toBeInstanceOf(Carbon::class)
+        ->and($date->format('Y-m-d H:i:s'))->toBe('2024-04-30 11:43:41');
 
-        $date = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
-        $this->assertInstanceOf(CarbonImmutable::class, $date);
-        $this->assertSame('2024-04-30 11:43:41', $date->format('Y-m-d H:i:s'));
+    $date = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
+    expect($date)->toBeInstanceOf(CarbonImmutable::class)
+        ->and($date->format('Y-m-d H:i:s'))->toBe('2024-04-30 11:43:41');
 
-        $date = $cast->set(LaravelCarbon::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
-        $this->assertInstanceOf(LaravelCarbon::class, $date);
-        $this->assertSame('2024-04-30 11:43:41', $date->format('Y-m-d H:i:s'));
+    $date = $cast->set(LaravelCarbon::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
+    expect($date)->toBeInstanceOf(LaravelCarbon::class)
+        ->and($date->format('Y-m-d H:i:s'))->toBe('2024-04-30 11:43:41');
 
-        $class = new class () extends CarbonImmutable { };
-        $date = $cast->set($class::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
-        $this->assertInstanceOf($class::class, $date);
-        $this->assertSame('2024-04-30 11:43:41', $date->format('Y-m-d H:i:s'));
-    }
+    $class = new class () extends CarbonImmutable { };
+    $date = $cast->set($class::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
+    expect($date)->toBeInstanceOf($class::class)
+        ->and($date->format('Y-m-d H:i:s'))->toBe('2024-04-30 11:43:41');
+});
 
-    public function testItCastsBags()
-    {
-        $cast = new MagicCast();
+test('it casts bags', function () {
+    $cast = new MagicCast();
 
-        $bag = $cast->set(TestBag::class, 'test', collect([
-            'test' => [
-                'name' => 'Davey Shafik',
-                'age' => '40',
-                'email' => 'davey@php.net'
-            ]
-        ]));
+    $bag = $cast->set(TestBag::class, 'test', collect([
+        'test' => [
+            'name' => 'Davey Shafik',
+            'age' => '40',
+            'email' => 'davey@php.net'
+        ]
+    ]));
 
-        $this->assertInstanceOf(TestBag::class, $bag);
-        $this->assertSame('Davey Shafik', $bag->name);
-        $this->assertSame(40, $bag->age);
-        $this->assertSame('davey@php.net', $bag->email);
-    }
+    expect($bag)->toBeInstanceOf(TestBag::class)
+        ->and($bag->name)->toBe('Davey Shafik')
+        ->and($bag->age)->toBe(40)
+        ->and($bag->email)->toBe('davey@php.net');
+});
 
-    public function testItCastsCollections()
-    {
-        $cast = new MagicCast();
+test('it casts collections', function () {
+    $cast = new MagicCast();
 
-        $collection = $cast->set(LaravelCollection::class, 'test', collect([
-            'test' => [
-                'name' => 'Davey Shafik',
-                'age' => '40',
-                'email' => 'davey@php.net'
-            ]
-        ]));
-        $this->assertInstanceOf(LaravelCollection::class, $collection);
-        $this->assertSame('Davey Shafik', $collection['name']);
-        $this->assertSame('40', $collection['age']);
-        $this->assertSame('davey@php.net', $collection['email']);
+    $collection = $cast->set(LaravelCollection::class, 'test', collect([
+        'test' => [
+            'name' => 'Davey Shafik',
+            'age' => '40',
+            'email' => 'davey@php.net'
+        ]
+    ]));
+    expect($collection)->toBeInstanceOf(LaravelCollection::class)
+        ->and($collection['name'])->toBe('Davey Shafik')
+        ->and($collection['age'])->toBe('40')
+        ->and($collection['email'])->toBe('davey@php.net');
 
-        $collection = $cast->set(Collection::class, 'test', collect([
-            'test' => [
-                'name' => 'Davey Shafik',
-                'age' => '40',
-                'email' => 'davey@php.net'
-            ]
-        ]));
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertSame('Davey Shafik', $collection['name']);
-        $this->assertSame('40', $collection['age']);
-        $this->assertSame('davey@php.net', $collection['email']);
-    }
+    $collection = $cast->set(Collection::class, 'test', collect([
+        'test' => [
+            'name' => 'Davey Shafik',
+            'age' => '40',
+            'email' => 'davey@php.net'
+        ]
+    ]));
+    expect($collection)->toBeInstanceOf(Collection::class)
+        ->and($collection['name'])->toBe('Davey Shafik')
+        ->and($collection['age'])->toBe('40')
+        ->and($collection['email'])->toBe('davey@php.net');
+});
 
+test('it casts unit enum', function () {
+    $cast = new MagicCast();
 
-    public function testItCastsUnitEnum()
-    {
-        $cast = new MagicCast();
+    $enum = $cast->set(TestUnitEnum::class, 'test', collect(['test' => 'TEST_VALUE']));
 
-        $enum = $cast->set(TestUnitEnum::class, 'test', collect(['test' => 'TEST_VALUE']));
+    expect($enum)->toBe(TestUnitEnum::TEST_VALUE);
+});
 
-        $this->assertSame(TestUnitEnum::TEST_VALUE, $enum);
-    }
+test('it casts backed enum', function () {
+    $cast = new MagicCast();
 
+    $enum = $cast->set(TestBackedEnum::class, 'test', collect(['test' => 'test']));
 
-    public function testItCastsBackedEnum()
-    {
-        $cast = new MagicCast();
-
-        $enum = $cast->set(TestBackedEnum::class, 'test', collect(['test' => 'test']));
-
-        $this->assertSame(TestBackedEnum::TEST_VALUE, $enum);
-    }
-}
+    expect($enum)->toBe(TestBackedEnum::TEST_VALUE);
+});

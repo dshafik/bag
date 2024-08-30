@@ -17,13 +17,13 @@
     "require-dev": {
         "captainhook/captainhook-phar": "^5.23",
         "captainhook/hook-installer": "^1.0",
-        "fakerphp/faker": "^1.23",
-        "infection/infection": "^0.28.1",
         "larastan/larastan": "^2.0",
         "laravel/pint": "^1.15",
         "laravel/prompts": "^0.1.25",
-        "orchestra/testbench": "^8.0|^9.0",
-        "phpunit/phpunit": "^10.5|^11",
+        "orchestra/pest-plugin-testbench": "^2.0",
+        "pestphp/pest-plugin-drift": "^2.6",
+        "pestphp/pest-plugin-faker": "^2.0",
+        "pestphp/pest-plugin-type-coverage": "^2.8",
         "ramsey/conventional-commits": "dev-allow-sf-7",
         "roave/security-advisories": "dev-latest",
         "symfony/var-dumper": "*"
@@ -67,7 +67,8 @@
         "allow-plugins": {
             "captainhook/captainhook-phar": true,
             "captainhook/hook-installer": true,
-            "infection/extension-installer": true
+            "infection/extension-installer": true,
+            "pestphp/pest-plugin": true
         }
     }
 }

@@ -1,143 +1,120 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Unit\Casts;
-
 use Bag\Casts\DateTime;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Carbon\Exceptions\InvalidFormatException;
-use DateTimeImmutable;
-use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\TestCase;
 
-#[CoversClass(DateTime::class)]
-class DateTimeTest extends TestCase
-{
-    public function testItCastsToDatetime()
-    {
-        $cast = new DateTime();
+test('it casts to datetime', function () {
+    $cast = new DateTime();
 
-        $datetime = $cast->set(\DateTime::class, 'test', collect(['test' => '2024-04-30 01:58:23']));
+    $datetime = $cast->set(\DateTime::class, 'test', collect(['test' => '2024-04-30 01:58:23']));
 
-        $this->assertInstanceOf(\DateTime::class, $datetime);
-        $this->assertSame('2024-04-30 01:58:23', $datetime->format('Y-m-d H:i:s'));
-    }
+    expect($datetime)->toBeInstanceOf(\DateTime::class)
+        ->and($datetime->format('Y-m-d H:i:s'))->toBe('2024-04-30 01:58:23');
+});
 
-    public function testItCastsToDatetimeImmutable()
-    {
-        $cast = new DateTime();
+test('it casts to datetime immutable', function () {
+    $cast = new DateTime();
 
-        $datetime = $cast->set(DateTimeImmutable::class, 'test', collect(['test' => '2024-04-30 01:58:23']));
+    $datetime = $cast->set(\DateTimeImmutable::class, 'test', collect(['test' => '2024-04-30 01:58:23']));
 
-        $this->assertInstanceOf(DateTimeImmutable::class, $datetime);
-        $this->assertSame('2024-04-30 01:58:23', $datetime->format('Y-m-d H:i:s'));
-    }
+    expect($datetime)->toBeInstanceOf(\DateTimeImmutable::class)
+        ->and($datetime->format('Y-m-d H:i:s'))->toBe('2024-04-30 01:58:23');
+});
 
-    public function testItCastsToCarbon()
-    {
-        $cast = new DateTime();
+test('it casts to carbon', function () {
+    $cast = new DateTime();
 
-        $datetime = $cast->set(Carbon::class, 'test', collect(['test' => '2024-04-30 01:58:23']));
+    $datetime = $cast->set(Carbon::class, 'test', collect(['test' => '2024-04-30 01:58:23']));
 
-        $this->assertInstanceOf(Carbon::class, $datetime);
-        $this->assertSame('2024-04-30 01:58:23', $datetime->format('Y-m-d H:i:s'));
-    }
+    expect($datetime)->toBeInstanceOf(Carbon::class)
+        ->and($datetime->format('Y-m-d H:i:s'))->toBe('2024-04-30 01:58:23');
+});
 
-    public function testItCastsToCarbonImmutable()
-    {
-        $cast = new DateTime();
+test('it casts to carbon immutable', function () {
+    $cast = new DateTime();
 
-        $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 01:58:23']));
+    $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 01:58:23']));
 
-        $this->assertInstanceOf(CarbonImmutable::class, $datetime);
-        $this->assertSame('2024-04-30 01:58:23', $datetime->format('Y-m-d H:i:s'));
-    }
+    expect($datetime)->toBeInstanceOf(CarbonImmutable::class)
+        ->and($datetime->format('Y-m-d H:i:s'))->toBe('2024-04-30 01:58:23');
+});
 
-    public function testItCastsToCustom()
-    {
-        $customDateTime = new class () extends CarbonImmutable {};
-        $cast = new DateTime(dateTimeClass: $customDateTime::class);
+test('it casts to custom', function () {
+    $customDateTime = new class () extends CarbonImmutable {};
+    $cast = new DateTime(dateTimeClass: $customDateTime::class);
 
-        $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 01:58:23']));
+    $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 01:58:23']));
 
-        $this->assertInstanceOf($customDateTime::class, $datetime);
-        $this->assertSame('2024-04-30 01:58:23', $datetime->format('Y-m-d H:i:s'));
-    }
+    expect($datetime)->toBeInstanceOf($customDateTime::class)
+        ->and($datetime->format('Y-m-d H:i:s'))->toBe('2024-04-30 01:58:23');
+});
 
-    public function testItDoesNotCastSame()
-    {
-        $cast = new DateTime();
+test('it does not cast same', function () {
+    $cast = new DateTime();
 
-        $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => new CarbonImmutable('2024-04-30 01:58:23')]));
+    $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => new CarbonImmutable('2024-04-30 01:58:23')]));
 
-        $this->assertInstanceOf(CarbonImmutable::class, $datetime);
-        $this->assertSame('2024-04-30 01:58:23', $datetime->format('Y-m-d H:i:s'));
-    }
+    expect($datetime)->toBeInstanceOf(CarbonImmutable::class)
+        ->and($datetime->format('Y-m-d H:i:s'))->toBe('2024-04-30 01:58:23');
+});
 
-    public function testItCastsIncorrectDateTimeInterface()
-    {
-        $cast = new DateTime();
+test('it casts incorrect date time interface', function () {
+    $cast = new DateTime();
 
-        $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => new DateTimeImmutable('2024-04-30 01:58:23')]));
+    $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => new \DateTimeImmutable('2024-04-30 01:58:23')]));
 
-        $this->assertInstanceOf(CarbonImmutable::class, $datetime);
-        $this->assertSame('2024-04-30 01:58:23', $datetime->format('Y-m-d H:i:s'));
-    }
+    expect($datetime)->toBeInstanceOf(CarbonImmutable::class)
+        ->and($datetime->format('Y-m-d H:i:s'))->toBe('2024-04-30 01:58:23');
+});
 
-    public function testItEnforcesStrictMode()
-    {
-        $cast = new DateTime(strictMode: true);
+test('it enforces strict mode', function () {
+    $cast = new DateTime(strictMode: true);
 
-        $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 01:58:23']));
+    $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 01:58:23']));
 
-        $this->assertInstanceOf(CarbonImmutable::class, $datetime);
-        $this->assertSame('2024-04-30 01:58:23', $datetime->format('Y-m-d H:i:s'));
-    }
+    expect($datetime)->toBeInstanceOf(CarbonImmutable::class)
+        ->and($datetime->format('Y-m-d H:i:s'))->toBe('2024-04-30 01:58:23');
+});
 
-    public function testItErrorsInStrictMode()
-    {
-        $this->expectException(InvalidFormatException::class);
-        $this->expectExceptionMessage('Not enough data available to satisfy format');
+test('it errors in strict mode', function () {
+    $this->expectException(InvalidFormatException::class);
+    $this->expectExceptionMessage('Not enough data available to satisfy format');
 
-        $cast = new DateTime(strictMode: true);
-        $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 01:58']));
-    }
+    $cast = new DateTime(strictMode: true);
+    $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 01:58']));
+});
 
-    public function testItDoesNotErrorInNonStrictMode()
-    {
-        $cast = new DateTime(strictMode: false);
-        $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 01:58']));
+test('it does not error in non strict mode', function () {
+    $cast = new DateTime(strictMode: false);
+    $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 01:58']));
 
-        $this->assertInstanceOf(CarbonImmutable::class, $datetime);
-        $this->assertSame('2024-04-30 01:58:00', $datetime->format('Y-m-d H:i:s'));
-    }
+    expect($datetime)->toBeInstanceOf(CarbonImmutable::class)
+        ->and($datetime->format('Y-m-d H:i:s'))->toBe('2024-04-30 01:58:00');
+});
 
-    public function testItParsesCustomFormat()
-    {
-        $cast = new DateTime(format: 'm/d/y');
+test('it parses custom format', function () {
+    $cast = new DateTime(format: 'm/d/y');
 
-        $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '4/30/24']));
+    $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '4/30/24']));
 
-        $this->assertSame('2024-04-30', $datetime->format('Y-m-d'));
-    }
+    expect($datetime->format('Y-m-d'))->toBe('2024-04-30');
+});
 
-    public function testItFormatsOutputUsingInputFormatByDefault()
-    {
-        $cast = new DateTime();
-        $output = $cast->get('test', \collect(['test' => new CarbonImmutable('2024-04-30 01:58:23')]));
+test('it formats output using input format by default', function () {
+    $cast = new DateTime();
+    $output = $cast->get('test', collect(['test' => new CarbonImmutable('2024-04-30 01:58:23')]));
 
-        $this->assertSame('2024-04-30 01:58:23', $output);
-    }
+    expect($output)->toBe('2024-04-30 01:58:23');
+});
 
-    public function testItParsesAndOutputsCustomFormat()
-    {
-        $cast = new DateTime(format: 'm/d/y H:i:s', outputFormat: 'Y-m-d');
+test('it parses and outputs custom format', function () {
+    $cast = new DateTime(format: 'm/d/y H:i:s', outputFormat: 'Y-m-d');
 
-        $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '4/30/24 01:58:23']));
+    $datetime = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '4/30/24 01:58:23']));
 
-        $this->assertSame('2024-04-30', $datetime->format('Y-m-d'));
-        $this->assertSame('2024-04-30', $cast->get('test', collect(['test' => $datetime])));
-    }
-}
+    expect($datetime->format('Y-m-d'))->toBe('2024-04-30')
+        ->and($cast->get('test', collect(['test' => $datetime])))->toBe('2024-04-30');
+});

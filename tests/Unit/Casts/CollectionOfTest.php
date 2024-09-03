@@ -109,6 +109,21 @@ test('it creates custom collection of bags', function () {
 
 });
 
+test('it creates collection using existing bags', function () {
+    $cast = new CollectionOf(TestBag::class);
+    $collection = $cast->set(Collection::class, 'test', collect(['test' => [
+        TestBag::from([
+            'name' => 'Davey Shafik',
+            'age' => 40,
+            'email' => 'davey@php.net',
+        ])
+    ]]));
+
+    expect($collection)
+        ->toBeInstanceOf(Collection::class)
+        ->toContainOnlyInstancesOf(TestBag::class);
+});
+
 test('it fails with invalid collection', function () {
     $this->expectException(InvalidCollection::class);
     $this->expectExceptionMessage('The property "test" must be a subclass of Illuminate\Support\Collection');

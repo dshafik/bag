@@ -37,6 +37,12 @@ class CollectionOf implements CastsPropertySet
             throw new InvalidCollection(sprintf('The property "%s" must be a subclass of %s', $propertyName, LaravelCollection::class));
         }
 
-        return $propertyType::make($properties->get($propertyName))->map(fn (mixed $item) => $this->valueClassname::from($item));
+        return $propertyType::make($properties->get($propertyName))->map(function (mixed $item) {
+            if ($item instanceof Bag && $item::class === $this->valueClassname) {
+                return clone $item;
+            }
+
+            return $this->valueClassname::from($item);
+        });
     }
 }

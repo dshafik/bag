@@ -8,7 +8,7 @@ use Bag\Exceptions\MissingPropertiesException;
 use Bag\Pipelines\Values\BagInput;
 use Illuminate\Support\Collection;
 
-readonly class MissingParameters
+readonly class MissingProperties
 {
     public function __invoke(BagInput $input)
     {
@@ -16,7 +16,7 @@ readonly class MissingParameters
         $required = $input->params->required();
         $input->values->each(fn (mixed $_, string $key) => $required->forget($key));
 
-        $required->whenNotEmpty(fn () => throw new MissingPropertiesException($required));
+        $required->whenNotEmpty(fn () => throw new MissingPropertiesException($input->bagClassname, $required));
 
         return $input;
     }

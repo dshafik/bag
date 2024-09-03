@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bag;
 
+use Faker\Generator;
 use Illuminate\Database\Eloquent\Factories\Sequence;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Collection as LaravelCollection;
 
 /**
@@ -13,11 +13,11 @@ use Illuminate\Support\Collection as LaravelCollection;
  */
 abstract class Factory
 {
-    use WithFaker;
-
     protected int $count = 1;
 
     protected LaravelCollection $state;
+
+    protected Generator $faker;
 
     /**
      * @var LaravelCollection<Sequence>
@@ -31,6 +31,7 @@ abstract class Factory
         protected string $bagClass,
         LaravelCollection|array $data = []
     ) {
+        $this->faker = \Faker\Factory::create();
         $this->state = LaravelCollection::make($this->definition())->merge($data);
         $this->sequences = LaravelCollection::empty();
     }

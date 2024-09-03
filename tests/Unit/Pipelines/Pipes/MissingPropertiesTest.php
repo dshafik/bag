@@ -4,13 +4,13 @@ declare(strict_types=1);
 use Bag\Exceptions\MissingPropertiesException;
 use Bag\Pipelines\Pipes\IsVariadic;
 use Bag\Pipelines\Pipes\MapInput;
-use Bag\Pipelines\Pipes\MissingParameters;
+use Bag\Pipelines\Pipes\MissingProperties;
 use Bag\Pipelines\Pipes\ProcessParameters;
 use Bag\Pipelines\Values\BagInput;
 use Tests\Fixtures\Values\OptionalPropertiesBag;
 use Tests\Fixtures\Values\TestBag;
 
-test('it does not error without missing parameters', function () {
+test('it does not error without missing properties', function () {
     $input = new BagInput(TestBag::class, collect([
         'name' => 'Davey Shafik',
         'age' => 40,
@@ -20,19 +20,19 @@ test('it does not error without missing parameters', function () {
     $input = (new MapInput())($input, fn (BagInput $input) => $input);
     $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
-    $pipe = new MissingParameters();
+    $pipe = new MissingProperties();
     $input = $pipe($input);
 
     expect($input)->toBeInstanceOf(BagInput::class);
 });
 
-test('it does not error with missing optional parameters', function () {
+test('it does not error with missing optional properties', function () {
     $input = new BagInput(OptionalPropertiesBag::class, collect());
     $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
     $input = (new MapInput())($input, fn (BagInput $input) => $input);
     $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
-    $pipe = new MissingParameters();
+    $pipe = new MissingProperties();
     $input = $pipe($input);
 
     expect($input)->toBeInstanceOf(BagInput::class);
@@ -44,13 +44,13 @@ test('it does not error with missing optional parameters', function () {
     $input = (new MapInput())($input, fn (BagInput $input) => $input);
     $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
-    $pipe = new MissingParameters();
+    $pipe = new MissingProperties();
     $input = $pipe($input);
 
     expect($input)->toBeInstanceOf(BagInput::class);
 });
 
-test('it errors with missing parameters', function () {
+test('it errors with missing properties', function () {
     $input = new BagInput(TestBag::class, collect([
         'name' => 'Davey Shafik',
         'age' => 40,
@@ -60,7 +60,7 @@ test('it errors with missing parameters', function () {
     $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
     $this->expectException(MissingPropertiesException::class);
-    $this->expectExceptionMessage('Missing required properties: email');
-    $pipe = new MissingParameters();
+    $this->expectExceptionMessage('Missing required properties for Bag Tests\\Fixtures\\Values\\TestBag: email');
+    $pipe = new MissingProperties();
     $pipe($input);
 });

@@ -7,7 +7,7 @@ namespace Bag\Pipelines;
 use Bag\Pipelines\Pipes\ExtraParameters;
 use Bag\Pipelines\Pipes\IsVariadic;
 use Bag\Pipelines\Pipes\MapInput;
-use Bag\Pipelines\Pipes\MissingParameters;
+use Bag\Pipelines\Pipes\MissingProperties;
 use Bag\Pipelines\Pipes\ProcessParameters;
 use Bag\Pipelines\Pipes\Transform;
 use Bag\Pipelines\Pipes\Validate;
@@ -24,7 +24,7 @@ class ValidationPipeline
             new ProcessParameters(),
             new IsVariadic(),
             new MapInput(),
-            new MissingParameters(),
+            new MissingProperties(),
             new ExtraParameters(),
             new Validate(),
         );

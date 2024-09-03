@@ -9,8 +9,12 @@ use Illuminate\Support\Collection;
 
 class MissingPropertiesException extends Exception
 {
-    public function __construct(Collection $missingParameters)
+    public function __construct(string $bagClassname, Collection $missingParameters)
     {
-        parent::__construct('Missing required properties: '.$missingParameters->keys()->implode(', '));
+        parent::__construct(sprintf(
+            'Missing required properties for Bag %s: %s',
+            $bagClassname,
+            $missingParameters->keys()->implode(', ')
+        ));
     }
 }

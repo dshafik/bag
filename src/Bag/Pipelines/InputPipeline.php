@@ -12,7 +12,7 @@ use Bag\Pipelines\Pipes\FillBag;
 use Bag\Pipelines\Pipes\IsVariadic;
 use Bag\Pipelines\Pipes\LaravelRouteParameters;
 use Bag\Pipelines\Pipes\MapInput;
-use Bag\Pipelines\Pipes\MissingParameters;
+use Bag\Pipelines\Pipes\MissingProperties;
 use Bag\Pipelines\Pipes\ProcessParameters;
 use Bag\Pipelines\Pipes\Transform;
 use Bag\Pipelines\Pipes\Validate;
@@ -30,7 +30,7 @@ class InputPipeline
             new IsVariadic(),
             new MapInput(),
             new LaravelRouteParameters(),
-            new MissingParameters(),
+            new MissingProperties(),
             new ExtraParameters(),
             new Validate(),
             new CastInputValues(),

@@ -10,7 +10,6 @@
          failOnRisky="false"
          failOnWarning="false"
          colors="true"
-         testdox="true"
     >
 
     <php>
@@ -24,6 +23,9 @@
         </testsuite>
         <testsuite name="unit">
             <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="arch">
+            <file>tests/ArchTest.php</file>
         </testsuite>
     </testsuites>
 

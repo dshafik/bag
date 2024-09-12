@@ -9,7 +9,7 @@ use Bag\Property\Value;
 use Bag\Property\ValueCollection;
 use Tests\Fixtures\Values\ComputedPropertyBag;
 
-covers(ProcessParameters::class);
+covers(ProcessProperties::class);
 
 test('it handles properties', function () {
     $bag = ComputedPropertyBag::from(['name' => 'Davey Shafik', 'age' => 40]);

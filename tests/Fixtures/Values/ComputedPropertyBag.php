@@ -17,6 +17,6 @@ readonly class ComputedPropertyBag extends Bag
         public string $name,
         public int $age,
     ) {
-        $this->dob = CarbonImmutable::now()->subYears($this->age);
+        $this->dob = now()->subYears($this->age)->toImmutable();
     }
 }

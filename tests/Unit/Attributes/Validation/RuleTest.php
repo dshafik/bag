@@ -23,6 +23,29 @@ use Bag\Attributes\Validation\Size;
 use Bag\Attributes\Validation\Str;
 use Tests\Fixtures\Enums\TestBackedEnum;
 
+covers(
+    Between::class,
+    Boolean::class,
+    Decimal::class,
+    Email::class,
+    Enum::class,
+    In::class,
+    Integer::class,
+    Max::class,
+    Min::class,
+    NotRegex::class,
+    Numeric::class,
+    Regex::class,
+    Required::class,
+    RequiredIf::class,
+    RequiredUnless::class,
+    RequiredWith::class,
+    RequiredWithAll::class,
+    Rule::class,
+    Size::class,
+    Str::class
+);
+
 test('it creates rules', function (string $ruleAttribute, array $arguments, mixed $expectedRule) {
     /** @var Rule $ruleAttribute */
     $rule = new $ruleAttribute(...$arguments);

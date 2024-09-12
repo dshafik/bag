@@ -10,6 +10,8 @@ use Bag\Pipelines\Values\BagInput;
 use Tests\Fixtures\Values\OptionalPropertiesBag;
 use Tests\Fixtures\Values\TestBag;
 
+covers(MissingProperties::class, MissingPropertiesException::class);
+
 test('it does not error without missing properties', function () {
     $input = new BagInput(TestBag::class, collect([
         'name' => 'Davey Shafik',

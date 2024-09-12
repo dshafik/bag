@@ -4,6 +4,8 @@ declare(strict_types=1);
 use Bag\Internal\Cache;
 use Mockery\MockInterface;
 
+covers(Cache::class);
+
 test('it creates mock', function () {
     expect(Cache::fake())->toBeInstanceOf(MockInterface::class);
 });

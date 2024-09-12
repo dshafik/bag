@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 use Bag\Collection;
+use Bag\Concerns\WithEloquentCasting;
+use Bag\Eloquent\Casts\AsBagCollection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use function Pest\Laravel\assertDatabaseHas;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
@@ -11,6 +13,8 @@ use Tests\Fixtures\Values\HiddenParametersBag;
 use Tests\Fixtures\Values\TestBag;
 
 uses(DatabaseTransactions::class);
+
+covers(WithEloquentCasting::class, AsBagCollection::class);
 
 test('it stores bag', function () {
     CastedModel::create([

@@ -9,6 +9,8 @@ use Tests\Fixtures\Values\ValidateUsingAttributesAndRulesMethodBag;
 use Tests\Fixtures\Values\ValidateUsingAttributesBag;
 use Tests\Fixtures\Values\ValidateUsingRulesMethodBag;
 
+covers(ValidationPipeline::class);
+
 test('it validates without rules', function () {
     $input = new BagInput(TestBag::class, [
         'name' => 'Davey Shafik',

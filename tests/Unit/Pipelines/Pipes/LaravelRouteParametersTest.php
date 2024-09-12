@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Attributes\Laravel\FromRouteParameter;
+use Bag\Attributes\Laravel\FromRouteParameterProperty;
 use Bag\Exceptions\InvalidRouteParameterException;
 use Bag\Pipelines\Pipes\CastInputValues;
 use Bag\Pipelines\Pipes\LaravelRouteParameters;
@@ -13,6 +16,8 @@ use Tests\Fixtures\Values\BagWithRequestParams;
 use Tests\Fixtures\Values\TestBag;
 
 uses(DatabaseTransactions::class);
+
+covers(LaravelRouteParameters::class, FromRouteParameter::class, FromRouteParameterProperty::class);
 
 test('it populates string parameter value', function () {
     $this->get('/string/testing');

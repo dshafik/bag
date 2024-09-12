@@ -3,6 +3,8 @@
 declare(strict_types=1);
 use Bag\Mappers\Stringable;
 
+covers(Stringable::class);
+
 test('it maps using single transform', function () {
     $mapper = new Stringable('upper');
 

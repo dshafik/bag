@@ -5,6 +5,8 @@ use Bag\Collection;
 use Bag\Exceptions\ImmutableCollectionException;
 use Tests\Fixtures\Collections\WrappedCollection;
 
+covers(Collection::class);
+
 test('it clones on forget', function () {
     $collection = Collection::make(['foo' => 'bar', 'baz' => 'bat']);
     $newCollection = $collection->forget('foo');

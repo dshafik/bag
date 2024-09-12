@@ -11,6 +11,8 @@ use Carbon\CarbonImmutable;
 use Tests\Fixtures\Values\ComputedPropertyBag;
 use Tests\Fixtures\Values\ComputedPropertyMissingBag;
 
+covers(ComputedValues::class);
+
 test('it validates computed exists', function () {
     $input = new BagInput(ComputedPropertyBag::class, collect([
         'name' => 'Davey Shafik',

@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Attributes\HiddenFromJson;
 use Bag\Enums\OutputType;
 use Bag\Pipelines\Pipes\HideJsonValues;
 use Bag\Pipelines\Pipes\ProcessParameters;
@@ -10,6 +12,8 @@ use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Tests\Fixtures\Values\ComputedPropertyHiddenBag;
 use Tests\Fixtures\Values\HiddenJsonParametersBag;
+
+covers(HideJsonValues::class, HiddenFromJson::class);
 
 test('it does not hide json unless outputting json', function () {
     $bag = HiddenJsonParametersBag::from([

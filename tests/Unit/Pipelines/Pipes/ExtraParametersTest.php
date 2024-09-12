@@ -10,6 +10,8 @@ use Bag\Pipelines\Values\BagInput;
 use Tests\Fixtures\Values\TestBag;
 use Tests\Fixtures\Values\VariadicBag;
 
+covers(ExtraParameters::class, AdditionalPropertiesException::class);
+
 test('it does not error without extra parameters', function () {
     $input = new BagInput(TestBag::class, collect([
         'name' => 'Davey Shafik',

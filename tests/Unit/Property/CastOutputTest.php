@@ -8,6 +8,8 @@ use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use Tests\Fixtures\Values\CastsDateBag;
 
+covers(CastOutput::class);
+
 test('it creates', function () {
     $param = (new \ReflectionClass(CastsDateBag::class))->getConstructor()->getParameters()[0];
 

@@ -3,6 +3,8 @@
 declare(strict_types=1);
 use Bag\Mappers\SnakeCase;
 
+covers(SnakeCase::class);
+
 test('it transforms to snake case', function () {
     $mapper = new SnakeCase();
 

@@ -1,9 +1,13 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\BagServiceProvider;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Tests\Fixtures\Values\TestBag;
+
+covers(BagServiceProvider::class);
 
 test('it resolves value from request', function () {
     $this->instance('request', Request::createFromBase(new SymfonyRequest(

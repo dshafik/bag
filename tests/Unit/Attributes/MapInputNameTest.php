@@ -4,6 +4,8 @@ declare(strict_types=1);
 use Bag\Attributes\MapInputName;
 use Bag\Mappers\Stringable;
 
+covers(MapInputName::class);
+
 test('it instantiates', function () {
     $map = new MapInputName(Stringable::class, 'foo', 'bar', 'baz');
 

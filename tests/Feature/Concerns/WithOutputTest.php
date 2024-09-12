@@ -1,9 +1,13 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Concerns\WithOutput;
 use Tests\Fixtures\Values\HiddenParametersBag;
 use Tests\Fixtures\Values\MappedOutputNameClassBag;
 use Tests\Fixtures\Values\WrappedBag;
+
+covers(WithOutput::class);
 
 test('it maps output names', function () {
     $value = MappedOutputNameClassBag::from([

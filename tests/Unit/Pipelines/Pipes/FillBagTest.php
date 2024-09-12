@@ -7,6 +7,8 @@ use Bag\Pipelines\Pipes\ProcessParameters;
 use Bag\Pipelines\Values\BagInput;
 use Tests\Fixtures\Values\TestBag;
 
+covers(FillBag::class);
+
 test('it creates bag instance', function () {
     $input = new BagInput(TestBag::class, collect(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']));
     $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);

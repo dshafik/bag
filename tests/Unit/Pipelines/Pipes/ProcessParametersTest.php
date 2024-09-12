@@ -9,6 +9,8 @@ use Tests\Fixtures\Values\NoConstructorBag;
 use Tests\Fixtures\Values\NoPropertiesBag;
 use Tests\Fixtures\Values\TestBag;
 
+covers(ProcessParameters::class);
+
 test('it requires a constructor', function () {
     $this->expectException(\RuntimeException::class);
     $this->expectExceptionMessage('Bag "Tests\Fixtures\Values\NoConstructorBag" must have a constructor with at least one parameter');

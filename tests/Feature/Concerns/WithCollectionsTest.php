@@ -1,9 +1,15 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Attributes\Collection as CollectionAttribute;
+use Bag\Collection;
+use Bag\Concerns\WithCollections;
 use Bag\Internal\Cache;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\Values\BagWithCollection;
+
+covers(WithCollections::class, Collection::class, CollectionAttribute::class);
 
 test('it creates custom collections', function () {
     $data = [

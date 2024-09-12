@@ -1,9 +1,13 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Concerns\WithJson;
 use Bag\Internal\Cache;
 use Tests\Fixtures\Values\HiddenJsonParametersBag;
 use Tests\Fixtures\Values\TestBag;
+
+covers(WithJson::class);
 
 test('it encodes json', function () {
     $value = TestBag::from([

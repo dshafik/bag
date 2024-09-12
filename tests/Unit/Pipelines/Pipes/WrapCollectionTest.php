@@ -7,6 +7,8 @@ use Bag\Pipelines\Values\CollectionOutput;
 use Tests\Fixtures\Collections\WrappedCollection;
 use Tests\Fixtures\Values\TestBag;
 
+covers(WrapCollection::class, CollectionOutput::class);
+
 test('it does not wrap collection with no wrapper', function () {
     $collection = TestBag::collect([[
         'name' => 'Davey Shafik',

@@ -11,6 +11,8 @@ use Tests\Fixtures\Values\CastInputOutputBag;
 use Tests\Fixtures\Values\CastVariadicDatetimeBag;
 use Tests\Fixtures\Values\VariadicBag;
 
+covers(CastInputValues::class);
+
 test('it casts input values', function () {
     $input = new BagInput(CastInputOutputBag::class, collect([
         'input' => 'test',

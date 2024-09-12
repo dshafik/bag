@@ -3,6 +3,8 @@
 declare(strict_types=1);
 use Bag\Mappers\CamelCase;
 
+covers(CamelCase::class);
+
 test('it transforms to camel case', function () {
     $mapper = new CamelCase();
 

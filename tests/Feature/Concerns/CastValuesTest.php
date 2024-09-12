@@ -1,6 +1,12 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Attributes\Cast;
+use Bag\Attributes\CastInput as CastInputAttribute;
+use Bag\Attributes\CastOutput as CastOutputAttribute;
+use Bag\Property\CastInput;
+use Bag\Property\CastOutput;
 use Carbon\CarbonImmutable;
 use Tests\Fixtures\Values\BagWithCollection;
 use Tests\Fixtures\Values\CastInputOutputBag;
@@ -11,6 +17,14 @@ use Tests\Fixtures\Values\CastVariadicCollectionBag;
 use Tests\Fixtures\Values\CastVariadicDatetimeBag;
 use Tests\Fixtures\Values\TypedVariadicBag;
 use Tests\Fixtures\Values\VariadicBag;
+
+covers(
+    Cast::class,
+    CastInput::class,
+    CastOutput::class,
+    CastInputAttribute::class,
+    CastOutputAttribute::class
+);
 
 test('it does not cast input', function () {
     $value = CastInputOutputBag::from([

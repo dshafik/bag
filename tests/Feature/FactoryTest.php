@@ -1,8 +1,12 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Attributes\Factory as FactoryAttribute;
 use Bag\Collection;
 use Bag\Exceptions\MissingFactoryException;
+use Bag\Factory;
+use Bag\Traits\HasFactory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\Fixtures\Collections\BagWithFactoryAndCollectionCollection;
 use Tests\Fixtures\Factories\BagWithFactoryFactory;
@@ -10,6 +14,8 @@ use Tests\Fixtures\Values\BagWithFactory;
 use Tests\Fixtures\Values\BagWithFactoryAndCollection;
 use Tests\Fixtures\Values\BagWithInvalidFactoryAttribute;
 use Tests\Fixtures\Values\BagWithoutFactoryAttribute;
+
+covers(Factory::class, HasFactory::class, FactoryAttribute::class);
 
 test('it resolves factory', function () {
     expect(BagWithFactory::factory())->toBeInstanceOf(BagWithFactoryFactory::class);

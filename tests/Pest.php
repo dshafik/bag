@@ -57,3 +57,17 @@ if (!function_exists('covers')) {
         // do nothing
     }
 }
+
+if (!function_exists('preset')) {
+    function preset(): void
+    {
+
+    }
+}
+
+if (!function_exists('php')) {
+    function php(): void
+    {
+        // do nothing
+    }
+}

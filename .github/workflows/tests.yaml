@@ -17,9 +17,16 @@ jobs:
       matrix:
         php-versions: [ '8.2', '8.3', '8.4' ]
         ignore-platform-reqs: [ '--ignore-platform-reqs', '' ]
+        laravel-versions: [ '^10', '^11' ]
         exclude:
+          - php-versions: '8.2'
+            ignore-platform-reqs: '--ignore-platform-reqs'
+          - php-versions: '8.3'
+            ignore-platform-reqs: '--ignore-platform-reqs'
           - php-versions: '8.4'
             ignore-platform-reqs: ''
+          - php-versions: '8.4'
+            laravel-versions: '^10'
       fail-fast: false
 
     steps:
@@ -34,6 +41,9 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           coverage: xdebug
           extensions: mbstring, intl, fileinfo, sqlite3, pdo_sqlite
+
+      - name: Set Laravel Version
+        run: 'sed -i -e "s/\"laravel\/framework\": \".*\"/\"laravel\/framework\": \"${{ matrix.laravel-versions }}\"/g" composer.json'
 
       - name: Install dependencies with composer
         run: composer update --no-ansi --no-interaction --no-progress ${{ matrix.ignore-platform-reqs }}

@@ -13,6 +13,8 @@ use Tests\Fixtures\Values\CastInputOutputBag;
 use Tests\Fixtures\Values\CastsDateBag;
 use Tests\Fixtures\Values\CastsDateInputBag;
 use Tests\Fixtures\Values\CastsDateOutputBag;
+use Tests\Fixtures\Values\CastsInvalidCastBag;
+use Tests\Fixtures\Values\CastsMagicDateBag;
 use Tests\Fixtures\Values\CastVariadicCollectionBag;
 use Tests\Fixtures\Values\CastVariadicDatetimeBag;
 use Tests\Fixtures\Values\TypedVariadicBag;
@@ -26,7 +28,7 @@ covers(
     CastOutputAttribute::class
 );
 
-test('it does not cast input', function () {
+test('it only casts intput or output', function () {
     $value = CastInputOutputBag::from([
         'input' => 'test',
         'output' => 'testing',
@@ -104,7 +106,7 @@ test('is casts variadics collections', function () {
 
 });
 
-test('is casts variadics datetime', function () {
+test('it casts variadics datetime', function () {
     $value = CastVariadicDatetimeBag::from([
         'name' => 'Davey Shafik',
         'age' => '40',
@@ -117,4 +119,33 @@ test('is casts variadics datetime', function () {
         ->and($value->values['extra']->format('Y-m-d'))->toBe('2024-04-30')
         ->and($value->values['more']->format('Y-m-d'))->toBe('2024-05-31');
 
+});
+
+test('it does not cast same type values', function () {
+    $value = CastsDateBag::from([
+        'date' => now(),
+    ]);
+
+    expect($value->date->toDateString())->toBe(now()->toDateString())
+        ->and($value->toArray()['date'])->toBe(now()->toDateString());
+});
+
+test('it ignores invalid casts', function () {
+    /** @var CastsInvalidCastBag $value */
+    $value = CastsInvalidCastBag::from([
+        'date' => '12:34:56',
+    ]);
+
+    expect($value->date->toDateString())->toBe(now()->startOfDay()->addHours(12)->addMinutes(34)->addSeconds(56)->toDateString())
+        ->and($value->toArray()['date']->toDateString())->toBe(now()->startOfDay()->addHours(12)->addMinutes(34)->addSeconds(56)->toDateString());
+});
+
+test('it casts magically', function () {
+    /** @var CastsMagicDateBag $value */
+    $value = CastsMagicDateBag::from([
+        'date' => '12:34:56',
+    ]);
+
+    expect($value->date->toDateString())->toBe(now()->startOfDay()->addHours(12)->addMinutes(34)->addSeconds(56)->toDateString())
+        ->and($value->toArray()['date']->toDateString())->toBe(now()->startOfDay()->addHours(12)->addMinutes(34)->addSeconds(56)->toDateString());
 });

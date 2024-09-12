@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bag\Concerns;
 
+use Bag\Attributes\Transforms;
+use Bag\Bag;
 use Bag\Enums\OutputType;
 use Bag\Pipelines\OutputPipeline;
 use Bag\Pipelines\Values\BagOutput;
@@ -20,5 +22,11 @@ trait WithJson
         $output = new BagOutput(bag: $this, outputType: OutputType::JSON);
 
         return OutputPipeline::process($output);
+    }
+
+    #[Transforms(Bag::FROM_JSON)]
+    protected static function fromJsonString(string $json): array
+    {
+        return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
     }
 }

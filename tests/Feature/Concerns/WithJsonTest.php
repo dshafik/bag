@@ -33,3 +33,12 @@ test('it uses cache', function () {
     expect(json_encode($value))->toBe('{"name_goes_here":"Davey Shafik","age_goes_here":40}')
         ->and($value->toJson())->toBe('{"name_goes_here":"Davey Shafik","age_goes_here":40}');
 });
+
+test('it transforms from JSON string', function () {
+    /** @var TestBag $value */
+    $value = TestBag::from('{"name":"Davey Shafik","age":40,"email":"davey@php.net"}');
+
+    expect($value->name)->toBe('Davey Shafik')
+        ->and($value->age)->toBe(40)
+        ->and($value->email)->toBe('davey@php.net');
+});

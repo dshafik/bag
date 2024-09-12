@@ -25,24 +25,9 @@ This will cast the `MyValue` object to a JSON string when saving it to the datab
 
 ## Casting Collections
 
-To cast a Collection you can use the `AsBagCollection` class as the cast type in the `$casts` property of your Eloquent model, passing in the Bag class name as the first argument:
+For Laravel 11+, you can cast to a Collection using the `casts()` method along with the `::castAsCollection()` method on your Bag class:
 
-```php{8}
-use Illuminate\Database\Eloquent\Model;
-use App\Values\MyValue;
-use Bag\AsBagCollection;
-
-class MyModel extends Model
-{
-    protected $casts = [
-        'my_values' => AsBagCollection::class . ':' . MyValue::class,
-    ];
-}
-```
-
-Alternatively, you can use the `casts()` method along with the `::castAsCollection()` method on your Bag class:
-
-```php{8}
+```php{6,8}
 use Illuminate\Database\Eloquent\Model;
 use App\Values\MyValue;
 
@@ -58,6 +43,23 @@ class MyModel extends Model
 
 or the `AsBagCollection::of()` method:
 
+```php{7,9}
+use Illuminate\Database\Eloquent\Model;
+use App\Values\MyValue;
+use Bag\AsBagCollection;
+
+class MyModel extends Model
+{
+    public function casts(): array {
+        return [
+            'my_values' => AsBagCollection::of(MyValue::class),
+        ];
+    }
+}
+```
+
+Alternatively, for Laravel 10, you can use the `AsBagCollection` class as the cast type in the `$casts` property of your Eloquent model, passing in the Bag class name as the first argument:
+
 ```php{8}
 use Illuminate\Database\Eloquent\Model;
 use App\Values\MyValue;
@@ -66,11 +68,11 @@ use Bag\AsBagCollection;
 class MyModel extends Model
 {
     protected $casts = [
-        'my_values' => AsBagCollection::of(MyValue::class),
+        'my_values' => AsBagCollection::class . ':' . MyValue::class,
     ];
 }
 ```
 
 Bag will cast the Collection to a JSON string when saving to the database and will cast them back to a Collection of `MyValue` objects when retrieving them from the database.
 
-Bag will automatically use the custom collection class if one is defined on the Bag class.
+Bag will automatically use the custom collection class if one is defined on the Bag class when retrieving the value.

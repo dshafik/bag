@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bag\Concerns;
 
+use Bag\Attributes\Transforms;
 use Bag\Bag;
 use Bag\Eloquent\Casts\AsBagCollection;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
@@ -46,6 +47,12 @@ trait WithEloquentCasting
     public static function castAsCollection(): string
     {
         return AsBagCollection::of(static::class);
+    }
+
+    #[Transforms(Bag::FROM_JSON)]
+    protected static function fromJsonString(string $json): array
+    {
+        return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
     }
 
     abstract public function getRaw(?string $key = null): mixed;

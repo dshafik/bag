@@ -10,12 +10,11 @@ use Bag\Pipelines\Pipes\LaravelRouteParameters;
 use Bag\Pipelines\Pipes\MapInput;
 use Bag\Pipelines\Pipes\ProcessParameters;
 use Bag\Pipelines\Values\BagInput;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Application;
 use Tests\Fixtures\Models\CastedModel;
+use Tests\Fixtures\Models\CastedModelLegacy;
 use Tests\Fixtures\Values\BagWithRequestParams;
 use Tests\Fixtures\Values\TestBag;
-
-uses(DatabaseTransactions::class);
 
 covers(LaravelRouteParameters::class, FromRouteParameter::class, FromRouteParameterProperty::class);
 
@@ -37,8 +36,8 @@ test('it populates int parameter value', function () {
         ->and($input->values->get('notNamedIntParam'))->toBe(1234);
 });
 
-test('it populates model parameter value', function () {
-    $model = CastedModel::create([
+test('it populates model parameter value on Laravel 10+', function () {
+    $model = CastedModelLegacy::create([
         'bag' => null,
     ]);
 
@@ -53,8 +52,8 @@ test('it populates model parameter value', function () {
 
 });
 
-test('it populates model parameter property value', function () {
-    $model = CastedModel::create([
+test('it populates model parameter property value on Laravel 10+', function () {
+    $model = CastedModelLegacy::create([
         'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
     ]);
 
@@ -72,6 +71,42 @@ test('it populates model parameter property value', function () {
         ->and($input->values->get('notNamedBag')->email)->toBe('davey@php.net');
 
 });
+
+test('it populates model parameter value on Laravel 11+', function () {
+    $model = CastedModelLegacy::create([
+        'bag' => null,
+    ]);
+
+    $this->get('/model/' . $model->id);
+
+    $input = runPipeline();
+
+    expect($input->values->get('modelParam'))->toBeInstanceOf(CastedModel::class)
+        ->and($input->values->get('modelParam')->id)->toBe(1)
+        ->and($input->values->get('notNamedModelParam'))->toBeInstanceOf(CastedModel::class)
+        ->and($input->values->get('notNamedModelParam')->id)->toBe(1);
+
+})->skip(fn () => !version_compare(Application::VERSION, '11.0.0', '>='), 'Requires Laravel 11+');
+
+test('it populates model parameter property value on Laravel 11+', function () {
+    $model = CastedModelLegacy::create([
+        'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']),
+    ]);
+
+    $this->get('/model/' . $model->id);
+
+    $input = runPipeline();
+
+    expect($input->values->get('bag'))->toBeInstanceOf(TestBag::class)
+        ->and($input->values->get('bag')->name)->toBe('Davey Shafik')
+        ->and($input->values->get('bag')->age)->toBe(40)
+        ->and($input->values->get('bag')->email)->toBe('davey@php.net')
+        ->and($input->values->get('notNamedBag'))->toBeInstanceOf(TestBag::class)
+        ->and($input->values->get('notNamedBag')->name)->toBe('Davey Shafik')
+        ->and($input->values->get('notNamedBag')->age)->toBe(40)
+        ->and($input->values->get('notNamedBag')->email)->toBe('davey@php.net');
+
+})->skip(fn () => !version_compare(Application::VERSION, '11.0.0', '>='), 'Requires Laravel 11+');
 
 test('it errors when trying to get property on scalar value', function () {
     $this->expectException(InvalidRouteParameterException::class);

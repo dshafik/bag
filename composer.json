@@ -3,7 +3,7 @@
     "description": "A comprehensive immutable value objects implementation",
     "type": "library",
     "require": {
-        "php": "^8.2|^8.3",
+        "php": "^8.2|^8.3|^8.4",
         "brick/money": "^0.8.1 || ^0.9.0",
         "illuminate/collections": "^10|^11",
         "illuminate/database": "^10|^11",
@@ -20,10 +20,10 @@
         "larastan/larastan": "^2.0",
         "laravel/pint": "^1.15",
         "laravel/prompts": "^0.1.25",
-        "orchestra/pest-plugin-testbench": "^2.0",
-        "pestphp/pest-plugin-faker": "^2.0",
-        "pestphp/pest-plugin-type-coverage": "^2.8",
-        "ramsey/conventional-commits": "dev-allow-sf-7",
+        "orchestra/pest-plugin-testbench": "^2.0|^3.0",
+        "pestphp/pest": "^2.0|^3.0",
+        "pestphp/pest-plugin-faker": "^2.0|^3.0",
+        "pestphp/pest-plugin-type-coverage": "^2.0|^3.0",
         "ramsey/conventional-commits": "^1.5.1",
         "roave/security-advisories": "dev-latest",
         "symfony/var-dumper": "*"

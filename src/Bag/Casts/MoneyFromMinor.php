@@ -56,7 +56,7 @@ class MoneyFromMinor implements CastsPropertySet, CastsPropertyGet
         return $money->formatTo($this->locale);
     }
 
-    protected function makeMoney(mixed $amount, int|string|CurrencyAlpha3|null $currency): BrickMoney
+    protected function makeMoney(mixed $amount, int|string $currency): BrickMoney
     {
         return BrickMoney::ofMinor($amount, $currency);
     }

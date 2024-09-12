@@ -37,7 +37,7 @@ class CastInput
 
         $castAttribute = Reflection::getAttribute($property, CastInputAttribute::class);
         if ($castAttribute !== null) {
-            $cast = Reflection::getAttributeInstance($castAttribute); // @codeCoverageIgnore
+            $cast = Reflection::getAttributeInstance($castAttribute);
         }
 
         $type = Util::getPropertyType($property);

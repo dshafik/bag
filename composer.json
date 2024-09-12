@@ -21,19 +21,13 @@
         "laravel/pint": "^1.15",
         "laravel/prompts": "^0.1.25",
         "orchestra/pest-plugin-testbench": "^2.0",
-        "pestphp/pest-plugin-drift": "^2.6",
         "pestphp/pest-plugin-faker": "^2.0",
         "pestphp/pest-plugin-type-coverage": "^2.8",
         "ramsey/conventional-commits": "dev-allow-sf-7",
+        "ramsey/conventional-commits": "^1.5.1",
         "roave/security-advisories": "dev-latest",
         "symfony/var-dumper": "*"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/llupa/conventional-commits.git"
-        }
-    ],
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -47,7 +41,7 @@
 
     },
     "scripts": {
-        "test": "phpunit",
+        "test": "pest",
         "style": "pint"
     },
     "extra" : {

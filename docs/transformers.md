@@ -83,7 +83,7 @@ if there is a more specific transformer available, Bag will use that instead.
 
 ### Handling JSON
 
-To differentiate between other strings and JSON, you can use special type `Bag::FROM_JSON` as the `Transformer` type:
+By default, Bag will transform JSON strings, but you can override this behavior by defining a overriding the `fromJsonString` method:
 
 ```php
 use Bag\Bag;
@@ -97,4 +97,6 @@ class MyValue extends Bag
     }
 }
 ```
+
+To differentiate between other strings and JSON, you should use the special type `Bag::FROM_JSON` as the `Transformer` type.
 

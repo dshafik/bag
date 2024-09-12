@@ -3,6 +3,8 @@
 declare(strict_types=1);
 use Bag\Mappers\Alias;
 
+covers(Alias::class);
+
 test('it maps using single transform', function () {
     $mapper = new Alias('different_words_go_here');
 

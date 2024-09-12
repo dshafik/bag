@@ -8,6 +8,8 @@ use Bag\Pipelines\Pipes\ProcessProperties;
 use Bag\Pipelines\Values\BagOutput;
 use Tests\Fixtures\Values\MappedOutputNameClassBag;
 
+covers(MapOutput::class);
+
 test('it maps output names', function () {
     $bag = MappedOutputNameClassBag::from([
         'nameGoesHere' => 'Davey Shafik',

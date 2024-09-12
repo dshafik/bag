@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use Bag\Console\Commands\MakeBagCommand;
+
+covers(MakeBagCommand::class);
+
 test('it creates bag', function () {
     $this->artisan('make:bag')
         ->expectsQuestion('Bag class name', 'MyBag')

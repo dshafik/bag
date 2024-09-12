@@ -48,3 +48,11 @@ function property(object $object, string $property)
 {
     return (fn () => $this->{$property})->call($object);
 }
+
+// Only supported in Pest v3+
+if (!function_exists('covers')) {
+    function covers(string ... $classesOrFunctions): void
+    {
+        // do nothing
+    }
+}

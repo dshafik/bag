@@ -7,6 +7,8 @@ use Tests\Fixtures\Values\BagWithTransformers;
 use Tests\Fixtures\Values\MappedNameClassBag;
 use Tests\Fixtures\Values\TestBag;
 
+covers(ValueCollection::class);
+
 test('it creates collection', function () {
     $class = new \ReflectionClass(TestBag::class);
     $collection = ValueCollection::make($class->getConstructor()?->getParameters())->mapWithKeys(function (\ReflectionParameter $property) use ($class) {

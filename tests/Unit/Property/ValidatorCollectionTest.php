@@ -4,6 +4,8 @@ declare(strict_types=1);
 use Bag\Property\ValidatorCollection;
 use Tests\Fixtures\Values\ValidateUsingAttributesBag;
 
+covers(ValidatorCollection::class);
+
 test('it creates collection', function () {
     $property = (new \ReflectionClass(ValidateUsingAttributesBag::class))->getProperty('name');
 

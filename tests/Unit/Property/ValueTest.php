@@ -7,6 +7,8 @@ use Bag\Property\ValidatorCollection;
 use Bag\Property\Value;
 use Tests\Fixtures\Values\ValidateMappedNameClassBag;
 
+covers(Value::class);
+
 test('it creates value from property', function () {
     $class = new \ReflectionClass(ValidateMappedNameClassBag::class);
     $property = $class->getProperty('nameGoesHere');

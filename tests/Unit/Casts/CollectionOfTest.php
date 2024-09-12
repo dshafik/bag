@@ -10,6 +10,8 @@ use Illuminate\Support\Collection as LaravelCollection;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\Values\TestBag;
 
+covers(CollectionOf::class);
+
 test('it creates laravel collection of bags', function () {
     $cast = new CollectionOf(TestBag::class);
     $collection = $cast->set(LaravelCollection::class, 'test', collect(['test' => [

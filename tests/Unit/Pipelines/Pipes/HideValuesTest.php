@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Attributes\Hidden;
 use Bag\Enums\OutputType;
 use Bag\Internal\Cache;
 use Bag\Pipelines\Pipes\HideValues;
@@ -11,6 +13,8 @@ use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Tests\Fixtures\Values\ComputedPropertyHiddenBag;
 use Tests\Fixtures\Values\HiddenParametersBag;
+
+covers(HideValues::class, Hidden::class);
 
 test('it ignores hidden properties', function () {
     $bag = HiddenParametersBag::from([

@@ -13,6 +13,8 @@ use Tests\Fixtures\Values\ValidateUsingAttributesAndRulesMethodBag;
 use Tests\Fixtures\Values\ValidateUsingAttributesBag;
 use Tests\Fixtures\Values\ValidateUsingRulesMethodBag;
 
+covers(Validate::class);
+
 test('it validates', function () {
     $input = new BagInput(ValidateUsingRulesMethodBag::class, collect(['name' => 'Davey Shafik', 'age' => 40]));
     $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);

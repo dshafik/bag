@@ -11,6 +11,8 @@ use Tests\Fixtures\Enums\TestBackedEnum;
 use Tests\Fixtures\Enums\TestUnitEnum;
 use Tests\Fixtures\Values\TestBag;
 
+covers(MagicCast::class);
+
 test('it casts int', function () {
     $cast = new MagicCast();
 

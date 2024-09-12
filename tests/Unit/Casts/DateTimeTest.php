@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Carbon\Exceptions\InvalidFormatException;
 
+covers(DateTime::class);
+
 test('it casts to datetime', function () {
     $cast = new DateTime();
 

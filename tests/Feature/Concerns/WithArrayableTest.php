@@ -1,7 +1,11 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Concerns\WithArrayable;
 use Tests\Fixtures\Values\TestBag;
+
+covers(WithArrayable::class);
 
 test('it is arrayable', function () {
     $value = TestBag::from([

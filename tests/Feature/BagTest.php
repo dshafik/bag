@@ -1,7 +1,11 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Bag;
 use Tests\Fixtures\Values\TestBag;
+
+covers(Bag::class);
 
 test('it creates value from array', function () {
     $value = TestBag::from([

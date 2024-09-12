@@ -7,6 +7,8 @@ use Brick\Money\Money;
 use PrinsFrank\Standards\Currency\CurrencyAlpha3;
 use Tests\Fixtures\Enums\TestCurrencyEnum;
 
+covers(MoneyFromMajor::class);
+
 test('it does not cast money', function () {
     $cast = new MoneyFromMajor(currency: CurrencyAlpha3::US_Dollar);
 

@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Attributes\Transforms;
 use Bag\Pipelines\Pipes\Transform;
 use Bag\Pipelines\Values\BagInput;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +11,8 @@ use Tests\Fixtures\Models\AlternativeTestModel;
 use Tests\Fixtures\Models\TestModel;
 use Tests\Fixtures\Values\BagWithFactory;
 use Tests\Fixtures\Values\BagWithTransformers;
+
+covers(Transform::class, Transforms::class);
 
 test('it transforms from std class', function () {
     $values = (object) ['name' => 'Davey Shafik', 'age' => '40'];

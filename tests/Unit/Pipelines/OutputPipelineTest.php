@@ -9,6 +9,8 @@ use Tests\Fixtures\Values\WrappedBag;
 use Tests\Fixtures\Values\WrappedBothBag;
 use Tests\Fixtures\Values\WrappedJsonBag;
 
+covers(BagOutput::class, OutputPipeline::class);
+
 test('it get array', function () {
     $bag = TestBag::from([
         'name' => 'Davey Shafik',

@@ -1,8 +1,11 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Attributes\Bag;
 use Bag\Exceptions\BagAttributeNotFoundException;
 use Bag\Exceptions\BagNotFoundException;
+use Bag\Traits\HasBag;
 use Tests\Fixtures\ObjectToBagAll;
 use Tests\Fixtures\ObjectToBagInvalidBag;
 use Tests\Fixtures\ObjectToBagNoAttribute;
@@ -10,6 +13,13 @@ use Tests\Fixtures\ObjectToBagProtected;
 use Tests\Fixtures\ObjectToBagPublic;
 use Tests\Fixtures\Values\ObjectToBagPrivate;
 use Tests\Fixtures\Values\OptionalPropertiesBag;
+
+covers(
+    HasBag::class,
+    BagNotFoundException::class,
+    BagAttributeNotFoundException::class,
+    Bag::class
+);
 
 test('it creates bag with public properties', function () {
     $object = new ObjectToBagPublic('Davey Shafik', 40, 'davey@php.net');

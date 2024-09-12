@@ -8,6 +8,8 @@ use Bag\Pipelines\Values\BagInput;
 use Tests\Fixtures\Values\MappedInputNameClassBag;
 use Tests\Fixtures\Values\MappedNameClassBag;
 
+covers(MapInput::class);
+
 test('it maps input names both mapped', function () {
     $input = new BagInput(MappedNameClassBag::class, collect([
         'name_goes_here' => 'Davey Shafik',

@@ -7,6 +7,8 @@ use Bag\Mappers\CamelCase;
 use Bag\Mappers\Stringable;
 use Illuminate\Pipeline\Pipeline;
 
+covers(Util::class);
+
 test('it gets property type', function () {
     $type = Util::getPropertyType(new \ReflectionParameter(fn (string $arg) => null, 'arg'));
 

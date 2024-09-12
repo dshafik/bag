@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+
+use Bag\Concerns\WithValidation;
 use Bag\Exceptions\ComputedPropertyUninitializedException;
 use Bag\Internal\Cache;
 use Carbon\Carbon;
@@ -12,6 +14,8 @@ use Tests\Fixtures\Values\ValidateMappedNameClassBag;
 use Tests\Fixtures\Values\ValidateUsingAttributesAndRulesMethodBag;
 use Tests\Fixtures\Values\ValidateUsingAttributesBag;
 use Tests\Fixtures\Values\ValidateUsingRulesMethodBag;
+
+covers(WithValidation::class);
 
 test('it validates', function () {
     expect(ValidateUsingRulesMethodBag::validate(collect(['name' => 'Davey Shafik', 'age' => 40])))->toBeTrue();

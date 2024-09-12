@@ -7,6 +7,8 @@ use Bag\Internal\Reflection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Values\BagWithCollection;
 
+covers(Reflection::class);
+
 test('it gets class', function () {
     $class = Reflection::getClass(static::class);
     expect($class->getName())->toBe(static::class);

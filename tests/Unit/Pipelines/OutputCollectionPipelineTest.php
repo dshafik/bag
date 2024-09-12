@@ -9,7 +9,7 @@ use Tests\Fixtures\Values\TestBag;
 use Tests\Fixtures\Values\WrappedBag;
 use Tests\Fixtures\Values\WrappedJsonBag;
 
-covers(CollectionOutput::class);
+covers(OutputCollectionPipeline::class);
 
 test('it get array', function () {
     $collection = collect([TestBag::from([

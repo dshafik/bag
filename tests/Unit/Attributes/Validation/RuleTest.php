@@ -6,6 +6,7 @@ use Bag\Attributes\Validation\Boolean;
 use Bag\Attributes\Validation\Decimal;
 use Bag\Attributes\Validation\Email;
 use Bag\Attributes\Validation\Enum;
+use Bag\Attributes\Validation\Exists;
 use Bag\Attributes\Validation\In;
 use Bag\Attributes\Validation\Integer;
 use Bag\Attributes\Validation\Max;
@@ -21,6 +22,7 @@ use Bag\Attributes\Validation\RequiredWithAll;
 use Bag\Attributes\Validation\Rule;
 use Bag\Attributes\Validation\Size;
 use Bag\Attributes\Validation\Str;
+use Bag\Attributes\Validation\Unique;
 use Tests\Fixtures\Enums\TestBackedEnum;
 
 covers(
@@ -29,6 +31,7 @@ covers(
     Decimal::class,
     Email::class,
     Enum::class,
+    Exists::class,
     In::class,
     Integer::class,
     Max::class,
@@ -43,7 +46,8 @@ covers(
     RequiredWithAll::class,
     Rule::class,
     Size::class,
-    Str::class
+    Str::class,
+    Unique::class,
 );
 
 test('it creates rules', function (string $ruleAttribute, array $arguments, mixed $expectedRule) {
@@ -63,6 +67,7 @@ test('it creates custom rules', function () {
 
     expect($rule->rule)->toBe('before:2024-04-30');
 });
+
 dataset('rules', function () {
     return [
         Between::class => [
@@ -97,6 +102,14 @@ dataset('rules', function () {
                 true,
             ],
             'expectedRule' => 'email:rfc,strict,dns,spoof,filter,filterUnicode',
+        ],
+        Exists::class => [
+            'ruleAttribute' => Exists::class,
+            'arguments' => [
+                'test_models',
+                'email',
+            ],
+            'expectedRule' => 'exists:test_models,email',
         ],
         In::class => [
             'ruleAttribute' => In::class,
@@ -197,6 +210,14 @@ dataset('rules', function () {
             'arguments' => [
             ],
             'expectedRule' => 'string',
+        ],
+        Unique::class => [
+            'ruleAttribute' => Unique::class,
+            'arguments' => [
+                'test_models',
+                'email',
+            ],
+            'expectedRule' => 'unique:test_models,email',
         ],
     ];
 });

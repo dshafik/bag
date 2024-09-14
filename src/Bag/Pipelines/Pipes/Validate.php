@@ -9,6 +9,7 @@ use Bag\Internal\Cache;
 use Bag\Pipelines\Values\BagInput;
 use Bag\Property\Value;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection as LaravelCollection;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Translation\Translator;
@@ -48,7 +49,16 @@ readonly class Validate
             ]);
             $translator = new Translator($loader, 'en');
 
-            return new Factory($translator);
+            $validator = new Factory($translator);
+
+            if (class_exists(Application::class) && method_exists($validator, 'setPresenceVerifier')) {
+                $app = Application::getInstance();
+                if ($app->has('db')) {
+                    $validator->setPresenceVerifier($app->get('validation.presence'));
+                }
+            }
+
+            return $validator;
         });
 
         try {

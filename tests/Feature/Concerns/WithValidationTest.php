@@ -2,20 +2,29 @@
 
 declare(strict_types=1);
 
+use Bag\Attributes\Validation\Exists;
+use Bag\Attributes\Validation\Unique;
 use Bag\Concerns\WithValidation;
 use Bag\Exceptions\ComputedPropertyUninitializedException;
 use Bag\Internal\Cache;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Validation\ValidationException;
+use Tests\Fixtures\Models\TestModel;
 use Tests\Fixtures\Values\ComputedPropertyBag;
 use Tests\Fixtures\Values\ComputedPropertyMissingBag;
+use Tests\Fixtures\Values\ValidateExistsRuleBag;
 use Tests\Fixtures\Values\ValidateMappedNameClassBag;
+use Tests\Fixtures\Values\ValidateUniqueRuleBag;
 use Tests\Fixtures\Values\ValidateUsingAttributesAndRulesMethodBag;
 use Tests\Fixtures\Values\ValidateUsingAttributesBag;
 use Tests\Fixtures\Values\ValidateUsingRulesMethodBag;
 
-covers(WithValidation::class);
+covers(
+    WithValidation::class,
+    Unique::class,
+    Exists::class,
+);
 
 test('it validates', function () {
     expect(ValidateUsingRulesMethodBag::validate(collect(['name' => 'Davey Shafik', 'age' => 40])))->toBeTrue();
@@ -81,4 +90,30 @@ test('it uses cache for computed properties', function () {
 
     ComputedPropertyBag::from(['name' => 'Davey Shafik', 'age' => 40]);
     ComputedPropertyBag::from(['name' => 'Davey Shafik', 'age' => 40]);
+});
+
+test('it supports unique validator', function () {
+    $this->expectException(ValidationException::class);
+    $this->expectExceptionMessage('The name has already been taken.');
+
+    TestModel::create(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']);
+
+    expect(
+        ValidateUniqueRuleBag::validate(collect(['name' => 'Test User', 'age' => 40, 'email' => 'davey@example.net']))
+    )->toBeTrue();
+
+    ValidateUniqueRuleBag::validate(collect(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']));
+});
+
+test('it supports exists validator', function () {
+    $this->expectException(ValidationException::class);
+    $this->expectExceptionMessage('The selected name is invalid.');
+
+    TestModel::create(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']);
+
+    expect(
+        ValidateExistsRuleBag::validate(collect(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']))
+    )->toBeTrue();
+
+    ValidateExistsRuleBag::validate(collect(['name' => 'Test User', 'age' => 40, 'email' => 'davey@php.net']));
 });

@@ -25,7 +25,7 @@ This will install the required dependencies for the project, and install the git
 To run the test suite, use the following command:
 
 ```shell
-composer test
+composer run test
 ```
 
 ## Coding Standards
@@ -33,7 +33,7 @@ composer test
 Bag follows the [PSR-12 Extended Coding Style standard](https://www.php-fig.org/psr/psr-12/). [Laravel Pint](https://laravel.com/docs/11.x/pint) is used to enforce code style. To check your code for style violations, run the following command:
 
 ```shell
-composer style
+composer run style
 ```
 
 ## Commit Standards

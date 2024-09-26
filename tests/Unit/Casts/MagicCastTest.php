@@ -13,144 +13,132 @@ use Tests\Fixtures\Values\TestBag;
 
 covers(MagicCast::class);
 
-test('it casts int', function () {
+dataset('int', [
+    ['int', 'test', collect(['test' => 1]), 1],
+    ['int', 'test', collect(['test' => 1.7]), 1],
+]);
+
+dataset('float', [
+    ['float', 'test', collect(['test' => 1]), 1.0],
+    ['float', 'test', collect(['test' => 1.7]), 1.7],
+]);
+
+dataset('bool', [
+    ['bool', 'test', collect(['test' => 0]), false],
+    ['bool', 'test', collect(['test' => 1]), true],
+]);
+
+dataset('string', [
+    ['string', 'test', collect(['test' => 'testing']), 'testing'],
+    ['string', 'test', collect(['test' => 1234]), '1234'],
+]);
+
+dataset('date_times', [
+    [\DateTime::class, 'test', collect(['test' => '2024-04-30 11:43:41']), \DateTime::class, '2024-04-30 11:43:41'],
+    [\DateTimeImmutable::class, 'test', collect(['test' => '2024-04-30 11:43:41']), \DateTimeImmutable::class, '2024-04-30 11:43:41'],
+    [Carbon::class, 'test', collect(['test' => '2024-04-30 11:43:41']), Carbon::class, '2024-04-30 11:43:41'],
+    [CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 11:43:41']), CarbonImmutable::class, '2024-04-30 11:43:41'],
+    [LaravelCarbon::class, 'test', collect(['test' => '2024-04-30 11:43:41']), LaravelCarbon::class, '2024-04-30 11:43:41'],
+]);
+
+dataset('bags', [
+    [TestBag::class, 'test', collect(['test' => ['name' => 'Davey Shafik', 'age' => '40', 'email' => 'davey@php.net']]), TestBag::class, 'Davey Shafik', 40, 'davey@php.net'],
+]);
+
+dataset('collections', [
+    [LaravelCollection::class, 'test', collect(['test' => ['name' => 'Davey Shafik', 'age' => '40', 'email' => 'davey@php.net']]), LaravelCollection::class, 'Davey Shafik', '40', 'davey@php.net'],
+    [Collection::class, 'test', collect(['test' => ['name' => 'Davey Shafik', 'age' => '40', 'email' => 'davey@php.net']]), Collection::class, 'Davey Shafik', '40', 'davey@php.net'],
+]);
+
+dataset('unit_enum', [
+    [TestUnitEnum::class, 'test', collect(['test' => 'TEST_VALUE']), TestUnitEnum::TEST_VALUE],
+]);
+
+dataset('backed_enum', [
+    [TestBackedEnum::class, 'test', collect(['test' => 'test']), TestBackedEnum::TEST_VALUE],
+]);
+
+dataset('nullable', [
+    ['int'],
+    ['float'],
+    ['bool'],
+    ['string'],
+    [\DateTime::class],
+    [\DateTimeImmutable::class],
+    [Carbon::class],
+    [CarbonImmutable::class],
+    [LaravelCarbon::class],
+    [TestBag::class],
+    [LaravelCollection::class],
+    [Collection::class],
+    [TestUnitEnum::class],
+    [TestBackedEnum::class],
+]);
+
+test('it casts int', function ($propertyType, $propertyName, $properties, $expected) {
     $cast = new MagicCast();
+    $result = $cast->set($propertyType, $propertyName, $properties);
+    expect($result)->toBe($expected);
+})->with('int');
 
-    $int = $cast->set('int', 'test', collect(['test' => 1]));
-    expect($int)
-        ->toBeInt()
-        ->toBe(1);
-
-    $int = $cast->set('int', 'test', collect(['test' => 1.7]));
-    expect($int)
-        ->toBeInt()
-        ->toBe(1);
-});
-
-test('it casts float', function () {
+test('it casts float', function ($propertyType, $propertyName, $properties, $expected) {
     $cast = new MagicCast();
+    $result = $cast->set($propertyType, $propertyName, $properties);
+    expect($result)->toBe($expected);
+})->with('float');
 
-    $float = $cast->set('float', 'test', collect(['test' => 1]));
-    expect($float)
-        ->toBeFloat()
-        ->toBe(1.0);
-
-    $float = $cast->set('float', 'test', collect(['test' => 1.7]));
-    expect($float)
-        ->toBeFloat()
-        ->toBe(1.7);
-});
-
-test('it casts boolean', function () {
+test('it casts boolean', function ($propertyType, $propertyName, $properties, $expected) {
     $cast = new MagicCast();
+    $result = $cast->set($propertyType, $propertyName, $properties);
+    expect($result)->toBe($expected);
+})->with('bool');
 
-    $boolean = $cast->set('bool', 'test', collect(['test' => 0]));
-    expect($boolean)->toBeFalse();
-
-    $boolean = $cast->set('bool', 'test', collect(['test' => 1]));
-    expect($boolean)->toBeTrue();
-});
-
-test('it casts string', function () {
+test('it casts string', function ($propertyType, $propertyName, $properties, $expected) {
     $cast = new MagicCast();
+    $result = $cast->set($propertyType, $propertyName, $properties);
+    expect($result)->toBe($expected);
+})->with('string');
 
-    $string = $cast->set('string', 'test', collect(['test' => 'testing']));
-    expect($string)
-        ->toBeString()
-        ->toBe('testing');
-
-    $string = $cast->set('string', 'test', collect(['test' => 1234]));
-    expect($string)
-        ->toBeString()
-        ->toBe('1234');
-});
-
-test('it casts date times', function () {
+test('it casts date times', function ($propertyType, $propertyName, $properties, $expectedClass, $expectedFormat) {
     $cast = new MagicCast();
+    $result = $cast->set($propertyType, $propertyName, $properties);
+    expect($result)->toBeInstanceOf($expectedClass)
+        ->and($result->format('Y-m-d H:i:s'))->toBe($expectedFormat);
+})->with('date_times');
 
-    $date = $cast->set(\DateTime::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
-    expect($date)->toBeInstanceOf(\DateTime::class)
-        ->and($date->format('Y-m-d H:i:s'))->toBe('2024-04-30 11:43:41');
-
-    $date = $cast->set(\DateTimeImmutable::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
-    expect($date)->toBeInstanceOf(\DateTimeImmutable::class)
-        ->and($date->format('Y-m-d H:i:s'))->toBe('2024-04-30 11:43:41');
-
-    $date = $cast->set(Carbon::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
-    expect($date)->toBeInstanceOf(Carbon::class)
-        ->and($date->format('Y-m-d H:i:s'))->toBe('2024-04-30 11:43:41');
-
-    $date = $cast->set(CarbonImmutable::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
-    expect($date)->toBeInstanceOf(CarbonImmutable::class)
-        ->and($date->format('Y-m-d H:i:s'))->toBe('2024-04-30 11:43:41');
-
-    $date = $cast->set(LaravelCarbon::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
-    expect($date)->toBeInstanceOf(LaravelCarbon::class)
-        ->and($date->format('Y-m-d H:i:s'))->toBe('2024-04-30 11:43:41');
-
-    $class = new class () extends CarbonImmutable { };
-    $date = $cast->set($class::class, 'test', collect(['test' => '2024-04-30 11:43:41']));
-    expect($date)->toBeInstanceOf($class::class)
-        ->and($date->format('Y-m-d H:i:s'))->toBe('2024-04-30 11:43:41');
-});
-
-test('it casts bags', function () {
+test('it casts bags', function ($propertyType, $propertyName, $properties, $expectedClass, $expectedName, $expectedAge, $expectedEmail) {
     $cast = new MagicCast();
+    $result = $cast->set($propertyType, $propertyName, $properties);
+    expect($result)->toBeInstanceOf($expectedClass)
+        ->and($result->name)->toBe($expectedName)
+        ->and($result->age)->toBe($expectedAge)
+        ->and($result->email)->toBe($expectedEmail);
+})->with('bags');
 
-    $bag = $cast->set(TestBag::class, 'test', collect([
-        'test' => [
-            'name' => 'Davey Shafik',
-            'age' => '40',
-            'email' => 'davey@php.net'
-        ]
-    ]));
-
-    expect($bag)->toBeInstanceOf(TestBag::class)
-        ->and($bag->name)->toBe('Davey Shafik')
-        ->and($bag->age)->toBe(40)
-        ->and($bag->email)->toBe('davey@php.net');
-});
-
-test('it casts collections', function () {
+test('it casts collections', function ($propertyType, $propertyName, $properties, $expectedClass, $expectedName, $expectedAge, $expectedEmail) {
     $cast = new MagicCast();
+    $result = $cast->set($propertyType, $propertyName, $properties);
+    expect($result)->toBeInstanceOf($expectedClass)
+        ->and($result['name'])->toBe($expectedName)
+        ->and($result['age'])->toBe($expectedAge)
+        ->and($result['email'])->toBe($expectedEmail);
+})->with('collections');
 
-    $collection = $cast->set(LaravelCollection::class, 'test', collect([
-        'test' => [
-            'name' => 'Davey Shafik',
-            'age' => '40',
-            'email' => 'davey@php.net'
-        ]
-    ]));
-    expect($collection)->toBeInstanceOf(LaravelCollection::class)
-        ->and($collection['name'])->toBe('Davey Shafik')
-        ->and($collection['age'])->toBe('40')
-        ->and($collection['email'])->toBe('davey@php.net');
-
-    $collection = $cast->set(Collection::class, 'test', collect([
-        'test' => [
-            'name' => 'Davey Shafik',
-            'age' => '40',
-            'email' => 'davey@php.net'
-        ]
-    ]));
-    expect($collection)->toBeInstanceOf(Collection::class)
-        ->and($collection['name'])->toBe('Davey Shafik')
-        ->and($collection['age'])->toBe('40')
-        ->and($collection['email'])->toBe('davey@php.net');
-});
-
-test('it casts unit enum', function () {
+test('it casts unit enum', function ($propertyType, $propertyName, $properties, $expected) {
     $cast = new MagicCast();
+    $result = $cast->set($propertyType, $propertyName, $properties);
+    expect($result)->toBe($expected);
+})->with('unit_enum');
 
-    $enum = $cast->set(TestUnitEnum::class, 'test', collect(['test' => 'TEST_VALUE']));
-
-    expect($enum)->toBe(TestUnitEnum::TEST_VALUE);
-});
-
-test('it casts backed enum', function () {
+test('it casts backed enum', function ($propertyType, $propertyName, $properties, $expected) {
     $cast = new MagicCast();
+    $result = $cast->set($propertyType, $propertyName, $properties);
+    expect($result)->toBe($expected);
+})->with('backed_enum');
 
-    $enum = $cast->set(TestBackedEnum::class, 'test', collect(['test' => 'test']));
+test('it casts to null if value is null', function ($propertyType) {
+    $cast = new MagicCast();
+    $result = $cast->set($propertyType, 'test', collect(['test' => null]));
 
-    expect($enum)->toBe(TestBackedEnum::TEST_VALUE);
-});
+    expect($result)->toBeNull();
+})->with('nullable');

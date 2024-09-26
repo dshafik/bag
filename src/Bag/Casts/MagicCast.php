@@ -23,6 +23,7 @@ class MagicCast implements CastsPropertySet
         $value = $properties->get($propertyName);
 
         return match (true) {
+            $value === null => null,
             $propertyType === 'int' => (int) $value,
             $propertyType === 'float' => (float) $value,
             $propertyType === 'bool' => (bool) $value,

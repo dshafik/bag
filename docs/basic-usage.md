@@ -16,9 +16,25 @@ readonly class MyValue extends Bag {
 }
 ```
 
+> [!TIP]
+> You can add an `@method` annotation to your class to provide auto-complete for the `::from()` method, or use the [Artisan Command with the --doc option](/docs/laravel-artisan-make-bag-command.md) to generate it for you.
+
+
 ## Instantiating a Value Object
 
-To create a new instance of your Value Object, call the `::from()` method:
+To create a new instance of your Value Object, call the `::from()` method. You can use an array, a Collection, named arguments, or positional arguments.
+
+
+### Named Arguments
+
+```php
+$value = MyValue::from(
+    name: 'Davey Shafik',
+    age: => 40,
+);
+```
+
+### Array or Collection of Arguments
 
 ```php
 $value = MyValue::from([
@@ -26,6 +42,27 @@ $value = MyValue::from([
     'age' => 40,
 ]);
 ```
+
+or:
+
+```php
+$value = MyValue::from(collect([
+    'name' => 'Davey Shafik',
+    'age' => 40,
+]));
+```
+
+### Positional Arguments
+
+```php
+$value = MyValue::from('Davey Shafik', 40);
+```
+
+> [!WARNING]
+> If you use positional arguments, you must ensure they are in the same order as the constructor.
+
+> [!WARNING]
+> If you have a single array argument, **and** an array [transformer](transformers.md), the transformer will be applied to the array, potentially causing unwanted side-effects.
 
 ## Type Casting
 

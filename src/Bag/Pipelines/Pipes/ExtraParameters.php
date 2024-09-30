@@ -24,7 +24,7 @@ readonly class ExtraParameters
             $extra->add($key);
         });
 
-        $extra->whenNotEmpty(fn () => throw new AdditionalPropertiesException($extra));
+        $extra->whenNotEmpty(fn () => throw new AdditionalPropertiesException($input->bagClassname, $extra));
 
         return $input;
     }

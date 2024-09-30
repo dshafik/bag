@@ -13,6 +13,7 @@ use Bag\Pipelines\Pipes\IsVariadic;
 use Bag\Pipelines\Pipes\LaravelRouteParameters;
 use Bag\Pipelines\Pipes\MapInput;
 use Bag\Pipelines\Pipes\MissingProperties;
+use Bag\Pipelines\Pipes\ProcessArguments;
 use Bag\Pipelines\Pipes\ProcessParameters;
 use Bag\Pipelines\Pipes\Transform;
 use Bag\Pipelines\Pipes\Validate;
@@ -21,12 +22,16 @@ use League\Pipeline\Pipeline;
 
 class InputPipeline
 {
+    /**
+     * @param BagInput<Bag> $input
+     */
     public static function process(BagInput $input): Bag
     {
         $pipeline = new Pipeline(
             null,
             new Transform(),
             new ProcessParameters(),
+            new ProcessArguments(),
             new IsVariadic(),
             new MapInput(),
             new LaravelRouteParameters(),

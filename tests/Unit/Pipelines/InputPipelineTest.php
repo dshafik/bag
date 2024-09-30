@@ -8,11 +8,11 @@ use Tests\Fixtures\Values\TestBag;
 covers(BagInput::class, InputPipeline::class);
 
 test('it creates bag', function () {
-    $input = new BagInput(TestBag::class, [
+    $input = new BagInput(TestBag::class, collect([
         'name' => 'Davey Shafik',
         'age' => 40,
         'email' => 'davey@php.net'
-    ]);
+    ]));
 
     $bag = InputPipeline::process($input);
 

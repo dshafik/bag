@@ -286,7 +286,7 @@ test('it pretends to create bag with factory', function () {
         ->expectsOutputToContain(
             <<<'EOF'
                 <?php
-    
+                
                 declare(strict_types=1);
                 
                 namespace App\Values\Factories;
@@ -321,7 +321,7 @@ test('it pretends to create bag with collection', function () {
         ->expectsOutputToContain(
             <<<'EOF'
                 <?php
-    
+                
                 declare(strict_types=1);
                 
                 namespace App\Values;
@@ -372,7 +372,7 @@ test('it pretends to create bag with factory and collection', function () {
         ->expectsOutputToContain(
             <<<'EOF'
                 <?php
-    
+                
                 declare(strict_types=1);
                 
                 namespace App\Values;
@@ -400,7 +400,7 @@ test('it pretends to create bag with factory and collection', function () {
         ->expectsOutputToContain(
             <<<'EOF'
                 <?php
-    
+                
                 declare(strict_types=1);
                 
                 namespace App\Values\Factories;
@@ -447,7 +447,7 @@ test('it errors on bag file exists', function () {
     $this->artisan('make:bag')
         ->expectsQuestion('Bag class name', 'MyBag10')
         ->expectsQuestion('Namespace', 'App\Values')
-        ->expectsOutputToContain('The Bag file already exists. Use --force to overwrite, or --update to add factory/collection.')
+        ->expectsOutputToContain('The Bag file already exists. Use --force to overwrite, or --update to add factory/collection/docs.')
         ->assertExitCode(1);
 });
 
@@ -638,13 +638,28 @@ test('it updates', function () {
     $this->artisan('make:bag MyBag14 --namespace=App\\\\Values')
         ->assertExitCode(0);
 
-    $this->artisan('make:bag MyBag14 --namespace=App\\\\Values --update --factory --collection')
+    expect(file_get_contents(app_path('Values/MyBag14.php')))
+        ->not()->toContain('Factory', 'Collection', 'from()');
+
+    $this->artisan('make:bag MyBag14 --namespace=App\\\\Values --update --factory --collection --docs')
         ->expectsQuestion('Factory class name', 'MyBag14Factory')
         ->expectsQuestion('Collection class name', 'MyBag14Collection')
         ->expectsOutputToContain('Bag [app/Values/MyBag14.php] updated successfully.')
         ->expectsOutputToContain('Bag Factory [app/Values/Factories/MyBag14Factory.php] created successfully.')
         ->expectsOutputToContain('Bag Collection [app/Values/Collections/MyBag14Collection.php] created successfully.')
         ->assertExitCode(0);
+
+    expect(file_get_contents(app_path('Values/MyBag14.php')))
+        ->toContain(
+            'use App\Values\Collections\MyBag14Collection;',
+            'use App\Values\Factories\MyBag14Factory;',
+            'use Bag\Attributes\Collection;',
+            'use Bag\Attributes\Factory;',
+            'use Bag\Traits\HasFactory;',
+            '@method static static from()',
+            '#[Factory(MyBag14Factory::class)]',
+            '#[Collection(MyBag14Collection::class)]',
+        );
 });
 
 test('it generates factory', function () {
@@ -715,6 +730,155 @@ test('it generates factory', function () {
                         'test' => MyBag15::empty(),
                         'collection' => MyBag15::collect([MyBag15::empty()]),
                     ];
+                }
+            }
+            
+            EOF);
+});
+
+test('it creates bag with docs', function () {
+    $this->artisan('make:bag', ['--docs' => true])
+        ->expectsQuestion('Bag class name', 'MyBag16')
+        ->expectsQuestion('Namespace', 'App\Values')
+        ->expectsOutputToContain('Bag [app/Values/MyBag16.php] created successfully.')
+        ->assertExitCode(0);
+
+    expect(file_get_contents(app_path('Values/MyBag16.php')))->toBe(<<<'EOF'
+            <?php
+            
+            declare(strict_types=1);
+            
+            namespace App\Values;
+            
+            use Bag\Bag;
+            
+            /**
+             * @method static static from(array $values)
+             */
+            readonly class MyBag16 extends Bag
+            {
+                public function __construct()
+                {
+                }
+            }
+            
+            EOF);
+});
+
+test('it updates docs', function () {
+    file_put_contents(
+        app_path('Values/MyBag17.php'),
+        <<<'EOF'
+        <?php
+        
+        declare(strict_types=1);
+        
+        namespace App\Values;
+        
+        use Bag\Attributes\Cast;
+        use Bag\Attributes\MapName;
+        use Bag\Bag;
+        use Bag\Casts\CollectionOf;
+        use Bag\Mappers\SnakeCase;
+        use Illuminate\Support\Collection;
+        use Tests\Fixtures\Collections\BagWithCollectionCollection;
+        use Tests\Fixtures\Values\TestBag;
+        
+        #[MapName(SnakeCase::class)]
+        readonly class MyBag17 extends Bag
+        {
+            public function __construct(
+                public string $name,
+                public int $age,
+                public bool $is_active,
+                public float $price,
+                public array $items,
+                public object $object,
+                public mixed $mixed,
+                public TestBag $bag,
+                public Collection $collection,
+                public ?string $nullable_string,
+                public ?int $nullable_int,
+                public ?bool $nullable_bool,
+                public ?float $nullable_float,
+                public ?array $nullable_array,
+                public ?object $nullable_object,
+                public ?TestBag $nullable_bag,
+                public ?Collection $nullable_collection,
+                public ?string $optional_string = null,
+                public ?int $optional_int = null,
+                public ?bool $optional_bool = null,
+                public ?float $optional_float = null,
+                public ?array $optional_array = null,
+                public ?object $optional_object = null,
+                public mixed $optional_mixed = null,
+                public ?TestBag $optional_bag = null,
+                public ?Collection $optional_collection = null,
+                #[Cast(CollectionOf::class, TestBag::class)]
+                public ?BagWithCollectionCollection  $optional_custom_collection = null,
+            ) {
+            }
+        }
+        
+        EOF
+    );
+
+    $this->artisan('make:bag MyBag17 --namespace=App\\\\Values --update --docs')
+        ->expectsOutputToContain('Bag [app/Values/MyBag17.php] updated successfully.')
+        ->assertExitCode(0);
+
+    expect(file_get_contents(app_path('Values/MyBag17.php')))->toBe(<<<'EOF'
+            <?php
+            
+            declare(strict_types=1);
+            
+            namespace App\Values;
+
+            use Bag\Attributes\Cast;
+            use Bag\Attributes\MapName;
+            use Bag\Bag;
+            use Bag\Casts\CollectionOf;
+            use Bag\Mappers\SnakeCase;
+            use Illuminate\Support\Collection;
+            use Tests\Fixtures\Collections\BagWithCollectionCollection;
+            use Tests\Fixtures\Values\TestBag;
+            
+            /**
+             * @method static static from(string $name, int $age, bool $is_active, float $price, array $items, object $object, mixed $mixed, TestBag $bag, Collection $collection, ?string $nullable_string, ?int $nullable_int, ?bool $nullable_bool, ?float $nullable_float, ?array $nullable_array, ?object $nullable_object, ?TestBag $nullable_bag, ?Collection $nullable_collection, ?string $optional_string = null, ?int $optional_int = null, ?bool $optional_bool = null, ?float $optional_float = null, ?array $optional_array = null, ?object $optional_object = null, mixed $optional_mixed = null, ?TestBag $optional_bag = null, ?Collection $optional_collection = null, ?BagWithCollectionCollection<TestBag> $optional_custom_collection = null)
+             */
+            #[MapName(SnakeCase::class)]
+            readonly class MyBag17 extends Bag
+            {
+                public function __construct(
+                    public string $name,
+                    public int $age,
+                    public bool $is_active,
+                    public float $price,
+                    public array $items,
+                    public object $object,
+                    public mixed $mixed,
+                    public TestBag $bag,
+                    public Collection $collection,
+                    public ?string $nullable_string,
+                    public ?int $nullable_int,
+                    public ?bool $nullable_bool,
+                    public ?float $nullable_float,
+                    public ?array $nullable_array,
+                    public ?object $nullable_object,
+                    public ?TestBag $nullable_bag,
+                    public ?Collection $nullable_collection,
+                    public ?string $optional_string = null,
+                    public ?int $optional_int = null,
+                    public ?bool $optional_bool = null,
+                    public ?float $optional_float = null,
+                    public ?array $optional_array = null,
+                    public ?object $optional_object = null,
+                    public mixed $optional_mixed = null,
+                    public ?TestBag $optional_bag = null,
+                    public ?Collection $optional_collection = null,
+                    #[Cast(CollectionOf::class, TestBag::class)]
+                    public ?BagWithCollectionCollection $optional_custom_collection = null,
+                ) {
                 }
             }
             

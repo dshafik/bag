@@ -17,7 +17,7 @@ readonly class MyValue extends Bag {
 ```
 
 > [!TIP]
-> You can add an `@method` annotation to your class to provide auto-complete for the `::from()` method, or use the [Artisan Command with the --doc option](/docs/laravel-artisan-make-bag-command.md) to generate it for you.
+> You can add an `@method` annotation to your class to provide auto-complete for the `::from()` method, or use the [Artisan Command with the --doc option](laravel-artisan-make-bag-command) to generate it for you.
 
 
 ## Instantiating a Value Object

@@ -12,7 +12,7 @@ trait WithValidation
 {
     public static function validate(LaravelCollection|array $values): bool
     {
-        $input = new BagInput(static::class, $values);
+        $input = new BagInput(static::class, collect($values));
 
         return ValidationPipeline::process($input);
     }

@@ -64,8 +64,8 @@ class MyBagCollection extends Collection
 }
 ```
 
-> [!TIP]
-> When creating a new Bag _or_ when specifying the `--update` flag, it will automatically add the `Collection` attribute to the Bag class.
+> [!NOTE]
+> When creating a new Bag _or_ when specifying the `--update` flag, it will automatically add the `Collection` attribute to the Bag class if necessary.
 
 ## Generating Bag Factories
 
@@ -101,12 +101,12 @@ class TestFactory extends Factory
 > [!TIP]
 > When creating a new Bag _or_ when specifying the `--update` flag, it will automatically add the `Factory` attribute and `HasFactory` trait to the Bag class.
 
-### Updating Factories
+## Updating Factories
 
 Once you had added properties to your Bag class, you can update the Factory class using the `--update` option:
 
 ```bash
-php artisan make:bag MyBag --factory --update
+php artisan make:bag MyBag --factory --docs --update
 ```
 
 > [!TIP]
@@ -158,10 +158,80 @@ class MyBagFactory extends Factory
 }
 ```
 
+## Documentation/Auto-Complete Helpers
+
+To enable easier use of named/positional arguments when creating a new Bag, you can use the `--docs` option to automatically generate it for the Bag,
+this will add an `@method` annotation to the Bag class to provide auto-complete for the `::from()` method:
+
+```bash
+php artisan make:bag MyBag --docs
+```
+
+This will add the following to the `MyBag` class:
+
+```php
+/**
+ * @method static static from(array $data)
+ */
+```
+
+## Updating Documentation
+
+Similar to Factories, you can update the documentation using the `--update` option:
+
+```bash
+php artisan make:bag MyBag --docs --update
+```
+
+This will update the `@method` annotation to include documentation for all defined Value attributes. For example, given the following bag:
+
+```php
+use App\Values\Collections\ReportCollection;
+use App\Values\Report;
+use App\Values\Team;
+use Carbon\CarbonImmutable;
+
+readonly class User extends Bag {
+    public function __construct(
+        public string $name,
+        public int $age,
+        public Team $team,
+        #[Cast(CollectionOf::class, Report::class)]
+        public ReportCollection $reports,
+        public CarbonImmutable $lastLogin,
+    ) {
+    }
+}
+```
+
+The `@method` annotation will added to the `User` class:
+
+```php
+use App\Values\Collections\ReportCollection;
+use App\Values\Report;
+use App\Values\Team;
+use Carbon\CarbonImmutable;
+
+/**
+ * @method static static from(string $name, int $age, Team $team, ReportCollection<Report> $reports, CarbonImmutable $lastLogin)
+ */
+readonly class User extends Bag {
+    public function __construct(
+        public string $name,
+        public int $age,
+        public Team $team,
+        #[Cast(CollectionOf::class, Report::class)]
+        public ReportCollection $reports,
+        public CarbonImmutable $lastLogin,
+    ) {
+    }
+}
+```
+
 ## Expected Usage
 
 Because the factory is based on the Bag class properties, you will typically create and customize the Bag value object, and **then** create
-the factory. To do this, you would follow these steps:
+the factory and add docs. To do this, you would follow these steps:
 
 1. Create the Bag class (optionally, with a collection):
 
@@ -171,16 +241,16 @@ php artisan make:bag MyBag --collection
 
 2. Customize the Bag class
 
-3. Create the Bag Factory:
+3. Create the Bag Factory and docs:
 
 ```bash
-php artisan make:bag MyBag --factory --update
+php artisan make:bag MyBag --factory --docs --update
 ```
 
 If you have already created the factory, you must add the `--force-except-bag` option to overwrite it:
 
 ```bash
-php artisan make:bag MyBag --factory --update --force-except-bag
+php artisan make:bag MyBag --factory --docs --update --force-except-bag
 ```
 
 > [!WARNING]
@@ -206,6 +276,7 @@ Options:
   -u, --update                   Update Bag class to add factory/collection
   -f, --factory[=FACTORY]        Create a Factory for the Bag [default: "interactive"]
   -c, --collection[=COLLECTION]  Create a Collection for the Bag [default: "interactive"]
+  -d, --docs                     Add Bag::from() docs to the Bag for IDE auto-complete
   -N, --namespace[=NAMESPACE]    Specify the namespace for the Bag
       --pretend                  Dump the file contents instead of writing to disk
   -h, --help                     Display help for the given command. When no command is given display help for the list command

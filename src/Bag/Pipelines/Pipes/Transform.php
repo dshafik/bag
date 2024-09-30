@@ -14,6 +14,7 @@ use Illuminate\Support\Collection as LaravelCollection;
 use Illuminate\Support\Str;
 use ReflectionAttribute;
 use ReflectionMethod;
+use ReflectionNamedType;
 use TypeError;
 
 readonly class Transform
@@ -32,7 +33,11 @@ readonly class Transform
 
     public function __invoke(BagInput $input)
     {
-        $inputs = $input->input;
+        if ($input->input->count() > 1 || !ctype_digit((string) $input->input->keys()->first())) {
+            return $input;
+        }
+
+        $inputs = $input->input->first();
 
         $methods = collect(Reflection::getClass($input->bagClassname)->getMethods(ReflectionMethod::IS_STATIC))->filter(function (ReflectionMethod $method) use ($inputs) {
             return collect(Reflection::getAttributes($method, Transforms::class))->map(fn (ReflectionAttribute $attribute) => Reflection::getAttributeInstance($attribute))->filter(function (Transforms $transformer) use ($inputs) {
@@ -71,6 +76,12 @@ readonly class Transform
         }
 
         if (is_array($inputs) || is_iterable($inputs) || $inputs instanceof ArrayAccess || $inputs instanceof Arrayable || is_iterable($inputs)) {
+            /** @var ReflectionNamedType $parameterType */
+            $parameterType = Reflection::getConstructor($input->bagClassname)->getParameters()[0]->getType();
+            if ($parameterType->getName() === 'array') {
+                return $input;
+            }
+
             $input->input = LaravelCollection::wrap($inputs);
 
             return $input;

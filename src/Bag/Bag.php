@@ -28,14 +28,18 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable, Castable
 
     public const FROM_JSON = 'json';
 
-    public static function from(mixed $values): Bag
+    public static function from(mixed ... $values): static
     {
-        $input = new BagInput(static::class, $values);
+        $input = new BagInput(static::class, collect($values));
 
-        return InputPipeline::process($input);
+        /** @psalm-var new<static> $bag */
+        /** @var static $bag */
+        $bag = InputPipeline::process($input);
+
+        return $bag;
     }
 
-    public function with(mixed ...$values): Bag
+    public function with(mixed ...$values): static
     {
         if (count($values) === 1 && isset($values[0])) {
             $values = $values[0];

@@ -14,7 +14,7 @@ use Override;
 class Collection extends LaravelCollection
 {
     /**
-     * \Illuminate\Contracts\Support\Arrayable<array-key, TValue>|iterable<array-key, TKey>|TKey  $keys
+     * @inheritDoc
      */
     #[Override]
     public function forget($keys): static
@@ -24,7 +24,7 @@ class Collection extends LaravelCollection
     }
 
     /**
-     * \Illuminate\Contracts\Support\Arrayable<array-key, TValue>|iterable<array-key, TKey>|TKey  $keys
+     * @inheritDoc
      */
     protected function forgetReal($keys): static
     {
@@ -36,7 +36,7 @@ class Collection extends LaravelCollection
     }
 
     /**
-     * @param int $count
+     * @inheritDoc
      */
     #[Override]
     public function pop($count = 1): mixed
@@ -50,7 +50,7 @@ class Collection extends LaravelCollection
     }
 
     /**
-     * @param array-key $key
+     * @inheritDoc
      */
     #[Override]
     public function prepend($value, $key = null): self
@@ -60,7 +60,7 @@ class Collection extends LaravelCollection
     }
 
     /**
-     * @param array-key $key
+     * @inheritDoc
      */
     protected function prependReal(mixed $value, string|int $key): static
     {
@@ -68,7 +68,7 @@ class Collection extends LaravelCollection
     }
 
     /**
-     * @param array-key $key
+     * @inheritDoc
      */
     #[Override]
     public function pull($key, $default = null): static
@@ -77,6 +77,7 @@ class Collection extends LaravelCollection
     }
 
     /**
+     * @inheritDoc
      */
     #[Override]
     public function push(...$values): static
@@ -91,7 +92,7 @@ class Collection extends LaravelCollection
     }
 
     /**
-     * @param array-key $key
+     * @inheritDoc
      */
     #[Override]
     public function put($key, $value): static
@@ -111,7 +112,7 @@ class Collection extends LaravelCollection
     }
 
     /**
-     * @param int $count
+     * @inheritDoc
      */
     #[Override]
     public function shift($count = 1): void
@@ -120,9 +121,7 @@ class Collection extends LaravelCollection
     }
 
     /**
-     * @param int $offset
-     * @param int $length
-     * @param array $replacement
+     * @inheritDoc
      * @phpstan-ignore method.childReturnType
      */
     #[Override]
@@ -132,6 +131,7 @@ class Collection extends LaravelCollection
     }
 
     /**
+     * @inheritDoc
      * @phpstan-ignore method.childReturnType
      */
     #[Override]
@@ -141,6 +141,7 @@ class Collection extends LaravelCollection
     }
 
     /**
+     * @inheritDoc
      * @param array-key $key
      */
     #[Override]
@@ -150,6 +151,7 @@ class Collection extends LaravelCollection
     }
 
     /**
+     * @inheritDoc
      * @param array-key $key
      */
     #[Override]
@@ -159,18 +161,15 @@ class Collection extends LaravelCollection
     }
 
     /**
-     * @param array-key $key
+     * @inheritDoc
      */
     #[Override]
-    public function offsetUnset($key): void
+    public function offsetUnset($offset): void
     {
         throw new ImmutableCollectionException('Array key writes not allowed on ' . static::class);
     }
 
-    /**
-     * @param string $name
-     */
-    public function __set($name, $value): void
+    public function __set(string|int $name, mixed $value): void
     {
         throw new ImmutableCollectionException('Property writes not allowed on ' . static::class);
     }

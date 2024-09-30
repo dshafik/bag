@@ -11,10 +11,14 @@ use Bag\Factory;
 use Bag\Internal\Cache;
 use Bag\Internal\Reflection;
 
+/**
+ * @template TFactory of Factory
+ */
 trait HasFactory
 {
     /**
      * @throws MissingFactoryException
+     * @returns TFactory
      */
     public static function factory(Collection|array|int $data = []): Factory
     {
@@ -34,7 +38,10 @@ trait HasFactory
         return $factory;
     }
 
-    protected static function getFactoryClass()
+    /**
+     * @return class-string<TFactory>
+     */
+    protected static function getFactoryClass(): string
     {
         return Cache::remember(__METHOD__, static::class, function () {
             $factoryAttribute = Reflection::getAttributeInstance(Reflection::getClass(static::class), FactoryAttribute::class);

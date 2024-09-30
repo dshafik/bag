@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Bag\Bag;
+use Bag\Exceptions\AdditionalPropertiesException;
+use Tests\Fixtures\Values\BagWithSingleArrayParameter;
 use Tests\Fixtures\Values\OptionalPropertiesBag;
 use Tests\Fixtures\Values\TestBag;
 
@@ -14,6 +16,19 @@ test('it creates value from array', function () {
         'age' => 40,
         'email' => 'davey@php.net',
     ]);
+
+    expect($value->name)->toBe('Davey Shafik')
+        ->and($value->age)->toBe(40)
+        ->and($value->email)->toBe('davey@php.net');
+});
+
+
+test('it creates value from collection', function () {
+    $value = TestBag::from(collect([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+        'email' => 'davey@php.net',
+    ]));
 
     expect($value->name)->toBe('Davey Shafik')
         ->and($value->age)->toBe(40)
@@ -80,3 +95,51 @@ test('it allows nullables with implicit nulls', function () {
         ->and($value->email)->toBeNull()
         ->and($value->bag)->toBeNull();
 });
+
+test('it accepts named params', function () {
+    $value = TestBag::from(name: 'Davey Shafik', age: 40, email: 'davey@php.net');
+
+    expect($value->name)->toBe('Davey Shafik')
+        ->and($value->age)->toBe(40)
+        ->and($value->email)->toBe('davey@php.net');
+});
+
+test('it handles single array params as array', function () {
+    $value = BagWithSingleArrayParameter::from(['items' => [1, 2, 3]]);
+
+    expect($value->items)->toBe([1, 2, 3]);
+});
+
+test('it handles single array params as named args', function () {
+    $value = BagWithSingleArrayParameter::from(items: [1, 2, 3]);
+
+    expect($value->items)->toBe([1, 2, 3]);
+});
+
+test('it handles single array params as positional args', function () {
+    $value = BagWithSingleArrayParameter::from([1, 2, 3]);
+
+    expect($value->items)->toBe([1, 2, 3]);
+});
+
+test('it rejects extra named params', function () {
+    $value = TestBag::from(name: 'Davey Shafik', age: 40, email: 'davey@php.net', extra: 'extra', foo: 'bar');
+})->throws(
+    AdditionalPropertiesException::class,
+    'Additional properties found: extra, foo'
+);
+
+test('it accepts ordered params', function () {
+    $value = TestBag::from('Davey Shafik', 40, 'davey@php.net');
+
+    expect($value->name)->toBe('Davey Shafik')
+        ->and($value->age)->toBe(40)
+        ->and($value->email)->toBe('davey@php.net');
+});
+
+test('it rejects extra ordered params', function () {
+    $value = TestBag::from('Davey Shafik', 40, 'davey@php.net', 'extra');
+})->throws(
+    \ArgumentCountError::class,
+    'Tests\Fixtures\Values\TestBag::from(): Too many arguments passed, expected 3, got 4'
+);

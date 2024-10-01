@@ -49,7 +49,7 @@ jobs:
         run: composer update --no-ansi --no-interaction --no-progress ${{ matrix.ignore-platform-reqs }}
 
       - name: Run tests with pest
-        run: vendor/bin/pest --coverage --min=80
+        run: vendor/bin/pest --parallel --coverage --min=80
 
       - name: Run type coverage with pest
         run: vendor/bin/pest --type-coverage --min=99 --memory-limit=-1

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 use Bag\Collection;
 use Bag\Concerns\WithEloquentCasting;
+use Bag\Eloquent\Casts\AsBag;
 use Bag\Eloquent\Casts\AsBagCollection;
 use Illuminate\Foundation\Application;
 use function Pest\Laravel\assertDatabaseHas;
@@ -13,7 +14,7 @@ use Tests\Fixtures\Values\BagWithCollection;
 use Tests\Fixtures\Values\HiddenParametersBag;
 use Tests\Fixtures\Values\TestBag;
 
-covers(WithEloquentCasting::class, AsBagCollection::class);
+covers(WithEloquentCasting::class, AsBag::class, AsBagCollection::class);
 
 describe('Laravel 11+', function () {
     test('it stores bag on Laravel 11+', function () {

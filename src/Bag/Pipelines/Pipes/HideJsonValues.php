@@ -10,16 +10,17 @@ use Bag\Internal\Cache;
 use Bag\Internal\Reflection;
 use Bag\Pipelines\Values\BagOutput;
 use Bag\Property\Value;
+use Illuminate\Support\Collection;
 
 readonly class HideJsonValues
 {
-    public function __invoke(BagOutput $output)
+    public function __invoke(BagOutput $output): BagOutput
     {
         if ($output->outputType !== OutputType::JSON) {
             return $output;
         }
 
-        $output->values = Cache::remember(__METHOD__, $output->bag, function () use ($output) {
+        $output->values = Cache::remember(__METHOD__, $output->bag, function () use ($output): Collection {
             $values = $output->values;
             $output->properties->each(function (Value $value) use (&$values, $output) {
                 $isHidden = Reflection::getAttribute($value->property, HiddenFromJson::class) !== null;

@@ -11,14 +11,14 @@ use Illuminate\Support\Collection;
 
 readonly class CastOutputValues
 {
-    public function __invoke(BagOutput $output)
+    public function __invoke(BagOutput $output): BagOutput
     {
         $properties = $output->properties;
         $params = $output->params;
         $values = $output->values;
 
         $output->values = $output->values->map(function (mixed $value, string $key) use ($properties, $params, $values) {
-            if ($params[$key]->variadic) {
+            if ($params[$key]?->variadic) {
                 return $this->castVariadic($params, $values, $value);
             }
 
@@ -31,6 +31,9 @@ readonly class CastOutputValues
         return $output;
     }
 
+    /**
+     * @param Collection<array-key, mixed> $values
+     */
     protected function castVariadic(ValueCollection $params, Collection $values, mixed $value): mixed
     {
         /** @var Value $last */

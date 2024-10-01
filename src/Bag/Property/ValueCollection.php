@@ -6,6 +6,9 @@ namespace Bag\Property;
 
 use Illuminate\Support\Collection;
 
+/**
+ * @extends Collection<string, Value>
+ */
 class ValueCollection extends Collection
 {
     public function required(): static
@@ -13,13 +16,19 @@ class ValueCollection extends Collection
         return $this->where('required', true);
     }
 
+    /**
+     * @return Collection<string, Collection<string, string>>
+     */
     public function aliases(): Collection
     {
-        return collect([
-            'input' => $this->map(function (Value $property) {
+        /** @var Collection<string, Collection<string, string>> $aliases */
+        $aliases = collect([
+            'input' => $this->toBase()->map(function (Value $property) {
                 return $property->maps['input'];
-            })->flatMap(function (Collection $aliases, string $name) {
-                return $aliases->mapWithKeys(function (string $alias) use ($name) {
+            })->flatMap(function (mixed $aliases, string $name) {
+                /** @var Collection<array-key, string> $aliases */
+                return $aliases->mapWithKeys(function (mixed $alias) use ($name) {
+                    /** @var string $alias */
                     return [$alias => $name];
                 });
             }),
@@ -27,5 +36,7 @@ class ValueCollection extends Collection
                 return [$property->name => $property->maps['output']];
             })->toBase(),
         ]);
+
+        return $aliases;
     }
 }

@@ -5,15 +5,22 @@ declare(strict_types=1);
 namespace Bag\Pipelines\Pipes;
 
 use Bag\Attributes\Computed;
+use Bag\Bag;
 use Bag\Exceptions\ComputedPropertyUninitializedException;
 use Bag\Internal\Cache;
 use Bag\Internal\Reflection;
 use Bag\Pipelines\Values\BagInput;
+use Illuminate\Support\Collection;
 use ReflectionProperty;
 
 readonly class ComputedValues
 {
-    public function __invoke(BagInput $input)
+    /**
+     * @template T of Bag
+     * @param BagInput<T> $input
+     * @return BagInput<T>
+     */
+    public function __invoke(BagInput $input): BagInput
     {
         $computedProperties = Cache::remember(__METHOD__, $input->bagClassname, function () use ($input) {
             return collect(Reflection::getProperties($input->bag))->filter(function (ReflectionProperty $property) {
@@ -21,6 +28,7 @@ readonly class ComputedValues
             });
         });
 
+        /** @var Collection<array-key,ReflectionProperty> $computedProperties */
         $computedProperties->each(function (ReflectionProperty $property) use ($input) {
             if ($property->isInitialized($input->bag)) {
                 return;

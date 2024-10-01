@@ -29,7 +29,7 @@ class CastOutput
             $cast = Reflection::getAttributeInstance($castAttribute);
             $args = Reflection::getAttributeArguments($castAttribute);
             $casterClass = $args[\array_key_first($args)];
-            if (!\is_a($casterClass, CastsPropertyGet::class, true)) {
+            if ((is_string($casterClass) || is_object($casterClass)) && !\is_a($casterClass, CastsPropertyGet::class, true)) {
                 $cast = null;
             }
         }
@@ -42,9 +42,13 @@ class CastOutput
         $name = $property->getName();
         $type = Util::getPropertyType($property);
 
+        /** @var CastOutputAttribute|null $cast */
         return new self(propertyType: $type->getName(), name: $name, caster: $cast);
     }
 
+    /**
+     * @param Collection<array-key,mixed> $properties
+     */
     public function __invoke(Collection $properties): mixed
     {
         if ($this->caster === null) {

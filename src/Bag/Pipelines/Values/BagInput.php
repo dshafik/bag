@@ -11,35 +11,34 @@ use Illuminate\Support\Collection as LaravelCollection;
 
 /**
  * @internal
- * @template TBag of Bag
+ * @template T of Bag
  */
 class BagInput
 {
     /**
-     * @var TBag
+     * @var T
      */
     public Bag $bag;
-
-    /**
-     * @var class-string<TBag>
-     */
-    public string $bagClassname;
 
     /**
      * @var ValueCollection<Value>
      */
     public ValueCollection $params;
-    public bool $variadic;
-    public LaravelCollection $values;
 
     /**
-     * @param class-string<Bag> $bagClassname
+     * @var LaravelCollection<array-key, mixed>
+     */
+    public LaravelCollection $values;
+
+    public bool $variadic;
+
+    /**
+     * @param class-string<T> $bagClassname
+     * @param LaravelCollection<array-key, mixed> $input
      */
     public function __construct(
-        string $bagClassname,
+        public string $bagClassname,
         public LaravelCollection $input,
     ) {
-        /** @var class-string<TBag> $bagClassname */
-        $this->bagClassname = $bagClassname;
     }
 }

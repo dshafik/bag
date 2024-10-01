@@ -9,7 +9,7 @@ use Bag\Pipelines\Values\BagOutput;
 
 readonly class MapOutput
 {
-    public function __invoke(BagOutput $output)
+    public function __invoke(BagOutput $output): BagOutput
     {
         if ($output->outputType === OutputType::RAW) {
             $output->output = $output->values;

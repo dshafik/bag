@@ -9,6 +9,9 @@ use Illuminate\Support\Collection as LaravelCollection;
 
 class CollectionOutput
 {
+    /**
+     * @param LaravelCollection<string, mixed> $collection
+     */
     public function __construct(
         public LaravelCollection $collection,
         public OutputType $outputType,

@@ -14,10 +14,11 @@ trait WithCollections
 {
     /**
      * @param  iterable<int, mixed>  $values
-     * @return Collection<static>
+     * @return Collection<array-key,static>
      */
     public static function collect(iterable $values = []): Collection
     {
+        /** @var class-string<Collection> $collection */
         $collection = Cache::remember(__METHOD__, static::class, function (): string {
             return Reflection::getAttributeInstance(
                 Reflection::getClass(static::class),

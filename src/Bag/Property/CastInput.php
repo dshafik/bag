@@ -17,7 +17,7 @@ class CastInput
     public function __construct(
         protected string $propertyType,
         protected string $name,
-        protected null|Cast|CastInputAttribute $caster
+        protected Cast|CastInputAttribute $caster
     ) {
     }
 
@@ -30,7 +30,7 @@ class CastInput
             $cast = Reflection::getAttributeInstance($castAttribute);
             $args = Reflection::getAttributeArguments($castAttribute);
             $casterClass = $args[\array_key_first($args)];
-            if (!\is_a($casterClass, CastsPropertySet::class, true)) {
+            if ((is_string($casterClass) || is_object($casterClass)) && !\is_a($casterClass, CastsPropertySet::class, true)) {
                 $cast = null;
             }
         }
@@ -45,6 +45,9 @@ class CastInput
         return new self(propertyType: $type->getName(), name: $property->name, caster: $cast ?? new CastInputAttribute(MagicCast::class));
     }
 
+    /**
+     * @param Collection<array-key, mixed> $properties
+     */
     public function __invoke(Collection $properties): mixed
     {
         return $this->caster->cast(propertyType: $this->propertyType, propertyName: $this->name, properties: $properties);

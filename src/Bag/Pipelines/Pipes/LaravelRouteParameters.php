@@ -6,6 +6,7 @@ namespace Bag\Pipelines\Pipes;
 
 use Bag\Attributes\Laravel\FromRouteParameter;
 use Bag\Attributes\Laravel\FromRouteParameterProperty;
+use Bag\Bag;
 use Bag\Exceptions\InvalidRouteParameterException;
 use Bag\Internal\Reflection;
 use Bag\Pipelines\Values\BagInput;
@@ -13,17 +14,22 @@ use ReflectionParameter;
 
 readonly class LaravelRouteParameters
 {
-    public function __invoke(BagInput $input)
+    /**
+     * @template T of Bag
+     * @param BagInput<T> $input
+     * @return BagInput<T>
+     */
+    public function __invoke(BagInput $input): BagInput
     {
         if (!\function_exists('\request')) {
             return $input; // @codeCoverageIgnore
         }
 
         collect(Reflection::getParameters(Reflection::getConstructor($input->bagClassname)))->each(function (ReflectionParameter $parameter) use ($input) {
-            if (($attribute = Reflection::getAttributeInstance($parameter, FromRouteParameter::class)) === null) {
-                if (($attribute = Reflection::getAttributeInstance($parameter, FromRouteParameterProperty::class)) === null) {
-                    return;
-                }
+            /** @var FromRouteParameter|FromRouteParameterProperty|null $attribute */
+            $attribute = Reflection::getAttributeInstance($parameter, FromRouteParameter::class) ?? Reflection::getAttributeInstance($parameter, FromRouteParameterProperty::class);
+            if ($attribute === null) {
+                return;
             }
 
             $value = request()->route($attribute->parameterName ?? $parameter->getName());

@@ -9,6 +9,9 @@ use Illuminate\Support\Collection;
 
 class MissingPropertiesException extends Exception
 {
+    /**
+     * @param Collection<array-key,array-key> $missingParameters
+     */
     public function __construct(string $bagClassname, Collection $missingParameters)
     {
         parent::__construct(sprintf(

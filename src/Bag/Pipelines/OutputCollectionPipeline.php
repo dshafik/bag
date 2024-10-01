@@ -11,6 +11,9 @@ use League\Pipeline\Pipeline;
 
 class OutputCollectionPipeline
 {
+    /**
+     * @return LaravelCollection<array-key,mixed>
+     */
     public static function process(CollectionOutput $output): LaravelCollection
     {
         $pipeline = new Pipeline(null, new WrapCollection());

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Bag\Property;
 
+use Bag\Bag;
 use Bag\Internal\Util;
+use Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -12,6 +14,9 @@ use ReflectionProperty;
 
 class Value
 {
+    /**
+     * @param ReflectionClass<Bag|Collection<array-key, mixed>> $bag
+     */
     public function __construct(
         public ReflectionClass $bag,
         public ReflectionProperty|ReflectionParameter $property,
@@ -26,6 +31,9 @@ class Value
     ) {
     }
 
+    /**
+     * @param ReflectionClass<Bag|Collection<array-key, mixed>> $bag
+     */
     public static function create(
         ReflectionClass $bag,
         ReflectionProperty|ReflectionParameter $property,

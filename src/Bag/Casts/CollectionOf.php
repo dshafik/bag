@@ -8,6 +8,7 @@ use Bag\Bag;
 use Bag\Exceptions\BagNotFoundException;
 use Bag\Exceptions\InvalidBag;
 use Bag\Exceptions\InvalidCollection;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection as LaravelCollection;
 use Override;
 
@@ -28,7 +29,8 @@ class CollectionOf implements CastsPropertySet
     }
 
     /**
-     * @param  class-string<LaravelCollection>  $propertyType
+     * @param class-string<LaravelCollection<array-key,mixed>> $propertyType
+     * @param LaravelCollection<array-key,array<array-key, Arrayable<(int|string), mixed>|iterable<(int|string), mixed>|null>> $properties
      */
     #[Override]
     public function set(string $propertyType, string $propertyName, LaravelCollection $properties): mixed

@@ -10,6 +10,9 @@ use Illuminate\Support\Collection as LaravelCollection;
 
 trait WithValidation
 {
+    /**
+     * @param LaravelCollection<array-key,mixed>|array<array-key,mixed> $values
+     */
     public static function validate(LaravelCollection|array $values): bool
     {
         $input = new BagInput(static::class, collect($values));

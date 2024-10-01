@@ -13,7 +13,7 @@ use Bag\Pipelines\Values\BagOutput;
 
 readonly class Wrap
 {
-    public function __invoke(BagOutput $output)
+    public function __invoke(BagOutput $output): BagOutput
     {
         if ($output->outputType !== OutputType::ARRAY && $output->outputType !== OutputType::JSON) {
             return $output;
@@ -32,7 +32,7 @@ readonly class Wrap
             }
         }
 
-        $output->output = Collection::make([Reflection::getAttributeInstance($wrapAttribute)->wrapKey => $output->output]);
+        $output->output = Collection::make([Reflection::getAttributeInstance($wrapAttribute)?->wrapKey => $output->output]);
 
         return $output;
     }

@@ -17,6 +17,9 @@ use League\Pipeline\Pipeline;
 
 class OutputPipeline
 {
+    /**
+     * @return array<string,mixed>
+     */
     public static function process(BagOutput $output): array
     {
         $pipeline = new Pipeline(

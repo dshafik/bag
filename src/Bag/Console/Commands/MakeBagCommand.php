@@ -24,6 +24,7 @@ use Nette\PhpGenerator\Literal;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\PsrPrinter;
+use Nette\PhpGenerator\TraitType;
 use PrinsFrank\Standards\Currency\CurrencyAlpha3;
 use ReflectionClass;
 use ReflectionNamedType;
@@ -44,19 +45,23 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
 
     public function handle(): int
     {
+        /** @var string $name */
         $name = $this->argument('name');
 
+        /** @var string $namespace */
         $namespace = match ($this->option('namespace')) {
             null => text('Namespace', default: 'App\\Values'),
             default => $this->option('namespace')
         };
 
+        /** @var string $factory */
         $factory = match ($this->option('factory')) {
             'interactive' => null,
             null => text('Factory class name', default: $name . 'Factory'),
             default => $this->option('factory')
         };
 
+        /** @var string $collection */
         $collection = match ($this->option('collection')) {
             'interactive' => null,
             null => text('Collection class name', default: $name . 'Collection'),
@@ -66,7 +71,7 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
         $directory = app_path(Str::of($namespace)->after('App\\')->replace('\\', '/')->toString());
 
         $this->ensureDirectory($directory);
-        if (!$this->createBag($namespace, $name, $directory, $factory, $collection, $this->option('docs'))) {
+        if (!$this->createBag($namespace, $name, $directory, $factory, $collection, (bool) $this->option('docs'))) {
             return 1;
         }
 
@@ -85,6 +90,9 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
         return 0;
     }
 
+    /**
+     * @return array<string, callable>
+     */
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
@@ -147,14 +155,14 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
             $classFile = \tempnam(\sys_get_temp_dir(), 'bag');
         }
 
-        file_put_contents($classFile, (new PsrPrinter())->printFile($file));
+        file_put_contents((string) $classFile, (new PsrPrinter())->printFile($file));
 
         require_once $classFile;
 
         if ($this->option('pretend')) {
             $this->pretend($name, (new PsrPrinter())->printFile($file));
 
-            \unlink($classFile);
+            \unlink((string) $classFile);
 
             return true;
         }
@@ -168,16 +176,19 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
     {
         require_once $classFile;
 
-        $file = PhpFile::fromCode(file_get_contents($classFile));
+        $file = PhpFile::fromCode((string) file_get_contents($classFile));
         $classNamespace = $file->getNamespaces()[$namespace];
+        /** @var TraitType $class */
         $class = $classNamespace->getClasses()[$name];
 
+        /** @var class-string $fullyQualifiedName */
+        $fullyQualifiedName = $classNamespace->getName() . '\\' . $name;
         if ($factory !== null) {
             $classNamespace->addUse(FactoryAttribute::class);
             $classNamespace->addUse(HasFactory::class);
             $classNamespace->addUse($namespace . '\\Factories\\' . $factory);
 
-            if (count((new ReflectionClass($classNamespace->getName() . '\\' . $name))->getAttributes(FactoryAttribute::class)) > 0) {
+            if (count((new ReflectionClass($fullyQualifiedName))->getAttributes(FactoryAttribute::class)) > 0) {
                 $attributes = $class->getAttributes();
                 foreach ($attributes as $key => $attribute) {
                     if ($attribute->getName() === FactoryAttribute::class) {
@@ -194,7 +205,7 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
         }
 
         if ($collection !== null) {
-            if (count((new ReflectionClass($classNamespace->getName() . '\\' . $name))->getAttributes(CollectionAttribute::class)) > 0) {
+            if (count((new ReflectionClass($fullyQualifiedName))->getAttributes(CollectionAttribute::class)) > 0) {
                 $attributes = $class->getAttributes();
                 foreach ($attributes as $key => $attribute) {
                     if ($attribute->getName() === CollectionAttribute::class) {
@@ -216,7 +227,9 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
         if ($this->option('docs')) {
             $args = [];
 
-            $parameters = (new ReflectionClass($namespace . '\\' . $name))->getMethod('__construct')->getParameters();
+            /** @var class-string $fullyQualifiedName */
+            $fullyQualifiedName = $namespace . '\\' . $name;
+            $parameters = (new ReflectionClass($fullyQualifiedName))->getMethod('__construct')->getParameters();
             foreach ($parameters as $parameter) {
                 /** @var ReflectionNamedType $parameterType */
                 $parameterType = $parameter->getType();
@@ -266,12 +279,12 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
             $classFile = \tempnam(\sys_get_temp_dir(), 'bag');
         }
 
-        file_put_contents($classFile, (new PsrPrinter())->printFile($file));
+        file_put_contents((string) $classFile, (new PsrPrinter())->printFile($file));
 
         if ($this->option('pretend')) {
             $this->pretend($name, (new PsrPrinter())->printFile($file));
 
-            \unlink($classFile);
+            \unlink((string) $classFile);
 
             return;
         }
@@ -305,15 +318,17 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
 
         $body = 'return [';
 
-        $parameters = (new ReflectionClass($namespace . '\\' . $valueName))->getMethod('__construct')->getParameters();
+        /** @var class-string $fullyQualifiedName */
+        $fullyQualifiedName = $namespace . '\\' . $valueName;
+        $parameters = (new ReflectionClass($fullyQualifiedName))->getMethod('__construct')->getParameters();
         foreach ($parameters as $parameter) {
             $faker = 'null';
 
             // @phpstan-ignore method.notFound
-            $parameterName = $parameter->getType()->getName();
+            $parameterName = $parameter->getType()?->getName();
 
             // @phpstan-ignore method.notFound
-            if (!$parameter->getType()->isBuiltin()) {
+            if (!$parameter->getType()?->isBuiltin()) {
                 $type = new ReflectionClass($parameterName);
 
                 if ($parameterName !== Collection::class) {
@@ -361,7 +376,7 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
                 }
 
                 // @phpstan-ignore method.notFound
-                $parameterName = $parameter->getType()?->getName();
+                $parameterName = $parameter->getType()->getName();
                 $faker = match (true) {
                     $parameterName === 'string' && ($parameter->name === 'id' || Str::endsWith($parameter->name, 'Id')) => '$this->faker->uuid()',
                     $parameterName === 'string' => '$this->faker->word()',

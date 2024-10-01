@@ -11,10 +11,13 @@ use Bag\Pipelines\Values\CollectionOutput;
 use Illuminate\Support\Collection as LaravelCollection;
 use Override;
 
+/**
+ * @extends LaravelCollection<array-key, mixed>
+ */
 class Collection extends LaravelCollection
 {
     /**
-     * @inheritDoc
+     * @param array<array-key> $keys
      */
     #[Override]
     public function forget($keys): static
@@ -24,10 +27,11 @@ class Collection extends LaravelCollection
     }
 
     /**
-     * @inheritDoc
+     * @param array<array-key> $keys
      */
     protected function forgetReal($keys): static
     {
+        /** @var array-key $key */
         foreach ($this->getArrayableItems($keys) as $key) {
             parent::offsetUnset($key);
         }
@@ -188,6 +192,9 @@ class Collection extends LaravelCollection
         return OutputCollectionPipeline::process($output)->jsonSerialize();
     }
 
+    /**
+     * @return array<array-key, mixed>
+     */
     public function unwrapped(): array
     {
         $output = new CollectionOutput($this, OutputType::UNWRAPPED);

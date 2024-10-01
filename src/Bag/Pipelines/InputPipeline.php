@@ -23,7 +23,9 @@ use League\Pipeline\Pipeline;
 class InputPipeline
 {
     /**
-     * @param BagInput<Bag> $input
+     * @template T of Bag
+     * @param BagInput<T> $input
+     * @return T
      */
     public static function process(BagInput $input): Bag
     {

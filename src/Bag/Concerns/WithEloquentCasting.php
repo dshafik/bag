@@ -5,42 +5,20 @@ declare(strict_types=1);
 namespace Bag\Concerns;
 
 use Bag\Bag;
+use Bag\Collection;
+use Bag\Eloquent\Casts\AsBag;
 use Bag\Eloquent\Casts\AsBagCollection;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 trait WithEloquentCasting
 {
+    /**
+     * @param array<string|int> $arguments
+     * @return CastsAttributes<Bag, array<mixed>>
+     */
     public static function castUsing(array $arguments): CastsAttributes
     {
-        return new class (static::class, $arguments) implements CastsAttributes {
-            /**
-             * @param class-string<Bag> $bagClass
-             */
-            public function __construct(protected string $bagClass, protected array $arguments)
-            {
-            }
-
-            public function get($model, string $key, $value, array $attributes): Bag|null
-            {
-                if ($value === null) {
-                    return null;
-                }
-
-                return ($this->bagClass)::from(json_decode($value, true));
-            }
-
-            /**
-             * @param Bag $value
-             */
-            public function set($model, string $key, $value, array $attributes): array|null
-            {
-                if ($value === null) {
-                    return null;
-                }
-
-                return [$key => json_encode($value->getRaw())];
-            }
-        };
+        return new AsBag(static::class, $arguments);
     }
 
     public static function castAsCollection(): string
@@ -48,5 +26,8 @@ trait WithEloquentCasting
         return AsBagCollection::of(static::class);
     }
 
+    /**
+     * @return ($key is null ? mixed : Collection)
+     */
     abstract public function getRaw(?string $key = null): mixed;
 }

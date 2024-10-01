@@ -14,10 +14,11 @@ class AdditionalPropertiesException extends Exception
 {
     /**
      * @param class-string<Bag> $bagClass
+     * @param Collection<array-key, array-key> $extraProperties
      */
     public function __construct(string $bagClass, Collection $extraProperties)
     {
-        $extraProperties->filter(fn (string|int $value) => ctype_digit((string) $value))
+        $extraProperties->filter(fn (mixed $value) => ctype_digit((string) $value))
             ->whenNotEmpty(function () use ($bagClass, $extraProperties) {
                 $expectedArgCount = count(Reflection::getParameters(Reflection::getConstructor($bagClass)));
 

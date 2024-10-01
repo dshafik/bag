@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bag\Pipelines;
 
+use Bag\Bag;
 use Bag\Pipelines\Pipes\ExtraParameters;
 use Bag\Pipelines\Pipes\IsVariadic;
 use Bag\Pipelines\Pipes\MapInput;
@@ -16,6 +17,10 @@ use League\Pipeline\Pipeline;
 
 class ValidationPipeline
 {
+    /**
+     * @template T of Bag
+     * @param BagInput<T> $input
+     */
     public static function process(BagInput $input): bool
     {
         $pipeline = new Pipeline(

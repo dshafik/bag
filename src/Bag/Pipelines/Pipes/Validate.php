@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bag\Pipelines\Pipes;
 
+use BackedEnum;
 use Bag\Bag;
 use Bag\Internal\Cache;
 use Bag\Pipelines\Values\BagInput;
@@ -14,18 +15,24 @@ use Illuminate\Support\Collection as LaravelCollection;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Translation\Translator;
 use Illuminate\Validation\Factory;
+use Illuminate\Validation\PresenceVerifierInterface;
 use Illuminate\Validation\ValidationException;
 
 readonly class Validate
 {
-    public function __invoke(BagInput $input)
+    /**
+     * @template T of Bag
+     * @param BagInput<T> $input
+     * @return BagInput<T>
+     */
+    public function __invoke(BagInput $input): BagInput
     {
         /** @var class-string<Bag> $bagClass */
         $bagClass = $input->bagClassname;
         $values = $input->values->all();
         $aliases = $input->params->aliases();
 
-        $rules = LaravelCollection::wrap($bagClass::rules())->mapWithKeys(function (array $rules, string $key) use ($aliases) {
+        $rules = LaravelCollection::wrap($bagClass::rules())->mapWithKeys(function (mixed $rules, string $key) use ($aliases) {
             $key = $aliases['output'][$key] ?? $key;
 
             return [$key => $rules];
@@ -54,7 +61,9 @@ readonly class Validate
             if (class_exists(Application::class) && method_exists($validator, 'setPresenceVerifier')) {
                 $app = Application::getInstance();
                 if ($app->has('db')) {
-                    $validator->setPresenceVerifier($app->get('validation.presence'));
+                    /** @var PresenceVerifierInterface $presenceVerifier */
+                    $presenceVerifier = $app->get('validation.presence');
+                    $validator->setPresenceVerifier($presenceVerifier);
                 }
             }
 
@@ -65,11 +74,15 @@ readonly class Validate
             $validator->validate($values, $rules->toArray());
         } catch (ValidationException $exception) {
             if (method_exists($bagClass, 'redirect')) {
-                $exception->redirectTo(app()->call([$bagClass, 'redirect']));
+                /** @var string $redirect */
+                $redirect = app()->call([$bagClass, 'redirect']);
+                $exception->redirectTo($redirect);
             }
 
             if (method_exists($bagClass, 'redirectRoute')) {
-                $exception->redirectTo(route(app()->call([$bagClass, 'redirectRoute'])));
+                /** @var BackedEnum|string $redirectRoute */
+                $redirectRoute = app()->call([$bagClass, 'redirectRoute']);
+                $exception->redirectTo(route($redirectRoute));
             }
 
             throw $exception;

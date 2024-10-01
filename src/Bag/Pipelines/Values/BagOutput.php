@@ -14,10 +14,19 @@ use Illuminate\Support\Collection as LaravelCollection;
  */
 class BagOutput
 {
+    /**
+     * @var class-string<Bag>
+     */
     public string $bagClassname;
     public ValueCollection $params;
     public ValueCollection $properties;
+    /**
+     * @var LaravelCollection<array-key, mixed>
+     */
     public LaravelCollection $values;
+    /**
+     * @var LaravelCollection<array-key, mixed>
+     */
     public LaravelCollection $output;
     public bool $variadic;
 

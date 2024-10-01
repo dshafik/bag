@@ -13,7 +13,7 @@ use Illuminate\Support\Collection as LaravelCollection;
 
 readonly class WrapCollection
 {
-    public function __invoke(CollectionOutput $output)
+    public function __invoke(CollectionOutput $output): CollectionOutput
     {
         if ($output->outputType === OutputType::UNWRAPPED) {
             $output->collection = $output->collection->toBase();
@@ -35,7 +35,9 @@ readonly class WrapCollection
             }
         }
 
-        $output->collection = LaravelCollection::make([Reflection::getAttributeInstance($wrapAttribute)->wrapKey => $output->collection->toBase()]);
+        /** @var LaravelCollection<string, mixed> $wrapped */
+        $wrapped = LaravelCollection::make([Reflection::getAttributeInstance($wrapAttribute)?->wrapKey => $output->collection->toBase()]);
+        $output->collection = $wrapped;
 
         return $output;
     }

@@ -24,6 +24,9 @@ trait WithOutput
         return $values;
     }
 
+    /**
+     * @return ($key is string ? mixed : Collection)
+     */
     public function getRaw(?string $key = null): mixed
     {
         $value = $this;
@@ -36,7 +39,10 @@ trait WithOutput
         return $values;
     }
 
-    public function unwrapped()
+    /**
+     * @return array<array-key, mixed>
+     */
+    public function unwrapped(): array
     {
         $output = new BagOutput(bag: $this, outputType: OutputType::UNWRAPPED);
 

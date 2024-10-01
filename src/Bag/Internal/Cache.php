@@ -13,13 +13,18 @@ use WeakMap;
  */
 class Cache
 {
+    /**
+     */
     public static self|MockInterface|null $instance = null;
 
     /**
-     * @var array<WeakMap>
+     * @var array<WeakMap<object,mixed>>
      */
     public static array $cacheWeakMap;
 
+    /**
+     * @var array <array-key, array<array-key, mixed>>
+     */
     public static array $cacheArray = [];
 
     public static function fake(): MockInterface
@@ -42,7 +47,7 @@ class Cache
         self::$instance = null;
     }
 
-    protected static function getInstance(): self
+    protected static function getInstance(): self|MockInterface
     {
         if (!isset(self::$instance)) {
             self::$instance = new self();
@@ -51,11 +56,22 @@ class Cache
         return self::$instance;
     }
 
+    /**
+     * @template T
+     * @param callable():T $callback
+     * @return T
+     */
     public static function remember(string $store, object|string $key, callable $callback): mixed
     {
+        // @phpstan-ignore method.notFound
         return self::getInstance()->store($store, $key, $callback);
     }
 
+    /**
+     * @template T
+     * @param callable():T $callback
+     * @return T
+     */
     public function store(string $store, object|string $key, callable $callback): mixed
     {
         if (is_object($key)) {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bag\Casts;
 
 use BackedEnum;
+use Brick\Math\BigNumber;
 use Brick\Money\Exception\UnknownCurrencyException;
 use Brick\Money\Money as BrickMoney;
 use Illuminate\Support\Collection;
@@ -21,6 +22,7 @@ class MoneyFromMinor implements CastsPropertySet, CastsPropertyGet
     #[Override]
     public function set(string $propertyType, string $propertyName, Collection $properties): mixed
     {
+        /** @var BigNumber|float|int|string $amount */
         $amount = $properties->get($propertyName);
 
         if ($amount instanceof BrickMoney) {
@@ -44,6 +46,7 @@ class MoneyFromMinor implements CastsPropertySet, CastsPropertyGet
             $currency = $currency->name;
         }
 
+        /** @var int|string $currency */
         return $this->makeMoney($amount, $currency);
     }
 
@@ -56,6 +59,9 @@ class MoneyFromMinor implements CastsPropertySet, CastsPropertyGet
         return $money->formatTo($this->locale);
     }
 
+    /**
+     * @param BigNumber|float|int|string $amount
+     */
     protected function makeMoney(mixed $amount, int|string $currency): BrickMoney
     {
         return BrickMoney::ofMinor($amount, $currency);

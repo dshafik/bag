@@ -24,9 +24,12 @@ class MagicCast implements CastsPropertySet
 
         return match (true) {
             $value === null => null,
+            // @phpstan-ignore cast.int
             $propertyType === 'int' => (int) $value,
+            // @phpstan-ignore cast.double
             $propertyType === 'float' => (float) $value,
             $propertyType === 'bool' => (bool) $value,
+            // @phpstan-ignore cast.string
             $propertyType === 'string' => (string) $value,
             is_object($value) && $propertyType === $value::class => $value,
             is_string($value) && (
@@ -36,9 +39,10 @@ class MagicCast implements CastsPropertySet
                 is_a($propertyType, CarbonImmutable::class, true)
             ) => $propertyType::createFromFormat('U.u', (new DateTimeImmutable($value))->format('U.u')),
             is_subclass_of($propertyType, Bag::class, true) => $propertyType::from($value),
-            is_a($propertyType, LaravelCollection::class, true) || is_subclass_of($propertyType, LaravelCollection::class, true) => $propertyType::make($value),
-            is_subclass_of($propertyType, BackedEnum::class, true) => $propertyType::from($value),
-            is_subclass_of($propertyType, UnitEnum::class, true) => constant("{$propertyType}::{$value}"),
+            // @phpstan-ignore argument.templateType
+            (is_a($propertyType, LaravelCollection::class, true) || is_subclass_of($propertyType, LaravelCollection::class, true)) && \is_iterable($value) => $propertyType::make($value),
+            is_subclass_of($propertyType, BackedEnum::class, true) && (is_string($value) || is_int($value)) => $propertyType::from($value),
+            is_subclass_of($propertyType, UnitEnum::class, true) && is_string($value) => constant("{$propertyType}::{$value}"),
             is_subclass_of($propertyType, Model::class) && \is_scalar($value) => $propertyType::findOrFail($value),
             default => $value,
         };

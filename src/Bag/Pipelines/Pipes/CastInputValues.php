@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bag\Pipelines\Pipes;
 
+use Bag\Bag;
 use Bag\Pipelines\Values\BagInput;
 use Bag\Property\Value;
 use Bag\Property\ValueCollection;
@@ -11,7 +12,12 @@ use Illuminate\Support\Collection;
 
 readonly class CastInputValues
 {
-    public function __invoke(BagInput $input)
+    /**
+     * @template T of Bag
+     * @param BagInput<T> $input
+     * @return BagInput<T>
+     */
+    public function __invoke(BagInput $input): BagInput
     {
         $properties = $input->params;
         $values = $input->values;
@@ -30,6 +36,9 @@ readonly class CastInputValues
         return $input;
     }
 
+    /**
+     * @param Collection<array-key, mixed> $values
+     */
     protected function castVariadic(ValueCollection $properties, Collection $values, mixed $value): mixed
     {
         /** @var Value $last */

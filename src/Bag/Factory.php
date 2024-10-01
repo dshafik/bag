@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Bag;
 
 use Faker\Generator;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Collection as LaravelCollection;
+use T;
 
 /**
  * @template T of Bag
@@ -15,17 +17,21 @@ abstract class Factory
 {
     protected int $count = 1;
 
+    /**
+     * @var LaravelCollection<array-key,mixed>
+     */
     protected LaravelCollection $state;
 
     protected Generator $faker;
 
     /**
-     * @var LaravelCollection<Sequence>
+     * @var LaravelCollection<array-key, Sequence>
      */
     protected LaravelCollection $sequences;
 
     /**
      * @param class-string<T> $bagClass
+     * @param LaravelCollection<array-key,mixed>|array<array-key,mixed> $data
      */
     public function __construct(
         protected string $bagClass,
@@ -36,8 +42,14 @@ abstract class Factory
         $this->sequences = LaravelCollection::empty();
     }
 
+    /**
+     * @return LaravelCollection<array-key,mixed>|array<array-key,mixed>
+     */
     abstract public function definition(): LaravelCollection|array;
 
+    /**
+     * @return $this<T>
+     */
     public function count(int $count): self
     {
         $this->count = $count;
@@ -45,6 +57,10 @@ abstract class Factory
         return $this;
     }
 
+    /**
+     * @param LaravelCollection<array-key,mixed>|array<array-key,mixed>|Sequence $dataOrSequence
+     * @return $this<T>
+     */
     public function state(LaravelCollection|array|Sequence $dataOrSequence): self
     {
         if ($dataOrSequence instanceof Sequence) {
@@ -58,6 +74,9 @@ abstract class Factory
         return $this;
     }
 
+    /**
+     * @return $this<T>
+     */
     public function sequence(mixed ... $sequence): self
     {
         $this->sequences->push(new Sequence(... $sequence));
@@ -66,7 +85,8 @@ abstract class Factory
     }
 
     /**
-     * @return T|LaravelCollection<T>|Collection<T>
+     * @param LaravelCollection<array-key,mixed>|array<array-key,mixed> $data
+     * @return T|LaravelCollection<array-key,T>|Collection<array-key,T>
      */
     public function make(LaravelCollection|array $data = []): Bag|LaravelCollection|Collection
     {
@@ -74,15 +94,18 @@ abstract class Factory
 
         $state = clone $this->state;
 
+        /** @var LaravelCollection<array-key,T> $collection */
         $collection = LaravelCollection::empty();
 
         for ($i = 0; $i < $this->count; $i++) {
             $this->sequences->each(function (Sequence $sequence) use (&$state) {
-                $state = $state->merge($sequence());
+                /** @var Arrayable<(int|string), mixed>|iterable<(int|string), mixed> $items */
+                $items = $sequence();
+                $state = $state->merge($items);
             });
             $collection->push($this->bagClass::from($state));
         }
 
-        return $this->count === 1 ? $collection->first() : $this->bagClass::collect($collection);
+        return ($this->count === 1 ? $collection->first() : $this->bagClass::collect($collection)) ?? Collection::empty();
     }
 }

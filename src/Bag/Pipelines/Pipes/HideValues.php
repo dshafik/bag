@@ -13,7 +13,7 @@ use SensitiveParameter;
 
 readonly class HideValues
 {
-    public function __invoke(BagOutput $output)
+    public function __invoke(BagOutput $output): BagOutput
     {
         $output->values = Cache::remember(__METHOD__, $output->bag, function () use ($output) {
             $values = $output->values;

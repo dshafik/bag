@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace Bag\Pipelines\Pipes;
 
+use Bag\Bag;
 use Bag\Pipelines\Values\BagInput;
 
 readonly class MapInput
 {
-    public function __invoke(BagInput $input)
+    /**
+     * @template T of Bag
+     * @param BagInput<T> $input
+     * @return BagInput<T>
+     */
+    public function __invoke(BagInput $input): BagInput
     {
         $aliases = $input->params->aliases();
 

@@ -8,5 +8,8 @@ use Illuminate\Support\Collection;
 
 interface CastsPropertyGet
 {
+    /**
+     * @param Collection<array-key,mixed> $properties
+     */
     public function get(string $propertyName, Collection $properties): mixed;
 }

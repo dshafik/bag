@@ -15,8 +15,12 @@ use Bag\Pipelines\Values\BagInput;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Validation\ValidationRule;
 use JsonSerializable;
 
+/**
+ * @implements Arrayable<array-key, mixed>
+ */
 readonly class Bag implements Arrayable, Jsonable, JsonSerializable, Castable
 {
     use WithArrayable;
@@ -32,11 +36,7 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable, Castable
     {
         $input = new BagInput(static::class, collect($values));
 
-        /** @psalm-var new<static> $bag */
-        /** @var static $bag */
-        $bag = InputPipeline::process($input);
-
-        return $bag;
+        return InputPipeline::process($input);
     }
 
     public function with(mixed ...$values): static
@@ -45,11 +45,14 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable, Castable
             $values = $values[0];
         }
 
-        $values = \array_merge($this->getRaw()->toArray(), $values);
+        $values = \array_merge($this->getRaw()->toArray(), (array) $values);
 
         return static::from($values);
     }
 
+    /**
+     * @return array<array-key, string|ValidationRule|class-string<ValidationRule>>
+     */
     public static function rules(): array
     {
         return [];

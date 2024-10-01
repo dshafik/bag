@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace Bag\Pipelines\Pipes;
 
+use Bag\Bag;
 use Bag\Pipelines\Values\BagInput;
 use Bag\Property\Value;
 
 readonly class ProcessArguments
 {
-    public function __invoke(BagInput $input)
+    /**
+     * @template T of Bag
+     * @param BagInput<T> $input
+     * @return BagInput<T>
+     */
+    public function __invoke(BagInput $input): BagInput
     {
         $firstInput = $input->input->first();
         if (is_array($firstInput) && $input->input->count() === 1 && !\ctype_digit((string) key($firstInput))) {

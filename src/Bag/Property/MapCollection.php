@@ -4,17 +4,25 @@ declare(strict_types=1);
 
 namespace Bag\Property;
 
+use Bag\Attributes\Attribute;
 use Bag\Attributes\MapInputName;
 use Bag\Attributes\MapName;
 use Bag\Attributes\MapOutputName;
+use Bag\Bag;
 use Bag\Internal\Reflection;
 use Bag\Mappers\MapperInterface;
 use Illuminate\Support\Collection;
 use ReflectionAttribute;
 use ReflectionClass;
 
+/**
+ * @extends Collection<array-key, mixed>
+ */
 class MapCollection extends Collection
 {
+    /**
+     * @param ReflectionClass<Bag|Collection<array-key, mixed>> $bagClass
+     */
     public static function create(ReflectionClass $bagClass, \ReflectionParameter|\ReflectionProperty $property): self
     {
         $name = $property->getName();
@@ -41,6 +49,10 @@ class MapCollection extends Collection
         return new self($aliases);
     }
 
+    /**
+     * @param ReflectionAttribute<Attribute> $attribute
+     * @return string[]
+     */
     protected static function getMap(ReflectionAttribute $attribute, string $name): array
     {
         /** @var MapName|MapInputName|MapOutputName $map */
@@ -60,7 +72,8 @@ class MapCollection extends Collection
     }
 
     /**
-     * @param  class-string<MapperInterface>  $mapper
+     * @param class-string<MapperInterface> $mapper
+     * @param array<array-key, mixed> $params
      */
     protected static function mapName(string $mapper, array $params, string $name): string
     {

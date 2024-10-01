@@ -6,6 +6,7 @@ namespace Bag\Pipelines\Pipes;
 
 use ArrayAccess;
 use Bag\Attributes\Transforms;
+use Bag\Bag;
 use Bag\Collection;
 use Bag\Internal\Reflection;
 use Bag\Pipelines\Values\BagInput;
@@ -31,7 +32,12 @@ readonly class Transform
         'object' => 'object',
     ];
 
-    public function __invoke(BagInput $input)
+    /**
+     * @template T of Bag
+     * @param BagInput<T> $input
+     * @return BagInput<T>
+     */
+    public function __invoke(BagInput $input): BagInput
     {
         if ($input->input->count() > 1 || !ctype_digit((string) $input->input->keys()->first())) {
             return $input;
@@ -40,8 +46,8 @@ readonly class Transform
         $inputs = $input->input->first();
 
         $methods = collect(Reflection::getClass($input->bagClassname)->getMethods(ReflectionMethod::IS_STATIC))->filter(function (ReflectionMethod $method) use ($inputs) {
-            return collect(Reflection::getAttributes($method, Transforms::class))->map(fn (ReflectionAttribute $attribute) => Reflection::getAttributeInstance($attribute))->filter(function (Transforms $transformer) use ($inputs) {
-                $types = $transformer->types->filter(function (string $type) use ($inputs) {
+            return collect(Reflection::getAttributes($method, Transforms::class))->map(fn (ReflectionAttribute $attribute) => Reflection::getAttributeInstance($attribute))->filter(function (?Transforms $transformer) use ($inputs): bool {
+                $types = $transformer?->types->filter(function (string $type) use ($inputs) {
                     $fromType = gettype($inputs);
 
                     return match (true) {
@@ -53,7 +59,7 @@ readonly class Transform
                     };
                 });
 
-                return $types->isNotEmpty();
+                return $types?->isNotEmpty() ?? false;
             })->isNotEmpty();
         });
 
@@ -77,7 +83,7 @@ readonly class Transform
 
         if (is_array($inputs) || is_iterable($inputs) || $inputs instanceof ArrayAccess || $inputs instanceof Arrayable || is_iterable($inputs)) {
             /** @var ReflectionNamedType $parameterType */
-            $parameterType = Reflection::getConstructor($input->bagClassname)->getParameters()[0]->getType();
+            $parameterType = Reflection::getConstructor($input->bagClassname)?->getParameters()[0]->getType();
             if ($parameterType->getName() === 'array') {
                 return $input;
             }
@@ -90,6 +96,9 @@ readonly class Transform
         throw new TypeError(sprintf('%s::from(): Argument #1 ($values): must be of type ArrayAccess|Traversable|Collection|LaravelCollection|Arrayable|array, %s given', $input->bagClassname, gettype($inputs)));
     }
 
+    /**
+     * @param LaravelCollection<array-key, ReflectionMethod> $methods
+     */
     protected function findMethod(LaravelCollection $methods, mixed $from): ReflectionMethod
     {
         /** @var Collection<string, array{transformer: Transforms, method: ReflectionMethod}> $transformers */
@@ -97,13 +106,18 @@ readonly class Transform
         $methods->each(function (ReflectionMethod $method) use (&$transformers) {
             collect(Reflection::getAttributes($method, Transforms::class))->each(function (ReflectionAttribute $attribute) use (&$transformers, $method) {
                 $transformer = Reflection::getAttributeInstance($attribute);
-                $transformer->types->each(function (string $type) use (&$transformers, $transformer, $method) {
+                $transformer?->types->each(function (string $type) use (&$transformers, $transformer, $method) {
                     $transformers[$type] = ['transformer' => $transformer, 'method' => $method];
                 });
             });
         });
 
-        return $transformers->mapWithKeys(function (array $transformerMethod, string $type) use ($from) {
+        /** @var ReflectionMethod $firstTransformer */
+        $firstTransformer = $transformers->mapWithKeys(function (mixed $transformerMethod, string $type) use ($from): array {
+            if (!is_array($transformerMethod)) {
+                return [];
+            }
+
             if (!is_object($from)) {
                 return match (true) {
                     $type === 'json' && is_string($from) && Str::isJson($from) => [0 => $transformerMethod['method']],
@@ -125,12 +139,14 @@ readonly class Transform
                 $classes = $classes->merge(collect($implements)->values());
             }
 
-            $key = $classes->search($type);
+            $key = $classes->search(fn (string $value) => $type === $value);
             if ($key === false) {
                 return [$type => $transformerMethod['method']];
             }
 
             return [$key => $transformerMethod['method']];
         })->sortKeys()->first();
+
+        return $firstTransformer;
     }
 }

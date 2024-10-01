@@ -8,7 +8,7 @@ use Bag\Pipelines\Values\BagOutput;
 
 final class GetValues
 {
-    public function __invoke(BagOutput $output)
+    public function __invoke(BagOutput $output): BagOutput
     {
         $output->values = $output->bag->getRaw();
 

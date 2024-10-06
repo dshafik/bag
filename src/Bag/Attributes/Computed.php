@@ -8,6 +8,6 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class Computed implements AttributeInterface
+readonly class Computed implements AttributeInterface
 {
 }

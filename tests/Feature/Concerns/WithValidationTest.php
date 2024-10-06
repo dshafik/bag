@@ -32,7 +32,7 @@ test('it validates', function () {
 
 test('it fails validation', function () {
     $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The name field must be a string. (and 1 more error)');
+    $this->expectExceptionMessage('The name field must be a string. (and 2 more errors)');
 
     try {
         ValidateUsingRulesMethodBag::validate(collect(['name' => 1234, 'age' => 'string']));
@@ -43,6 +43,7 @@ test('it fails validation', function () {
             ],
             'age' => [
                 'The age field must be an integer.',
+                'The age field must be at least 18.',
             ],
         ]);
 

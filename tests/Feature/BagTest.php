@@ -69,7 +69,7 @@ test('it errors on non-nullables', function () {
     $value = TestBag::from([
         'name' => null,
         'age' => null,
-        'email' => null
+        'email' => null,
     ]);
 })->throws(\TypeError::class, 'Tests\Fixtures\Values\TestBag::__construct(): Argument #1 ($name) must be of type string, null given');
 

@@ -14,7 +14,7 @@ use Illuminate\Support\Collection as LaravelCollection;
 /**
  * @implements CastsAttributes<Collection, mixed>
  */
-class AsBagCollection implements CastsAttributes
+readonly class AsBagCollection implements CastsAttributes
 {
     public function __construct(protected string $bagClass)
     {

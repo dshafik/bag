@@ -12,7 +12,7 @@ use Bag\Internal\Reflection;
 use Bag\Internal\Util;
 use Illuminate\Support\Collection;
 
-class CastInput
+readonly class CastInput
 {
     public function __construct(
         protected string $propertyType,

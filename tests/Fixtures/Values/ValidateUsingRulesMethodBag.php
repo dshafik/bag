@@ -18,7 +18,7 @@ readonly class ValidateUsingRulesMethodBag extends Bag
     {
         return [
             'name' => ['required', 'string'],
-            'age' => ['required', 'integer'],
+            'age' => ['required', 'integer', 'min:18'],
         ];
     }
 }

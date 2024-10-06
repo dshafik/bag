@@ -10,12 +10,12 @@ use Bag\Casts\CastsPropertyGet;
 use Illuminate\Support\Collection;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
-class CastOutput implements AttributeInterface
+readonly class CastOutput implements AttributeInterface
 {
     /**
      * @var array<array-key,mixed>
      */
-    protected array $parameters = [];
+    protected array $parameters;
 
     public function __construct(protected string $casterClassname, mixed ...$parameters)
     {

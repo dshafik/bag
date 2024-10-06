@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bag\Mappers;
 
-class CamelCase extends Stringable
+readonly class CamelCase extends Stringable
 {
     public function __construct()
     {

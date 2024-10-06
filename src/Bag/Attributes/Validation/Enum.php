@@ -9,7 +9,7 @@ use BackedEnum;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
-class Enum extends Rule implements AttributeInterface
+readonly class Enum extends Rule implements AttributeInterface
 {
     /**
      * @type class-string<BackedEnum>

@@ -13,7 +13,7 @@ use Override;
 use PrinsFrank\Standards\Currency\CurrencyAlpha3;
 use UnitEnum;
 
-class MoneyFromMinor implements CastsPropertySet, CastsPropertyGet
+readonly class MoneyFromMinor implements CastsPropertySet, CastsPropertyGet
 {
     public function __construct(protected CurrencyAlpha3|string|null $currency = null, protected ?string $currencyProperty = null, protected string $locale = 'en_US')
     {

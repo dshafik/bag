@@ -8,7 +8,7 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
-class RequiredIf extends Rule implements AttributeInterface
+readonly class RequiredIf extends Rule implements AttributeInterface
 {
     public function __construct(string $otherFieldName, mixed $value)
     {

@@ -9,7 +9,7 @@ use Bag\Pipelines\Values\CollectionOutput;
 use Illuminate\Support\Collection as LaravelCollection;
 use League\Pipeline\Pipeline;
 
-class OutputCollectionPipeline
+readonly class OutputCollectionPipeline
 {
     /**
      * @return LaravelCollection<array-key,mixed>

@@ -8,7 +8,7 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
-class NotRegex extends Rule implements AttributeInterface
+readonly class NotRegex extends Rule implements AttributeInterface
 {
     public function __construct(string $regex)
     {

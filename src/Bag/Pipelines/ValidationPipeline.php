@@ -15,7 +15,7 @@ use Bag\Pipelines\Pipes\Validate;
 use Bag\Pipelines\Values\BagInput;
 use League\Pipeline\Pipeline;
 
-class ValidationPipeline
+readonly class ValidationPipeline
 {
     /**
      * @template T of Bag

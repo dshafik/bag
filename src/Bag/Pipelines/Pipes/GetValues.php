@@ -6,7 +6,7 @@ namespace Bag\Pipelines\Pipes;
 
 use Bag\Pipelines\Values\BagOutput;
 
-final class GetValues
+readonly class GetValues
 {
     public function __invoke(BagOutput $output): BagOutput
     {

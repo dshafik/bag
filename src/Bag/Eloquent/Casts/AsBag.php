@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @implements CastsAttributes<Bag, mixed>
  */
-class AsBag implements CastsAttributes
+readonly class AsBag implements CastsAttributes
 {
     /**
      * @param class-string<Bag> $bagClass

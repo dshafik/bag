@@ -20,7 +20,7 @@ use Bag\Pipelines\Pipes\Validate;
 use Bag\Pipelines\Values\BagInput;
 use League\Pipeline\Pipeline;
 
-class InputPipeline
+readonly class InputPipeline
 {
     /**
      * @template T of Bag

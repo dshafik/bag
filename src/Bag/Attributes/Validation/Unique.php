@@ -9,7 +9,7 @@ use Bag\Attributes\Attribute as AttributeInterface;
 use Illuminate\Database\Eloquent\Model;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
-class Unique extends Rule implements AttributeInterface
+readonly class Unique extends Rule implements AttributeInterface
 {
     /**
      * @param string|class-string<Model> $table

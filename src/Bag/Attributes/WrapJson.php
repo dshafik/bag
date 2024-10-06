@@ -8,7 +8,7 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class WrapJson implements AttributeInterface
+readonly class WrapJson implements AttributeInterface
 {
     public function __construct(
         public string $wrapKey,

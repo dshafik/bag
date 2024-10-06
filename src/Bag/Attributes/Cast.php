@@ -11,12 +11,12 @@ use Bag\Casts\CastsPropertySet;
 use Illuminate\Support\Collection;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
-class Cast implements AttributeInterface
+readonly class Cast implements AttributeInterface
 {
     /**
      * @var array<array-key,mixed>
      */
-    protected array $parameters = [];
+    protected array $parameters;
 
     /**
      * @param class-string<CastsPropertyGet>|class-string<CastsPropertySet> $casterClassname

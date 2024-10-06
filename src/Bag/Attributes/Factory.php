@@ -8,7 +8,7 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class Factory implements AttributeInterface
+readonly class Factory implements AttributeInterface
 {
     /**
      * @param class-string<Factory> $factoryClass

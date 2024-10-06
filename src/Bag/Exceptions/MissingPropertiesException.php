@@ -12,7 +12,7 @@ class MissingPropertiesException extends Exception
     /**
      * @param Collection<array-key,array-key> $missingParameters
      */
-    public function __construct(string $bagClassname, Collection $missingParameters)
+    public function __construct(public string $bagClassname, public Collection $missingParameters)
     {
         parent::__construct(sprintf(
             'Missing required properties for Bag %s: %s',

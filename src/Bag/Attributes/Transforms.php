@@ -9,7 +9,7 @@ use Bag\Attributes\Attribute as AttributeInterface;
 use Illuminate\Support\Collection;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
-class Transforms implements AttributeInterface
+readonly class Transforms implements AttributeInterface
 {
     /**
      * @var Collection<array-key, string>

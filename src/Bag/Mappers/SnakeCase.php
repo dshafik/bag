@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bag\Mappers;
 
-class SnakeCase extends Stringable
+readonly class SnakeCase extends Stringable
 {
     public function __construct()
     {

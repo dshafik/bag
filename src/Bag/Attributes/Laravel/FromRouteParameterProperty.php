@@ -8,7 +8,7 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
-class FromRouteParameterProperty implements AttributeInterface
+readonly class FromRouteParameterProperty implements AttributeInterface
 {
     public function __construct(
         public string $parameterName,

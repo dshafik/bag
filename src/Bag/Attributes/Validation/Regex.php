@@ -8,7 +8,7 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
-class Regex extends Rule implements AttributeInterface
+readonly class Regex extends Rule implements AttributeInterface
 {
     public function __construct(string $regex)
     {

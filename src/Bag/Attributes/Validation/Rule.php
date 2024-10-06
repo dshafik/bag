@@ -8,7 +8,7 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
-class Rule implements AttributeInterface
+readonly class Rule implements AttributeInterface
 {
     public string|object $rule;
 

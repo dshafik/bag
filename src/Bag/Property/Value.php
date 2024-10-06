@@ -12,7 +12,7 @@ use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionProperty;
 
-class Value
+readonly class Value
 {
     /**
      * @param ReflectionClass<Bag|Collection<array-key, mixed>> $bag

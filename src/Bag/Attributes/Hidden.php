@@ -8,6 +8,6 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
-class Hidden implements AttributeInterface
+readonly class Hidden implements AttributeInterface
 {
 }

@@ -64,6 +64,25 @@ $value = MyValue::from('Davey Shafik', 40);
 > [!WARNING]
 > If you have a single array argument, **and** an array [transformer](transformers.md), the transformer will be applied to the array, potentially causing unwanted side-effects.
 
+## Creating an Empty Value Object
+
+To create an empty Value Object, you can use the `::empty()` method:
+
+```php
+$value = MyValue::empty();
+```
+
+This will create a new instance with all properties set either:
+
+- Their default value, if one is defined
+- `null` if they are nullable (e.g. `?type` or `type|null`)
+- A zero-value
+
+> [!WARNING]
+> Zero values may cause side-effects, for example DateTime objects will be set to the Unix Epoch (1970-01-01 00:00:00), and Money objects will be set to zero using the current locale currency code.
+
+This will create a new instance with the provided properties set, and all other properties set to their default value, `null`, or zero-value as described above.
+
 ## Type Casting
 
 Bag will cast all values to their defined type _automatically_ for all scalar types, as well as the following:

@@ -10,12 +10,15 @@ use Bag\Concerns\WithEloquentCasting;
 use Bag\Concerns\WithJson;
 use Bag\Concerns\WithOutput;
 use Bag\Concerns\WithValidation;
+use Bag\Pipelines\EmptyPipeline;
 use Bag\Pipelines\InputPipeline;
+use Bag\Pipelines\PartialPipeline;
 use Bag\Pipelines\Values\BagInput;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\Collection;
 use JsonSerializable;
 
 /**
@@ -37,6 +40,13 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable, Castable
         $input = new BagInput(static::class, collect($values));
 
         return InputPipeline::process($input);
+    }
+
+    public static function empty(): static
+    {
+        $input = new BagInput(static::class, Collection::empty());
+
+        return EmptyPipeline::process($input);
     }
 
     public function with(mixed ...$values): static

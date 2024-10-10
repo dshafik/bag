@@ -11,7 +11,7 @@ use Bag\Attributes\Attribute as AttributeInterface;
 class Factory implements AttributeInterface
 {
     /**
-     * @param class-string<Factory> $factoryClass
+     * @param class-string<Bag\Factory> $factoryClass
      */
     public function __construct(public string $factoryClass)
     {

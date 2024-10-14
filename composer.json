@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "php": "^8.2|^8.3|^8.4",
-        "brick/money": "^0.8.1 || ^0.9.0",
+        "brick/money": "^0.8.1 || ^0.9.0 || ^0.10.0",
         "illuminate/collections": "^10|^11",
         "illuminate/database": "^10|^11",
         "illuminate/support": "^10|^11",

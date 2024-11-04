@@ -38,7 +38,11 @@ trait WithEloquentCasting
                     return null;
                 }
 
-                return [$key => json_encode($value->getRaw())];
+                if ($value instanceof Bag) {
+                    return [$key => json_encode($value->getRaw())];
+                }
+
+                return [$key => json_encode($value)];
             }
         };
     }

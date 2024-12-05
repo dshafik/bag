@@ -6,12 +6,15 @@ namespace Bag\Attributes;
 
 use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
+use Bag\Bag;
+use Bag\Factory as BagFactory;
 
 #[Attribute(Attribute::TARGET_CLASS)]
 class Factory implements AttributeInterface
 {
     /**
-     * @param class-string<Factory> $factoryClass
+     * @template T of Bag
+     * @param class-string<BagFactory<T>> $factoryClass
      */
     public function __construct(public string $factoryClass)
     {

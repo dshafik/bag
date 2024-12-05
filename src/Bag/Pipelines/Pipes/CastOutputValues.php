@@ -18,7 +18,7 @@ readonly class CastOutputValues
         $values = $output->values;
 
         $output->values = $output->values->map(function (mixed $value, string $key) use ($properties, $params, $values) {
-            if ($params[$key]?->variadic) {
+            if (isset($params[$key]) && $params[$key]->variadic) {
                 return $this->castVariadic($params, $values, $value);
             }
 

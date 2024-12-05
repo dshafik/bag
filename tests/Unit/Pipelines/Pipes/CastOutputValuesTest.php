@@ -7,6 +7,7 @@ use Bag\Pipelines\Pipes\ProcessParameters;
 use Bag\Pipelines\Pipes\ProcessProperties;
 use Bag\Pipelines\Values\BagOutput;
 use Carbon\CarbonImmutable;
+use Tests\Fixtures\Values\BagWithManualSetProperty;
 use Tests\Fixtures\Values\CastInputOutputBag;
 use Tests\Fixtures\Values\CastVariadicDatetimeBag;
 use Tests\Fixtures\Values\VariadicBag;
@@ -69,4 +70,14 @@ test('it casts variadic output', function () {
     expect($output->values->get('values'))->toBeArray()
         ->and($output->values->get('values'))->toHaveKey('test')
         ->and($output->values->get('values')['test'])->toBe('2024-04-30');
+});
+
+test('it supports extra properties', function () {
+    $bag = BagWithManualSetProperty::from(['fullName' => 'Davey Shafik']);
+
+    expect($bag->toArray())->toEqual([
+        'fullName' => 'Davey Shafik',
+        'firstName' => 'Davey',
+        'lastName' => 'Shafik',
+    ]);
 });

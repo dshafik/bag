@@ -17,6 +17,7 @@ use SensitiveParameter;
 
 /**
  * @template T of Bag
+ * @internal This class is not meant to be used or overwritten outside of the library.
  */
 class Reflection
 {

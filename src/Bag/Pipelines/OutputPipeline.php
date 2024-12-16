@@ -15,7 +15,7 @@ use Bag\Pipelines\Pipes\Wrap;
 use Bag\Pipelines\Values\BagOutput;
 use League\Pipeline\Pipeline;
 
-class OutputPipeline
+readonly class OutputPipeline
 {
     /**
      * @return array<string,mixed>

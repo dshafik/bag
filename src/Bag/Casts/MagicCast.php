@@ -15,7 +15,7 @@ use function is_subclass_of;
 use Override;
 use UnitEnum;
 
-class MagicCast implements CastsPropertySet
+readonly class MagicCast implements CastsPropertySet
 {
     #[Override]
     public function set(string $propertyType, string $propertyName, LaravelCollection $properties): mixed

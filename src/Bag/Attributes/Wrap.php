@@ -8,7 +8,7 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class Wrap implements AttributeInterface
+readonly class Wrap implements AttributeInterface
 {
     public function __construct(
         public string $wrapKey,

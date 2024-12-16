@@ -11,7 +11,7 @@ use Bag\Internal\Reflection;
 use Bag\Internal\Util;
 use Illuminate\Support\Collection;
 
-class CastOutput
+readonly class CastOutput
 {
     public function __construct(
         protected string $propertyType,

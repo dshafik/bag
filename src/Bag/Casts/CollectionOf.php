@@ -12,7 +12,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection as LaravelCollection;
 use Override;
 
-class CollectionOf implements CastsPropertySet
+readonly class CollectionOf implements CastsPropertySet
 {
     /**
      * @param  class-string<Bag>  $valueClassname

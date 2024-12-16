@@ -8,6 +8,6 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
-class HiddenFromJson implements AttributeInterface
+readonly class HiddenFromJson implements AttributeInterface
 {
 }

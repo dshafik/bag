@@ -14,7 +14,7 @@ use Override;
 /**
  * @template T of DateTimeInterface
  */
-class DateTime implements CastsPropertyGet, CastsPropertySet
+readonly class DateTime implements CastsPropertyGet, CastsPropertySet
 {
     /**
      * @param  class-string<T>|null  $dateTimeClass
@@ -44,35 +44,36 @@ class DateTime implements CastsPropertyGet, CastsPropertySet
     #[Override]
     public function set(string $propertyType, string $propertyName, Collection $properties): mixed
     {
-        if ($this->dateTimeClass === null) {
-            $this->dateTimeClass = $propertyType;
+        $dateTimeClass = $this->dateTimeClass;
+        if ($dateTimeClass === null) {
+            $dateTimeClass = $propertyType;
         }
 
         $value = $properties->get($propertyName);
 
-        if ($value instanceof $this->dateTimeClass) {
+        if ($value instanceof $dateTimeClass) {
             return $value;
         }
 
         if ($value instanceof DateTimeInterface) {
             // @phpstan-ignore staticMethod.notFound
-            return $this->dateTimeClass::createFromFormat('U.u', $value->format('U.u'));
+            return $dateTimeClass::createFromFormat('U.u', $value->format('U.u'));
         }
 
         if ($this->strictMode) {
             // @phpstan-ignore staticMethod.notFound
-            return $this->dateTimeClass::createFromFormat($this->format, $value);
+            return $dateTimeClass::createFromFormat($this->format, $value);
         }
 
         try {
             // @phpstan-ignore staticMethod.notFound
-            return $this->dateTimeClass::createFromFormat($this->format, $value);
+            return $dateTimeClass::createFromFormat($this->format, $value);
         } catch (InvalidFormatException) {
             /** @var string $value */
             $datetime = new DateTimeImmutable($value);
 
             // @phpstan-ignore staticMethod.notFound
-            return $this->dateTimeClass::createFromFormat('U.u', $datetime->format('U.u'));
+            return $dateTimeClass::createFromFormat('U.u', $datetime->format('U.u'));
         }
     }
 }

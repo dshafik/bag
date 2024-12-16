@@ -14,6 +14,9 @@ use ReflectionParameter;
 use ReflectionProperty;
 use ReflectionUnionType;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside of the library.
+ */
 class Util
 {
     public static function getPropertyType(ReflectionParameter|ReflectionProperty $property): ReflectionNamedType

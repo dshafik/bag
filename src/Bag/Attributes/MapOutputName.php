@@ -9,7 +9,7 @@ use Bag\Attributes\Attribute as AttributeInterface;
 use Bag\Mappers\MapperInterface;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
-class MapOutputName extends MapName implements AttributeInterface
+readonly class MapOutputName extends MapName implements AttributeInterface
 {
     /**
      * @param  class-string<MapperInterface>  $mapper

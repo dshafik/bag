@@ -36,7 +36,7 @@ test('it validates using rules', function () {
 
 test('it fails validation using rules', function () {
     $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The name field must be a string. (and 1 more error)');
+    $this->expectExceptionMessage('The name field must be a string. (and 2 more errors)');
 
     $input = new BagInput(ValidateUsingRulesMethodBag::class, collect([
         'name' => 1234,
@@ -48,7 +48,7 @@ test('it fails validation using rules', function () {
     } catch (ValidationException $e) {
         expect($e->errors())->toBe([
             'name' => ['The name field must be a string.'],
-            'age' => ['The age field must be an integer.']
+            'age' => ['The age field must be an integer.', 'The age field must be at least 18.']
         ]);
 
         throw $e;

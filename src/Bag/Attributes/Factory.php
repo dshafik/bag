@@ -10,7 +10,7 @@ use Bag\Bag;
 use Bag\Factory as BagFactory;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class Factory implements AttributeInterface
+readonly class Factory implements AttributeInterface
 {
     /**
      * @template T of Bag

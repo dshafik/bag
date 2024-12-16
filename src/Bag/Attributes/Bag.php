@@ -8,7 +8,7 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class Bag implements AttributeInterface
+readonly class Bag implements AttributeInterface
 {
     public const PUBLIC = 1;
     public const PROTECTED = 2;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bag\Mappers;
 
-class Alias implements MapperInterface
+readonly class Alias implements MapperInterface
 {
     public function __construct(protected string $alias)
     {

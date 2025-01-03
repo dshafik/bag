@@ -24,7 +24,7 @@ jobs:
           - php-versions: '8.3'
             ignore-platform-reqs: '--ignore-platform-reqs'
           - php-versions: '8.4'
-            ignore-platform-reqs: ''
+            ignore-platform-reqs: '--ignore-platform-reqs'
           - php-versions: '8.4'
             laravel-versions: '^10'
       fail-fast: false

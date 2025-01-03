@@ -14,7 +14,7 @@ class Unique extends Rule implements AttributeInterface
     /**
      * @param string|class-string<Model> $table
      */
-    public function __construct(string $table, string $column = null)
+    public function __construct(string $table, ?string $column = null)
     {
         parent::__construct('unique', $table, $column);
     }

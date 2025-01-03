@@ -6,6 +6,7 @@ namespace Bag\Concerns;
 
 use Bag\Pipelines\ValidationPipeline;
 use Bag\Pipelines\Values\BagInput;
+use Bag\Pipelines\WithoutValidationPipeline;
 use Illuminate\Support\Collection as LaravelCollection;
 
 trait WithValidation
@@ -18,5 +19,12 @@ trait WithValidation
         $input = new BagInput(static::class, collect($values));
 
         return ValidationPipeline::process($input);
+    }
+
+    public static function withoutValidation(mixed ... $values): static
+    {
+        $input = new BagInput(static::class, collect($values));
+
+        return WithoutValidationPipeline::process($input);
     }
 }

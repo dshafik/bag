@@ -13,6 +13,7 @@ use Illuminate\Validation\ValidationException;
 use Tests\Fixtures\Models\TestModel;
 use Tests\Fixtures\Values\ComputedPropertyBag;
 use Tests\Fixtures\Values\ComputedPropertyMissingBag;
+use Tests\Fixtures\Values\OptionalValidateUsingAttributesAndRulesMethodBag;
 use Tests\Fixtures\Values\ValidateExistsRuleBag;
 use Tests\Fixtures\Values\ValidateMappedNameClassBag;
 use Tests\Fixtures\Values\ValidateUniqueRuleBag;
@@ -116,4 +117,50 @@ test('it supports exists validator', function () {
     )->toBeTrue();
 
     ValidateExistsRuleBag::validate(collect(['name' => 'Test User', 'age' => 40, 'email' => 'davey@php.net']));
+});
+
+test('it creates without validation', function () {
+    $bag = OptionalValidateUsingAttributesAndRulesMethodBag::withoutValidation(['name' => 'Davey Shafik']);
+    expect($bag)
+        ->toBeInstanceOf(OptionalValidateUsingAttributesAndRulesMethodBag::class)
+    ->and($bag->toArray())
+        ->toBe(['name' => 'Davey Shafik', 'age' => null]);
+});
+
+test('it appends without validation', function () {
+    $bag = OptionalValidateUsingAttributesAndRulesMethodBag::withoutValidation(['name' => 'Davey Shafik']);
+
+    expect($bag)
+        ->toBeInstanceOf(OptionalValidateUsingAttributesAndRulesMethodBag::class)
+    ->and($bag = $bag->append(age: 40))
+        ->toBeInstanceOf(OptionalValidateUsingAttributesAndRulesMethodBag::class)
+    ->and($bag->toArray())
+        ->toBe(['name' => 'Davey Shafik', 'age' => 40])
+    ->and($bag = $bag->append(name: 'Another Name')->append(age: 41))
+        ->toBeInstanceOf(OptionalValidateUsingAttributesAndRulesMethodBag::class)
+    ->and($bag->toArray())
+        ->toBe(['name' => 'Another Name', 'age' => 41]);
+});
+
+test('it validates and throws exception', function () {
+    $bag = OptionalValidateUsingAttributesAndRulesMethodBag::withoutValidation(['name' => 'Davey Shafik']);
+
+    expect(fn () => $bag->valid())
+         ->toThrow(ValidationException::class);
+});
+
+test('it validates and swallows exception', function () {
+    $bag = OptionalValidateUsingAttributesAndRulesMethodBag::withoutValidation(['name' => 'Davey Shafik']);
+
+    expect($bag->valid(false))
+        ->toBeNull();
+});
+
+test('it validates current instance', function () {
+    $bag = OptionalValidateUsingAttributesAndRulesMethodBag::withoutValidation(['name' => 'Davey Shafik']);
+
+    expect($bag = $bag->append(age: 40)->valid())
+        ->toBeInstanceOf(OptionalValidateUsingAttributesAndRulesMethodBag::class)
+    ->and($bag->toArray())
+        ->toBe(['name' => 'Davey Shafik', 'age' => 40]);
 });

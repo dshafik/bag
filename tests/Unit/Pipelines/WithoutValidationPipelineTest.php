@@ -3,7 +3,7 @@
 declare(strict_types=1);
 use Bag\Pipelines\Values\BagInput;
 use Bag\Pipelines\WithoutValidationPipeline;
-use Tests\Fixtures\Values\OptionalPropertiesBag;
+use Tests\Fixtures\Values\OptionalValidateUsingAttributesAndRulesMethodBag;
 use Tests\Fixtures\Values\TestBag;
 
 covers(BagInput::class, WithoutValidationPipeline::class);
@@ -21,18 +21,16 @@ test('it creates bag', function () {
 });
 
 test('it creates invalid bag', function () {
-    $input = new BagInput(OptionalPropertiesBag::class, collect([
+    $input = new BagInput(OptionalValidateUsingAttributesAndRulesMethodBag::class, collect([
         'name' => 'Davey Shafik',
     ]));
 
     $bag = WithoutValidationPipeline::process($input);
 
     expect($bag)
-        ->toBeInstanceOf(OptionalPropertiesBag::class)
+        ->toBeInstanceOf(OptionalValidateUsingAttributesAndRulesMethodBag::class)
     ->and($bag->toArray())->toBe([
         'name' => 'Davey Shafik',
         'age' => null,
-        'email' => null,
-        'bag' => null,
     ]);
 });

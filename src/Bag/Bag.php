@@ -50,6 +50,17 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable, Castable
         return static::from($values);
     }
 
+    public function append(mixed ...$values): static
+    {
+        if (count($values) === 1 && isset($values[0])) {
+            $values = $values[0];
+        }
+
+        $values = \array_merge($this->getRaw()->toArray(), (array) $values);
+
+        return static::withoutValidation($values);
+    }
+
     /**
      * @return array<array-key, string|ValidationRule|class-string<ValidationRule>>
      */

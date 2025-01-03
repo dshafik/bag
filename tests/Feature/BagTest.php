@@ -65,6 +65,36 @@ test('it creates new instance using with array', function () {
         ->and($value2->email)->toBe('test@example.org');
 });
 
+test('it creates new instance using append with named args', function () {
+    $value = TestBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 39,
+        'email' => 'davey@php.net',
+    ]);
+
+    $value2 = $value->append(age: 40, email: 'test@example.org');
+
+    expect($value)->not->toBe($value2)
+        ->and($value2->name)->toBe('Davey Shafik')
+        ->and($value2->age)->toBe(40)
+        ->and($value2->email)->toBe('test@example.org');
+});
+
+test('it creates new instance using append with array', function () {
+    $value = TestBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 39,
+        'email' => 'davey@php.net',
+    ]);
+
+    $value2 = $value->append(['age' => 40, 'email' => 'test@example.org']);
+
+    expect($value)->not->toBe($value2)
+        ->and($value2->name)->toBe('Davey Shafik')
+        ->and($value2->age)->toBe(40)
+        ->and($value2->email)->toBe('test@example.org');
+});
+
 test('it errors on non-nullables', function () {
     $value = TestBag::from([
         'name' => null,

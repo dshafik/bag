@@ -17,7 +17,7 @@
     "require-dev": {
         "captainhook/captainhook-phar": "^5.23",
         "captainhook/hook-installer": "^1.0",
-        "larastan/larastan": "^2.0",
+        "larastan/larastan": "^2.0 || ^3.0",
         "laravel/pint": "^1.15",
         "laravel/prompts": "^0.1.25 || ^0.2.0 || ^0.3.0",
         "orchestra/pest-plugin-testbench": "^2.0|^3.0",

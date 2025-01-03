@@ -7,7 +7,7 @@ use Bag\BagServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Tests\Fixtures\Values\OptionalPropertiesBag;
+use Tests\Fixtures\Values\OptionalValidateUsingAttributesAndRulesMethodBag;
 use Tests\Fixtures\Values\TestBag;
 
 covers(BagServiceProvider::class);
@@ -60,7 +60,7 @@ test('it resolves without validation using closure route', function () {
 
     Route::post('/test', function (
         #[WithoutValidation]
-        OptionalPropertiesBag $bag
+        OptionalValidateUsingAttributesAndRulesMethodBag $bag
     ) use (&$resolved) {
         $resolved = $bag;
 
@@ -70,19 +70,19 @@ test('it resolves without validation using closure route', function () {
     $this->post('/test', ['name' => 'Davey Shafik']);
 
     expect($resolved)
-        ->toBeInstanceOf(OptionalPropertiesBag::class)
+        ->toBeInstanceOf(OptionalValidateUsingAttributesAndRulesMethodBag::class)
         ->and($resolved->toArray())
-        ->toBe(['name' => 'Davey Shafik', 'age' => null, 'email' => null, 'bag' => null]);
+        ->toBe(['name' => 'Davey Shafik', 'age' => null]);
 });
 
 test('it resolves without validation using class method route', function () {
     class Test
     {
-        public static OptionalPropertiesBag $resolved;
+        public static OptionalValidateUsingAttributesAndRulesMethodBag $resolved;
 
         public function test(
             #[WithoutValidation]
-            OptionalPropertiesBag $bag
+            OptionalValidateUsingAttributesAndRulesMethodBag $bag
         ) {
             static::$resolved = $bag;
 
@@ -95,7 +95,7 @@ test('it resolves without validation using class method route', function () {
     $this->post('/test', ['name' => 'Davey Shafik']);
 
     expect(\Test::$resolved)
-        ->toBeInstanceOf(OptionalPropertiesBag::class)
+        ->toBeInstanceOf(OptionalValidateUsingAttributesAndRulesMethodBag::class)
         ->and(\Test::$resolved->toArray())
-        ->toBe(['name' => 'Davey Shafik', 'age' => null, 'email' => null, 'bag' => null]);
+        ->toBe(['name' => 'Davey Shafik', 'age' => null]);
 });

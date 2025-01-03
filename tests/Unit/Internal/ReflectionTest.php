@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-use Bag\Attributes\Collection;
+use Bag\Attributes\Collection as AttributesCollection;
+use Bag\Collection;
 use Bag\Internal\Reflection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixtures\Values\BagWithCollection;
@@ -38,7 +39,7 @@ test('it returns null when no constructor', function () {
 
 test('it gets properties', function () {
     $properties = Reflection::getProperties(static::class);
-    expect($properties)->toBeArray();
+    expect($properties)->toBeInstanceOf(Collection::class);
 });
 
 test('it returns empty when getting properties on null', function () {
@@ -48,7 +49,7 @@ test('it returns empty when getting properties on null', function () {
 test('it gets parameters', function () {
     $method = new \ReflectionMethod(static::class, 'setUp');
     $parameters = Reflection::getParameters($method);
-    expect($parameters)->toBeArray();
+    expect($parameters)->toBeInstanceOf(Collection::class);
 });
 
 test('it returns empty when getting parameters on null', function () {
@@ -58,7 +59,7 @@ test('it returns empty when getting parameters on null', function () {
 test('it gets attributes', function () {
     $class = new \ReflectionClass(static::class);
     $attributes = Reflection::getAttributes($class, CoversClass::class);
-    expect($attributes)->toBeArray();
+    expect($attributes)->toBeInstanceOf(Collection::class);
 });
 
 test('it returns empty when getting attributes on null', function () {
@@ -67,7 +68,7 @@ test('it returns empty when getting attributes on null', function () {
 
 test('it gets attribute', function () {
     $class = new \ReflectionClass(BagWithCollection::class);
-    $attribute = Reflection::getAttribute($class, Collection::class);
+    $attribute = Reflection::getAttribute($class, AttributesCollection::class);
     expect($attribute)->toBeInstanceOf(\ReflectionAttribute::class);
 });
 
@@ -82,7 +83,7 @@ test('it returns null when getting attribute on null', function () {
 
 test('it gets attribute instance', function () {
     $class = new \ReflectionClass(BagWithCollection::class);
-    $instance = Reflection::getAttributeInstance($class, Collection::class);
+    $instance = Reflection::getAttributeInstance($class, AttributesCollection::class);
     expect($instance)->toBeObject();
 });
 
@@ -97,7 +98,7 @@ test('it returns null when getting attribute instance on null', function () {
 
 test('it gets attribute arguments', function () {
     $class = Reflection::getClass(BagWithCollection::class);
-    $attribute = Reflection::getAttribute($class, Collection::class);
+    $attribute = Reflection::getAttribute($class, AttributesCollection::class);
     $arguments = Reflection::getAttributeArguments($attribute);
-    expect($arguments)->toBeArray();
+    expect($arguments)->toBeInstanceOf(Collection::class);
 });

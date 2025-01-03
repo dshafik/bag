@@ -23,7 +23,8 @@ readonly class ComputedValues
     public function __invoke(BagInput $input): BagInput
     {
         $computedProperties = Cache::remember(__METHOD__, $input->bagClassname, function () use ($input) {
-            return collect(Reflection::getProperties($input->bag))->filter(function (ReflectionProperty $property) {
+            return collect(Reflection::getProperties($input->bag))->filter(function ($property) {
+                /** @var ReflectionProperty $property */
                 return Reflection::getAttribute($property, Computed::class) !== null;
             });
         });

@@ -46,7 +46,10 @@ readonly class Transform
         $inputs = $input->input->first();
 
         $methods = collect(Reflection::getClass($input->bagClassname)->getMethods(ReflectionMethod::IS_STATIC))->filter(function (ReflectionMethod $method) use ($inputs) {
-            return collect(Reflection::getAttributes($method, Transforms::class))->map(fn (ReflectionAttribute $attribute) => Reflection::getAttributeInstance($attribute))->filter(function (?Transforms $transformer) use ($inputs): bool {
+            return collect(Reflection::getAttributes($method, Transforms::class))->map(function ($attribute) {
+                /** @var ReflectionAttribute<Transforms> $attribute */
+                return Reflection::getAttributeInstance($attribute);
+            })->filter(function (?Transforms $transformer) use ($inputs): bool {
                 $types = $transformer?->types->filter(function (string $type) use ($inputs) {
                     $fromType = gettype($inputs);
 
@@ -104,7 +107,8 @@ readonly class Transform
         /** @var Collection<string, array{transformer: Transforms, method: ReflectionMethod}> $transformers */
         $transformers = collect();
         $methods->each(function (ReflectionMethod $method) use (&$transformers) {
-            collect(Reflection::getAttributes($method, Transforms::class))->each(function (ReflectionAttribute $attribute) use (&$transformers, $method) {
+            collect(Reflection::getAttributes($method, Transforms::class))->each(function ($attribute) use (&$transformers, $method) {
+                /** @var ReflectionAttribute<Transforms> $attribute */
                 $transformer = Reflection::getAttributeInstance($attribute);
                 $transformer?->types->each(function (string $type) use (&$transformers, $transformer, $method) {
                     $transformers[$type] = ['transformer' => $transformer, 'method' => $method];

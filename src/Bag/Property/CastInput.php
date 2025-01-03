@@ -29,7 +29,7 @@ class CastInput
         if ($castAttribute !== null) {
             $cast = Reflection::getAttributeInstance($castAttribute);
             $args = Reflection::getAttributeArguments($castAttribute);
-            $casterClass = $args[\array_key_first($args)];
+            $casterClass = $args->first();
             if ((is_string($casterClass) || is_object($casterClass)) && !\is_a($casterClass, CastsPropertySet::class, true)) {
                 $cast = null;
             }

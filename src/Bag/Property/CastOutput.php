@@ -28,7 +28,7 @@ class CastOutput
         if ($castAttribute !== null) {
             $cast = Reflection::getAttributeInstance($castAttribute);
             $args = Reflection::getAttributeArguments($castAttribute);
-            $casterClass = $args[\array_key_first($args)];
+            $casterClass = $args->first();
             if ((is_string($casterClass) || is_object($casterClass)) && !\is_a($casterClass, CastsPropertyGet::class, true)) {
                 $cast = null;
             }

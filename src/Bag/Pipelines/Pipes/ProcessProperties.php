@@ -19,11 +19,18 @@ readonly class ProcessProperties
         $output->properties = Cache::remember(__METHOD__, $output->bagClassname, function () use ($output) {
             $class = Reflection::getClass($output->bagClassname);
 
-            $parameters = collect(Reflection::getParameters(Reflection::getConstructor($class)))->map(fn (ReflectionParameter $param) => $param->name);
+            $parameters = Reflection::getParameters(Reflection::getConstructor($class))->map(function ($param) {
+                /** @var ReflectionParameter $param */
+                return $param->name;
+            });
 
             return ValueCollection::wrap(collect(Reflection::getProperties($class))
-                ->filter(fn (ReflectionProperty $property) => !$parameters->contains($property->name))
-                ->mapWithKeys(function (ReflectionProperty $property) use ($class) {
+                ->filter(function ($property) use ($parameters) {
+                    /** @var ReflectionProperty $property */
+                    return !$parameters->contains($property->name);
+                })
+                ->mapWithKeys(function ($property) use ($class) {
+                    /** @var ReflectionProperty $property */
                     return [$property->getName() => Value::create($class, $property)]; // @codeCoverageIgnore
                 }));
         });

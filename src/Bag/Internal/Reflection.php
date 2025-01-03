@@ -8,6 +8,7 @@ use Bag\Attributes\Attribute;
 use Bag\Bag;
 use Bag\Collection;
 use Illuminate\Support\Collection as LaravelCollection;
+use Laravel\SerializableClosure\Support\ReflectionClosure;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionMethod;
@@ -47,45 +48,49 @@ class Reflection
 
     /**
      * @param ReflectionClass<T|Collection<array-key, mixed>|LaravelCollection<array-key, mixed>>|T|class-string<T>|null $classOrObject
-     * @return array<ReflectionProperty>
+     * @return Collection<ReflectionProperty>
      */
-    public static function getProperties(ReflectionClass|Bag|string|null $classOrObject): array
+    public static function getProperties(ReflectionClass|Bag|string|null $classOrObject): Collection
     {
         if ($classOrObject === null) {
-            return [];
+            return Collection::empty();
         }
 
-        return self::getClass($classOrObject)->getProperties();
+        return Collection::make(self::getClass($classOrObject)->getProperties());
     }
 
     /**
-     * @return array<ReflectionParameter>
+     * @return Collection<ReflectionParameter>
      */
-    public static function getParameters(?ReflectionMethod $reflectionMethod): array
+    public static function getParameters(ReflectionMethod|ReflectionClosure|null $reflectionMethod): Collection
     {
         if ($reflectionMethod === null) {
-            return [];
+            return Collection::empty();
         }
 
-        return $reflectionMethod->getParameters();
+        return Collection::make($reflectionMethod->getParameters());
     }
 
     /**
      * @template TAttr of Attribute|SensitiveParameter
      * @param ReflectionClass<T|Collection<array-key, mixed>|LaravelCollection<array-key, mixed>>|ReflectionMethod|ReflectionProperty|ReflectionParameter|null $reflectionObject
      * @param ?class-string<TAttr> $attribute
-     * @return array<ReflectionAttribute<TAttr>>
+     * @return Collection<ReflectionAttribute<TAttr>>
      */
     public static function getAttributes(
         ReflectionClass|ReflectionMethod|ReflectionProperty|ReflectionParameter|null $reflectionObject,
         ?string $attribute,
         int $flags = 0
-    ): array {
+    ): Collection {
         if ($reflectionObject === null) {
-            return [];
+            return Collection::empty();
         }
 
-        return $reflectionObject->getAttributes($attribute, $flags);
+
+        /** @var array<ReflectionAttribute<TAttr>> $attributes */
+        $attributes = $reflectionObject->getAttributes($attribute, $flags);
+
+        return Collection::make($attributes);
     }
 
     /**
@@ -105,7 +110,8 @@ class Reflection
             return null;
         }
 
-        return $attributes[0];
+        // @phpstan-ignore-next-line
+        return $attributes->first();
     }
 
     /**
@@ -133,10 +139,10 @@ class Reflection
     /**
      * @template TAttr of Attribute|SensitiveParameter
      * @param ReflectionAttribute<TAttr> $reflectionAttribute
-     * @return array<array-key,mixed>
+     * @return Collection<array-key,mixed>
      */
-    public static function getAttributeArguments(ReflectionAttribute $reflectionAttribute): array
+    public static function getAttributeArguments(ReflectionAttribute $reflectionAttribute): Collection
     {
-        return $reflectionAttribute->getArguments();
+        return Collection::make($reflectionAttribute->getArguments());
     }
 }

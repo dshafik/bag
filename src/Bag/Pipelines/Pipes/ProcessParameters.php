@@ -12,7 +12,6 @@ use Bag\Pipelines\Values\BagInput;
 use Bag\Pipelines\Values\BagOutput;
 use Bag\Property\Value;
 use Bag\Property\ValueCollection;
-use Illuminate\Support\Collection;
 use ReflectionParameter;
 
 readonly class ProcessParameters
@@ -26,11 +25,12 @@ readonly class ProcessParameters
     {
         $inputOrOutput->params = Cache::remember(__METHOD__, $inputOrOutput->bagClassname, function () use ($inputOrOutput) {
             $class = Reflection::getClass($inputOrOutput->bagClassname);
-            $params = ValueCollection::wrap(Collection::make(Reflection::getParameters(Reflection::getConstructor($class)))->mapWithKeys(
+            $params = ValueCollection::wrap(Reflection::getParameters(Reflection::getConstructor($class))->mapWithKeys(
                 /**
                  * @return array{string, Value}
                  */
-                function (ReflectionParameter $param) use ($class): array {
+                function ($param) use ($class): array {
+                    /** @var ReflectionParameter $param */
                     return [$param->getName() => Value::create($class, $param)]; // @codeCoverageIgnore
                 }
             ));

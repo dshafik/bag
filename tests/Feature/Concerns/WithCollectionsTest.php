@@ -8,6 +8,7 @@ use Bag\Concerns\WithCollections;
 use Bag\Internal\Cache;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\Values\BagWithCollection;
+use Tests\Fixtures\Values\TestBag;
 
 covers(WithCollections::class, Collection::class, CollectionAttribute::class);
 
@@ -53,4 +54,14 @@ test('it uses cache', function () {
         expect($bag->name)->toBe($data[$index]['name'])
             ->and($bag->age)->toBe($data[$index]['age']);
     });
+});
+
+test('it can be cast to a collection', function () {
+    $value = TestBag::from([
+        'name' => 'Davey Shafik',
+        'age' => 40,
+        'email' => 'davey@php.net'
+    ])->toCollection();
+
+    expect($value->toArray())->toBe(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']);
 });

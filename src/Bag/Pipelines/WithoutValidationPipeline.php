@@ -36,7 +36,7 @@ class WithoutValidationPipeline
             new IsVariadic(),
             new MapInput(),
             new LaravelRouteParameters(),
-            // new MissingProperties(),
+            new MissingProperties(),
             new ExtraParameters(),
             new CastInputValues(),
             new FillBag(),

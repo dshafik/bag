@@ -23,7 +23,7 @@ class MyValue extends Bag {
 }
 ```
 
-In the above example, the `hiddenProperty` will not be included when calling `toArray()` or `json_encode()`:
+In the above example, the `hiddenProperty` will not be included when calling `toArray()`, `toCollection()` or `json_encode()`:
 
 ```php
 $value = MyValue::from([

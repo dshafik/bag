@@ -67,6 +67,7 @@ export default withMermaid({
           { text: 'Transformers', link: '/transformers' },
           { text: 'Validation', link: '/validation' },
           { text: 'Computed Properties', link: '/computed-properties' },
+          { text: 'Output', link: '/output' },
           { text: 'Wrapping', link: '/wrapping' },
           { text: 'Factories / Testing', link: '/testing' },
         ]

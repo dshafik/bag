@@ -79,7 +79,7 @@ Bag will cast all values to their defined type _automatically_ for all scalar ty
 
 ### Modifying a Value Object
 
-Value Objects are immutable, so you cannot change their properties directly. Instead, you can create a new instance with the updated values using the `Bag->with()` method:
+Value Objects are immutable, so you cannot change their properties directly. Instead, you can create a new instance with the updated values using the `Bag->with()` or `Bag->append()` methods:
 
 ```php
 $value = MyValue::from([
@@ -93,3 +93,6 @@ dump($newValue->toArray()); // ['name' => 'Davey Shafik', 'age' => 41]
 ```
 
 You can pass either named arguments, or an array or Collection of key-value pairs to the `Bag->with()` method. 
+
+> [!TIP]
+> The `Bag->append()` method works the same way as `Bag->with()`, but it will not validate the new value object. You can manually validate the object using `Bag->valid()`.

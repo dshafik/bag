@@ -50,7 +50,7 @@ has [custom collection classes](https://spatie.be/docs/laravel-data/v4/as-a-data
 
 ## Hidden Properties
 
-Bag supports [hiding properties](hidden) when transforming to an array or JSON.
+Bag supports [hiding properties](hidden) when transforming to an array and/or JSON.
 
 ## Artisan `make:bag` Command
 

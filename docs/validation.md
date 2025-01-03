@@ -29,11 +29,32 @@ readonly class MyValue extends Bag
 
 In this example we added a `#[Required]` attribute to the `name` property, and defined validation rules in the `rules()` method.
 
-You can validate a Bag object using the `Bag::validate()` method:
+You can validate a Bag object before creating it using the `Bag::validate()` method:
 
 ```php
 $value = MyValue::validate([
     'name' => 'Davey Shafik',
+    'age' => 40,
+]);
+```
+
+## Creating a Bag Without Validation
+
+If you want to create a Bag without automatically validating it, you can use the `Bag::withoutValidation()` method:
+
+```php
+$value = MyValue::withoutValidation([
+    'name' => 'Davey Shafik',
+    'age' => 40,
+]);
+```
+
+To futher append properties to a Bag without validation, you can use the `Bag::append()` method:
+
+```php
+$value = MyValue::withoutValidation([
+    'name' => 'Davey Shafik',
+])->append([
     'age' => 40,
 ]);
 ```

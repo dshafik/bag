@@ -5,6 +5,7 @@ use Bag\Property\Value;
 use Bag\Property\ValueCollection;
 use Tests\Fixtures\Values\BagWithTransformers;
 use Tests\Fixtures\Values\MappedNameClassBag;
+use Tests\Fixtures\Values\NullablePropertiesBag;
 use Tests\Fixtures\Values\TestBag;
 
 covers(ValueCollection::class);
@@ -28,6 +29,18 @@ test('it returns required properties', function () {
     $required = $collection->required();
     expect($required)->toHaveCount(3)
         ->and($required->keys()->all())->toBe(['name', 'age', 'email']);
+});
+
+test('it returns nullable properties', function () {
+    $class = new \ReflectionClass(NullablePropertiesBag::class);
+    $collection = ValueCollection::make($class->getConstructor()?->getParameters())->mapWithKeys(function (\ReflectionParameter $property) use ($class) {
+        return [$property->getName() => Value::create($class, $property)];
+    });
+
+    expect($collection)->toHaveCount(4);
+    $required = $collection->nullable();
+    expect($required)->toHaveCount(4)
+        ->and($required->keys()->all())->toBe(['name', 'age', 'email', 'bag']);
 });
 
 test('it resolves aliases', function () {

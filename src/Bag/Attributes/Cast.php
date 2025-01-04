@@ -8,7 +8,8 @@ use Attribute;
 use Bag\Attributes\Attribute as AttributeInterface;
 use Bag\Casts\CastsPropertyGet;
 use Bag\Casts\CastsPropertySet;
-use Illuminate\Support\Collection;
+use Bag\Collection;
+use Illuminate\Support\Collection as LaravelCollection;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
 class Cast implements AttributeInterface
@@ -27,9 +28,9 @@ class Cast implements AttributeInterface
     }
 
     /**
-     * @param Collection<array-key,mixed> $properties
+     * @param LaravelCollection<array-key,mixed> $properties
      */
-    public function cast(string $propertyType, string $propertyName, Collection $properties): mixed
+    public function cast(Collection $propertyType, string $propertyName, LaravelCollection $properties): mixed
     {
         /** @var CastsPropertySet $cast */
         $cast = new $this->casterClassname(...$this->parameters);
@@ -38,9 +39,9 @@ class Cast implements AttributeInterface
     }
 
     /**
-     * @param Collection<array-key,mixed> $properties
+     * @param LaravelCollection<array-key,mixed> $properties
      */
-    public function transform(string $propertyName, Collection $properties): mixed
+    public function transform(string $propertyName, LaravelCollection $properties): mixed
     {
         /** @var CastsPropertyGet $cast */
         $cast = new $this->casterClassname(...$this->parameters);

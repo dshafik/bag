@@ -6,6 +6,7 @@ namespace Bag\Casts;
 
 use BackedEnum;
 use Bag\Bag;
+use Bag\Collection;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use DateTimeImmutable;
@@ -17,10 +18,46 @@ use UnitEnum;
 
 class MagicCast implements CastsPropertySet
 {
+    /**
+     * @param Collection<string> $propertyTypes
+     */
     #[Override]
-    public function set(string $propertyType, string $propertyName, LaravelCollection $properties): mixed
+    public function set(Collection $propertyTypes, string $propertyName, LaravelCollection $properties): mixed
     {
         $value = $properties->get($propertyName);
+
+        // Find the correct type for the property
+        $valueType = get_debug_type($value);
+
+        // Exact Match to a type
+        if ($propertyTypes->filter(function ($type) use ($valueType, $value) {
+            /** @var string|class-string $type */
+            return $type === $valueType || ((is_object($value) || is_string($value)) && is_a($value, $type, true));
+        })->isNotEmpty()) {
+            return $value;
+        }
+
+        // Fuzzy Matches
+        /** @var string $propertyType */
+        $propertyType = $propertyTypes->first(function ($type) {
+            /** @var string $type */
+            return match (true) {
+                is_a($type, \DateTime::class, true) => true,
+                is_a($type, DateTimeImmutable::class, true) => true,
+                is_a($type, Carbon::class, true) => true,
+                is_a($type, CarbonImmutable::class, true) => true,
+                is_a($type, Bag::class, true) => true,
+                (is_a($type, LaravelCollection::class, true) || is_subclass_of((string) $type, LaravelCollection::class)) => true,
+                is_a($type, BackedEnum::class, true) => true,
+                is_a($type, UnitEnum::class, true) => true,
+                is_subclass_of($type, Model::class) => true,
+                $type === 'float' => true,
+                $type === 'int' => true,
+                $type === 'string' => true,
+                $type === 'bool' => true,
+                default => false,
+            };
+        });
 
         return match (true) {
             $value === null => null,
@@ -39,8 +76,7 @@ class MagicCast implements CastsPropertySet
                 is_a($propertyType, CarbonImmutable::class, true)
             ) => $propertyType::createFromFormat('U.u', (new DateTimeImmutable($value))->format('U.u')),
             is_subclass_of($propertyType, Bag::class, true) => $propertyType::from($value),
-            // @phpstan-ignore argument.templateType
-            (is_a($propertyType, LaravelCollection::class, true) || is_subclass_of($propertyType, LaravelCollection::class, true)) && \is_iterable($value) => $propertyType::make($value),
+            (is_a($propertyType, LaravelCollection::class, true) || is_subclass_of((string) $propertyType, LaravelCollection::class)) && \is_iterable($value) => $propertyType::make($value),
             is_subclass_of($propertyType, BackedEnum::class, true) && (is_string($value) || is_int($value)) => $propertyType::from($value),
             is_subclass_of($propertyType, UnitEnum::class, true) && is_string($value) => constant("{$propertyType}::{$value}"),
             is_subclass_of($propertyType, Model::class) && \is_scalar($value) => $propertyType::findOrFail($value),

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Bag\Casts;
 
-use Illuminate\Support\Collection;
+use Bag\Collection;
+use Illuminate\Support\Collection as LaravelCollection;
 
 interface CastsPropertySet
 {
     /**
-     * @param Collection<array-key,mixed> $properties
+     * @param LaravelCollection<array-key,mixed> $properties
      */
-    public function set(string $propertyType, string $propertyName, Collection $properties): mixed;
+    public function set(Collection $propertyTypes, string $propertyName, LaravelCollection $properties): mixed;
 }

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Bag\Casts;
 
 use BackedEnum;
+use Bag\Collection;
 use Brick\Math\BigNumber;
 use Brick\Money\Exception\UnknownCurrencyException;
 use Brick\Money\Money as BrickMoney;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Collection as LaravelCollection;
 use Override;
 use PrinsFrank\Standards\Currency\CurrencyAlpha3;
 use UnitEnum;
@@ -20,7 +21,7 @@ class MoneyFromMinor implements CastsPropertySet, CastsPropertyGet
     }
 
     #[Override]
-    public function set(string $propertyType, string $propertyName, Collection $properties): mixed
+    public function set(Collection $propertyTypes, string $propertyName, LaravelCollection $properties): mixed
     {
         /** @var BigNumber|float|int|string $amount */
         $amount = $properties->get($propertyName);
@@ -51,7 +52,7 @@ class MoneyFromMinor implements CastsPropertySet, CastsPropertyGet
     }
 
     #[Override]
-    public function get(string $propertyName, Collection $properties): mixed
+    public function get(string $propertyName, LaravelCollection $properties): mixed
     {
         /** @var BrickMoney $money */
         $money = $properties->get($propertyName);

@@ -16,6 +16,11 @@ class ValueCollection extends Collection
         return $this->where('required', true);
     }
 
+    public function nullable(): static
+    {
+        return $this->where('allowsNull', true);
+    }
+
     /**
      * @return Collection<string, Collection<string, string>>
      */

@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 use Bag\Bag;
 use Bag\Exceptions\AdditionalPropertiesException;
+use Tests\Fixtures\Enums\TestBackedEnum;
 use Tests\Fixtures\Values\BagWithSingleArrayParameter;
+use Tests\Fixtures\Values\BagWithUnionTypes;
+use Tests\Fixtures\Values\NullablePropertiesBag;
 use Tests\Fixtures\Values\OptionalPropertiesBag;
+use Tests\Fixtures\Values\OptionalPropertiesWithDefaultsBag;
 use Tests\Fixtures\Values\TestBag;
 
 covers(Bag::class);
@@ -126,6 +130,33 @@ test('it allows nullables with implicit nulls', function () {
         ->and($value->bag)->toBeNull();
 });
 
+test('it uses default values', function () {
+    $value = OptionalPropertiesWithDefaultsBag::from();
+
+    expect($value->name)->toBe('Davey Shafik')
+        ->and($value->age)->toBe(40)
+        ->and($value->email)->toBe('davey@php.net')
+        ->and($value->bag)->toBeNull();
+});
+
+test('it sets nullable without input', function () {
+    $value = NullablePropertiesBag::from();
+
+    expect($value->name)->toBeNull()
+        ->and($value->age)->toBeNull()
+        ->and($value->email)->toBeNull()
+        ->and($value->bag)->toBeNull();
+});
+
+test('it allows nullables with no values', function () {
+    $value = OptionalPropertiesBag::from();
+
+    expect($value->name)->toBeNull()
+        ->and($value->age)->toBeNull()
+        ->and($value->email)->toBeNull()
+        ->and($value->bag)->toBeNull();
+});
+
 test('it accepts named params', function () {
     $value = TestBag::from(name: 'Davey Shafik', age: 40, email: 'davey@php.net');
 
@@ -173,3 +204,15 @@ test('it rejects extra ordered params', function () {
     \ArgumentCountError::class,
     'Tests\Fixtures\Values\TestBag::from(): Too many arguments passed, expected 3, got 4'
 );
+
+test('union types', function () {
+    $value = BagWithUnionTypes::from(name: 'Davey Shafik', age: 40, email: 'davey@php.net');
+    expect($value->name)->toBe('Davey Shafik')
+        ->and($value->age)->toBe(40)
+        ->and($value->email)->toBe('davey@php.net');
+
+    $value = BagWithUnionTypes::from(name: TestBackedEnum::TEST_VALUE, age: '40', email: false);
+    expect($value->name)->toBe(TestBackedEnum::TEST_VALUE)
+        ->and($value->age)->toBe('40')
+        ->and($value->email)->toBe(false);
+});

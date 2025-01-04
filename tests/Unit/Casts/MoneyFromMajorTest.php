@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 use Bag\Casts\MoneyFromMajor;
+use Bag\Collection;
 use Brick\Money\Exception\UnknownCurrencyException;
 use Brick\Money\Money;
+use Laravel\SerializableClosure\Support\ReflectionClosure;
 use PrinsFrank\Standards\Currency\CurrencyAlpha3;
 use Tests\Fixtures\Enums\TestCurrencyEnum;
 
@@ -12,7 +14,9 @@ covers(MoneyFromMajor::class);
 test('it does not cast money', function () {
     $cast = new MoneyFromMajor(currency: CurrencyAlpha3::US_Dollar);
 
-    $money =  $cast->set(MoneyFromMajor::class, 'test', collect(['test' => Money::ofMinor(10000, 'CAD')]));
+    $type = Collection::wrap((new ReflectionClosure(fn (MoneyFromMajor $type) => true))->getParameters()[0]->getType());
+
+    $money =  $cast->set($type, 'test', collect(['test' => Money::ofMinor(10000, 'CAD')]));
 
     /** @var Money $money */
     expect($money->isEqualTo(Money::of(100, 'CAD')))->toBeTrue();
@@ -21,7 +25,9 @@ test('it does not cast money', function () {
 test('it casts money with backed enum currency', function () {
     $cast = new MoneyFromMajor(currency: CurrencyAlpha3::US_Dollar);
 
-    $money =  $cast->set(MoneyFromMajor::class, 'test', collect(['test' => 100]));
+    $type = Collection::wrap((new ReflectionClosure(fn (MoneyFromMajor $type) => true))->getParameters()[0]->getType());
+
+    $money =  $cast->set($type, 'test', collect(['test' => 100]));
 
     /** @var Money $money */
     expect($money->isEqualTo(Money::of(100, 'USD')))->toBeTrue();
@@ -30,7 +36,9 @@ test('it casts money with backed enum currency', function () {
 test('it casts money with string currency', function () {
     $cast = new MoneyFromMajor(currency: 'USD');
 
-    $money =  $cast->set(MoneyFromMajor::class, 'test', collect(['test' => 100]));
+    $type = Collection::wrap((new ReflectionClosure(fn (MoneyFromMajor $type) => true))->getParameters()[0]->getType());
+
+    $money =  $cast->set($type, 'test', collect(['test' => 100]));
 
     /** @var Money $money */
     expect($money->isEqualTo(Money::of(100, 'USD')))->toBeTrue();
@@ -39,7 +47,9 @@ test('it casts money with string currency', function () {
 test('it casts money with currency property as string', function () {
     $cast = new MoneyFromMajor(currencyProperty: 'currency');
 
-    $money =  $cast->set(MoneyFromMajor::class, 'test', collect(['test' => 100, 'currency' => 'USD']));
+    $type = Collection::wrap((new ReflectionClosure(fn (MoneyFromMajor $type) => true))->getParameters()[0]->getType());
+
+    $money =  $cast->set($type, 'test', collect(['test' => 100, 'currency' => 'USD']));
 
     /** @var Money $money */
     expect($money->isEqualTo(Money::of(100, 'USD')))->toBeTrue();
@@ -48,7 +58,9 @@ test('it casts money with currency property as string', function () {
 test('it casts money with currency property as backed enum', function () {
     $cast = new MoneyFromMajor(currencyProperty: 'currency');
 
-    $money =  $cast->set(MoneyFromMajor::class, 'test', collect(['test' => 100, 'currency' => CurrencyAlpha3::US_Dollar]));
+    $type = Collection::wrap((new ReflectionClosure(fn (MoneyFromMajor $type) => true))->getParameters()[0]->getType());
+
+    $money =  $cast->set($type, 'test', collect(['test' => 100, 'currency' => CurrencyAlpha3::US_Dollar]));
 
     /** @var Money $money */
     expect($money->isEqualTo(Money::of(100, 'USD')))->toBeTrue();
@@ -57,7 +69,9 @@ test('it casts money with currency property as backed enum', function () {
 test('it casts money with currency property as unit enum', function () {
     $cast = new MoneyFromMajor(currencyProperty: 'currency');
 
-    $money =  $cast->set(MoneyFromMajor::class, 'test', collect(['test' => 100, 'currency' => TestCurrencyEnum::USD]));
+    $type = Collection::wrap((new ReflectionClosure(fn (MoneyFromMajor $type) => true))->getParameters()[0]->getType());
+
+    $money =  $cast->set($type, 'test', collect(['test' => 100, 'currency' => TestCurrencyEnum::USD]));
 
     /** @var Money $money */
     expect($money->isEqualTo(Money::of(100, 'USD')))->toBeTrue();
@@ -67,8 +81,10 @@ test('it fails with no currency', function () {
     $this->expectException(UnknownCurrencyException::class);
     $this->expectExceptionMessage('No currency found');
 
+    $type = Collection::wrap((new ReflectionClosure(fn (MoneyFromMajor $type) => true))->getParameters()[0]->getType());
+
     $cast = new MoneyFromMajor(currencyProperty: 'currency');
-    $cast->set(MoneyFromMajor::class, 'test', collect(['test' => 100, 'currency' => null]));
+    $cast->set($type, 'test', collect(['test' => 100, 'currency' => null]));
 });
 
 test('it formats output', function () {

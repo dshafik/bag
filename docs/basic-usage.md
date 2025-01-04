@@ -66,7 +66,7 @@ $value = MyValue::from('Davey Shafik', 40);
 
 ## Type Casting
 
-Bag will cast all values to their defined type _automatically_ for all scalar types, as well as the following:
+If the input value matches the type of the property (including [union types](https://www.php.net/manual/en/language.types.type-system.php#language.types.type-system.composite.union)), it will be used as-is. Otherwise, Bag will cast all values to their defined type _automatically_ for all scalar types, as well as the following:
 
 - `Bag` objects
 - `\Bag\Collection` and `\Illuminate\Support\Collection` objects
@@ -76,6 +76,46 @@ Bag will cast all values to their defined type _automatically_ for all scalar ty
 
 > [!TIP]
 > We recommend using `\Carbon\CarbonImmutable` for all date times.
+
+## Default Values
+
+You can define default values for your properties by setting them in the constructor:
+
+```php
+use Bag\Bag;
+
+readonly class MyValue extends Bag {
+    public function __construct(
+        public string $name,
+        public int $age = 40,
+    ) {
+    }
+}
+
+$value = MyValue::from([
+    'name' => 'Davey Shafik',
+])->toArray(); // ['name' => 'Davey Shafik', 'age' => 40]
+```
+
+## Nullable Values
+
+Bag will fill missing nullable values without a default value with `null`:
+
+```php
+use Bag\Bag;
+
+readonly class MyValue extends Bag {
+    public function __construct(
+        public string $name,
+        public ?int $age,
+    ) {
+    }
+}
+
+$value = MyValue::from([
+    'name' => 'Davey Shafik',
+])->toArray(); // ['name' => 'Davey Shafik', 'age' => null]
+```
 
 ### Modifying a Value Object
 

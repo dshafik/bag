@@ -9,6 +9,7 @@ use Bag\Pipelines\Pipes\CastInputValues;
 use Bag\Pipelines\Pipes\ComputedValues;
 use Bag\Pipelines\Pipes\ExtraParameters;
 use Bag\Pipelines\Pipes\FillBag;
+use Bag\Pipelines\Pipes\FillNulls;
 use Bag\Pipelines\Pipes\IsVariadic;
 use Bag\Pipelines\Pipes\LaravelRouteParameters;
 use Bag\Pipelines\Pipes\MapInput;
@@ -34,6 +35,7 @@ class WithoutValidationPipeline
             new ProcessParameters(),
             new ProcessArguments(),
             new IsVariadic(),
+            new FillNulls(),
             new MapInput(),
             new LaravelRouteParameters(),
             new MissingProperties(),

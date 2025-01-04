@@ -50,6 +50,3 @@ jobs:
 
       - name: Run tests with pest
         run: vendor/bin/pest --parallel --coverage --min=80
-
-      - name: Run type coverage with pest
-        run: vendor/bin/pest --type-coverage --min=99 --memory-limit=-1

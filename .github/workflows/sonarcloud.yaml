@@ -37,6 +37,6 @@ jobs:
         run: vendor/bin/phpstan analyse --memory-limit=-1 --error-format=json > phpstan.json
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

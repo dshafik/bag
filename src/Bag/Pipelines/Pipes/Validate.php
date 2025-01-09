@@ -35,7 +35,7 @@ readonly class Validate
         $aliases = $input->params->aliases();
 
         $rules = LaravelCollection::wrap($bagClass::rules())->mapWithKeys(function (mixed $rules, string $key) use ($aliases) {
-            $key = $aliases['output'][$key] ?? $key;
+            $key = $aliases['input'][$key] ?? $key;
 
             return [$key => $rules];
         });

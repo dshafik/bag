@@ -15,7 +15,10 @@ use Bag\Pipelines\Values\BagInput;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Validation\DataAwareRule;
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Contracts\Validation\ValidatorAwareRule;
 use JsonSerializable;
 
 /**
@@ -62,7 +65,7 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable, Castable
     }
 
     /**
-     * @return array<array-key, string|ValidationRule|class-string<ValidationRule>>
+     * @return array<array-key, string|ValidationRule|Rule|DataAwareRule|ValidatorAwareRule|class-string<ValidationRule|Rule|DataAwareRule|ValidatorAwareRule>|array<string|ValidationRule|Rule|DataAwareRule|ValidatorAwareRule|class-string<ValidationRule|Rule|DataAwareRule|ValidatorAwareRule>>>
      */
     public static function rules(): array
     {

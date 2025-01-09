@@ -27,6 +27,16 @@ test('it populates string parameter value', function () {
         ->and($input->values->get('notNamedStringParam'))->toBe('testing');
 });
 
+
+test('it does not overwrite existing data', function () {
+    $this->get('/string/testing');
+
+    $input = runPipeline(['stringParam' => 'existing', 'notNamedStringParam' => 'existing']);
+
+    expect($input->values->get('stringParam'))->toBe('existing')
+        ->and($input->values->get('notNamedStringParam'))->toBe('existing');
+});
+
 test('it populates int parameter value', function () {
     $this->get('/int/1234');
 
@@ -133,9 +143,9 @@ test('it does not override body', function () {
         ->and($input->values->get('notNamedStringParam'))->toBe('overridden');
 });
 
-function runPipeline(): BagInput
+function runPipeline($data = []): BagInput
 {
-    $input = new BagInput(BagWithRequestParams::class, collect());
+    $input = new BagInput(BagWithRequestParams::class, collect($data));
 
     $input = (new ProcessParameters())($input);
     $input = (new MapInput())($input);

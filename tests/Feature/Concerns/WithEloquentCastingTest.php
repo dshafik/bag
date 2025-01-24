@@ -11,7 +11,9 @@ use Tests\Fixtures\Collections\BagWithCollectionCollection;
 use Tests\Fixtures\Models\CastedModel;
 use Tests\Fixtures\Models\CastedModelLegacy;
 use Tests\Fixtures\Values\BagWithCollection;
+use Tests\Fixtures\Values\CastedModelValues;
 use Tests\Fixtures\Values\HiddenParametersBag;
+use Tests\Fixtures\Values\OptionalPropertiesBag;
 use Tests\Fixtures\Values\TestBag;
 
 covers(WithEloquentCasting::class, AsBag::class, AsBagCollection::class);
@@ -158,6 +160,74 @@ describe('Laravel 11+', function () {
             ->and($model->hidden_bag->age)->toBe(40)
             ->and($model->hidden_bag->email)->toBe('davey@php.net');
     });
+
+    test('it stores bags with toArray on Laravel 11+', function () {
+        $model = CastedModel::create(CastedModelValues::from(
+            [
+                'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net'])
+            ]
+        )->toArray());
+
+        expect($model->bag)->toBeInstanceOf(TestBag::class)
+            ->and($model->bag->name)->toBe('Davey Shafik')
+            ->and($model->bag->age)->toBe(40)
+            ->and($model->bag->email)->toBe('davey@php.net');
+
+        assertDatabaseHas('testing', ['bag' => '{"name":"Davey Shafik","age":40,"email":"davey@php.net"}']);
+    });
+
+    test('it stores nested bags with toArray on Laravel 11+', function () {
+        $model = CastedModel::create(CastedModelValues::from(
+            [
+                'optionalsBag' => OptionalPropertiesBag::from([
+                    'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net'])
+                ]),
+            ]
+        )->toArray());
+
+        expect($model->optionals_bag)
+            ->toBeInstanceOf(OptionalPropertiesBag::class)
+            ->and($model->optionals_bag->bag)->toBeInstanceOf(TestBag::class)
+            ->and($model->optionals_bag->bag->name)->toBe('Davey Shafik')
+            ->and($model->optionals_bag->bag->age)->toBe(40)
+            ->and($model->optionals_bag->bag->email)->toBe('davey@php.net');
+
+        assertDatabaseHas('testing', ['optionals_bag' => '{"name":null,"age":null,"email":null,"bag":{"name":"Davey Shafik","age":40,"email":"davey@php.net"}}']);
+    });
+
+    test('it retrieves bags stored with toArray on Laravel 11+', function () {
+        CastedModel::create(CastedModelValues::from(
+            [
+                'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net'])
+            ]
+        )->toArray());
+
+        $model = CastedModel::first();
+
+        expect($model->bag)->toBeInstanceOf(TestBag::class)
+            ->and($model->bag->name)->toBe('Davey Shafik')
+            ->and($model->bag->age)->toBe(40)
+            ->and($model->bag->email)->toBe('davey@php.net');
+    });
+
+    test('it retrieves nested bags stored with toArray on Laravel 11+', function () {
+        CastedModel::create(CastedModelValues::from(
+            [
+                'optionalsBag' => OptionalPropertiesBag::from([
+                    'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net'])
+                ]),
+            ]
+        )->toArray());
+
+        $model = CastedModel::first();
+
+        expect($model->optionals_bag)
+            ->toBeInstanceOf(OptionalPropertiesBag::class)
+            ->and($model->optionals_bag->bag)->toBeInstanceOf(TestBag::class)
+            ->and($model->optionals_bag->bag->name)->toBe('Davey Shafik')
+            ->and($model->optionals_bag->bag->age)->toBe(40)
+            ->and($model->optionals_bag->bag->email)->toBe('davey@php.net');
+    });
 })->skip(fn () => !version_compare(Application::VERSION, '11.0.0', '>='), 'Requires Laravel 11+');
 
 describe('Laravel 10+', function () {
@@ -301,5 +371,73 @@ describe('Laravel 10+', function () {
             ->and($model->hidden_bag->name)->toBe('Davey Shafik')
             ->and($model->hidden_bag->age)->toBe(40)
             ->and($model->hidden_bag->email)->toBe('davey@php.net');
+    });
+
+    test('it stores bags with toArray on Laravel 10+', function () {
+        $model = CastedModelLegacy::create(CastedModelValues::from(
+            [
+                'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net'])
+            ]
+        )->toArray());
+
+        expect($model->bag)->toBeInstanceOf(TestBag::class)
+            ->and($model->bag->name)->toBe('Davey Shafik')
+            ->and($model->bag->age)->toBe(40)
+            ->and($model->bag->email)->toBe('davey@php.net');
+
+        assertDatabaseHas('testing', ['bag' => '{"name":"Davey Shafik","age":40,"email":"davey@php.net"}']);
+    });
+
+    test('it stores nested bags with toArray on Laravel 10+', function () {
+        $model = CastedModelLegacy::create(CastedModelValues::from(
+            [
+                'optionalsBag' => OptionalPropertiesBag::from([
+                    'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net'])
+                ]),
+            ]
+        )->toArray());
+
+        expect($model->optionals_bag)
+            ->toBeInstanceOf(OptionalPropertiesBag::class)
+            ->and($model->optionals_bag->bag)->toBeInstanceOf(TestBag::class)
+            ->and($model->optionals_bag->bag->name)->toBe('Davey Shafik')
+            ->and($model->optionals_bag->bag->age)->toBe(40)
+            ->and($model->optionals_bag->bag->email)->toBe('davey@php.net');
+
+        assertDatabaseHas('testing', ['optionals_bag' => '{"name":null,"age":null,"email":null,"bag":{"name":"Davey Shafik","age":40,"email":"davey@php.net"}}']);
+    });
+
+    test('it retrieves bags stored with toArray on Laravel 10+', function () {
+        CastedModelLegacy::create(CastedModelValues::from(
+            [
+                'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net'])
+            ]
+        )->toArray());
+
+        $model = CastedModelLegacy::first();
+
+        expect($model->bag)->toBeInstanceOf(TestBag::class)
+            ->and($model->bag->name)->toBe('Davey Shafik')
+            ->and($model->bag->age)->toBe(40)
+            ->and($model->bag->email)->toBe('davey@php.net');
+    });
+
+    test('it retrieves nested bags stored with toArray on Laravel 10+', function () {
+        CastedModelLegacy::create(CastedModelValues::from(
+            [
+                'optionalsBag' => OptionalPropertiesBag::from([
+                    'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net'])
+                ]),
+            ]
+        )->toArray());
+
+        $model = CastedModelLegacy::first();
+
+        expect($model->optionals_bag)
+            ->toBeInstanceOf(OptionalPropertiesBag::class)
+            ->and($model->optionals_bag->bag)->toBeInstanceOf(TestBag::class)
+            ->and($model->optionals_bag->bag->name)->toBe('Davey Shafik')
+            ->and($model->optionals_bag->bag->age)->toBe(40)
+            ->and($model->optionals_bag->bag->email)->toBe('davey@php.net');
     });
 });

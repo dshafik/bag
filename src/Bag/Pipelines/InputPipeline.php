@@ -16,6 +16,7 @@ use Bag\Pipelines\Pipes\MapInput;
 use Bag\Pipelines\Pipes\MissingProperties;
 use Bag\Pipelines\Pipes\ProcessArguments;
 use Bag\Pipelines\Pipes\ProcessParameters;
+use Bag\Pipelines\Pipes\StripExtraParameters;
 use Bag\Pipelines\Pipes\Transform;
 use Bag\Pipelines\Pipes\Validate;
 use Bag\Pipelines\Values\BagInput;
@@ -41,6 +42,7 @@ class InputPipeline
             new LaravelRouteParameters(),
             new MissingProperties(),
             new ExtraParameters(),
+            new StripExtraParameters(),
             new Validate(),
             new CastInputValues(),
             new FillBag(),

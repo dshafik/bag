@@ -7,7 +7,6 @@ namespace Bag\Pipelines;
 use Bag\Bag;
 use Bag\Pipelines\Pipes\CastInputValues;
 use Bag\Pipelines\Pipes\ComputedValues;
-use Bag\Pipelines\Pipes\ExtraParameters;
 use Bag\Pipelines\Pipes\FillBag;
 use Bag\Pipelines\Pipes\FillNulls;
 use Bag\Pipelines\Pipes\IsVariadic;
@@ -16,6 +15,7 @@ use Bag\Pipelines\Pipes\MapInput;
 use Bag\Pipelines\Pipes\MissingProperties;
 use Bag\Pipelines\Pipes\ProcessArguments;
 use Bag\Pipelines\Pipes\ProcessParameters;
+use Bag\Pipelines\Pipes\StripExtraParameters;
 use Bag\Pipelines\Pipes\Transform;
 use Bag\Pipelines\Values\BagInput;
 use League\Pipeline\Pipeline;
@@ -39,7 +39,7 @@ class WithoutValidationPipeline
             new MapInput(),
             new LaravelRouteParameters(),
             new MissingProperties(),
-            new ExtraParameters(),
+            new StripExtraParameters(),
             new CastInputValues(),
             new FillBag(),
             new ComputedValues(),

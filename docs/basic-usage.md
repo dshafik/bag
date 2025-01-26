@@ -117,6 +117,32 @@ $value = MyValue::from([
 ])->toArray(); // ['name' => 'Davey Shafik', 'age' => null]
 ```
 
+## Stripping Extra Parameters
+
+By default, Bag will throw a `\Bag\Exceptions\AdditionalPropertiesException` exception if you try to instantiate a non-variadic Bag with extra parameters. You can disable this behavior by adding the `StripExtraParameters` attribute to the class:
+
+```php
+use Bag\Attributes\StripExtraParameters;
+use Bag\Bag;
+
+#[StripExtraParameters]
+readonly class MyValue extends Bag {
+    public function __construct(
+        public string $name,
+        public ?int $age,
+    ) {
+    }
+}
+
+$value = MyValue::from([
+    'name' => 'Davey Shafik',
+    'test' => true,
+])->toArray(); // [ 'name' => 'Davey Shafik', 'age' => null ] (note that 'test' is stripped)
+```
+
+> [!TIP]
+> You can also use the `StripExtraParameters` attribute when [injecting a Bag object into a controller](/laravel-controller-injection#avoiding-extra-parameters).
+
 ### Modifying a Value Object
 
 Value Objects are immutable, so you cannot change their properties directly. Instead, you can create a new instance with the updated values using the `Bag->with()` or `Bag->append()` methods:

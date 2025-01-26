@@ -13,6 +13,26 @@ class MyController extends Controller {
 }
 ```
 
+## Avoiding Extra Parameters
+
+By default, Bag will throw a `\Bag\Exceptions\AdditionalPropertiesException` exception if you try to instantiate a non-variadic Bag with extra parameters. You can disable this behavior by adding the `StripExtraParameters` attribute to the controller parameter:
+
+```php
+use App\Values\MyValue;
+use Bag\Attributes\StripExtraParameters;
+
+class MyController extends Controller {
+    public function store(
+        #[StripExtraParameters] MyValue $value
+    ) {
+        // After stripping extra parameters, $value is a validated MyValue object
+    }
+}
+```
+
+> [!TIP]
+> You can also add the `StripExtraParameters` attribute to [the Bag class itself](/basic-usage#stripping-extra-parameters). 
+
 ## Automatic Validation 
 
 When you type hint a `Bag` object in your controller method, Bag will automatically validate the request data and inject the `Bag` object into your controller method.
@@ -34,6 +54,9 @@ class MyController extends Controller {
     }
 }
 ```
+
+> [!NOTE]
+> This will also strip additional parameters from the request data that are not part of the `Bag` object.
 
 > [!TIP]
 > The `Bag->valid()` method will throw a `ValidationException` if the Bag object is not valid by default, you can pass in `false` to return null instead.

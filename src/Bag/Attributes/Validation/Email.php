@@ -18,8 +18,8 @@ class Email extends Rule implements AttributeInterface
         bool $filter = false,
         bool $filterUnicode = false
     ) {
-
         $validators = [];
+
         if ($rfc) {
             $validators[] = 'rfc';
         }

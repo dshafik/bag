@@ -103,6 +103,13 @@ dataset('rules', function () {
             ],
             'expectedRule' => 'email:rfc,strict,dns,spoof,filter,filterUnicode',
         ],
+        'EmailDefaultsToRfc' => [
+            'ruleAttribute' => Email::class,
+            'arguments' => [
+                false
+            ],
+            'expectedRule' => 'email:rfc',
+        ],
         Exists::class => [
             'ruleAttribute' => Exists::class,
             'arguments' => [

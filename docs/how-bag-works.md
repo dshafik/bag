@@ -31,8 +31,9 @@ start("Bag::from($data)")
 -- Finalized Input Values --> missing(Missing Parameters) --> missingError{Error?}
 missingError -- Yes --> errorMissingParameters(MissingPropertiesException)
 missingError -- No --> extra(Extra Parameters) --> extraError{Error?}
-extraError -- Yes --> errorExtraParameters(ExtraPropertiesException)
-extraError -- No --> validate(Validate)
+extraError -- Yes --> errorExtraParameters(AdditionalPropertiesException)
+extraError -- No --> strip(Strip Extra Parameters)
+--> validate(Validate)
 --> valid{Valid?}
 valid -- No --> errorValidation(ValidationException)
 valid -- Yes --> cast(Cast Input)
@@ -57,6 +58,7 @@ click mapInput "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes
 click laravelParams "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/LaravelRouteParameters.php" _blank
 click missing "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/MissingParameters.php" _blank
 click extra "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/ExtraParameters.php" _blank
+click strip "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/StripExtraParameters.php" _blank
 click validate "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/Validate.php" _blank
 click cast "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/CastInputValues.php" _blank
 click construct "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/FillBag.php" _blank
@@ -122,8 +124,9 @@ start("Bag::validate($data)")
 -- Finalized Input Values --> missing(Missing Parameters) --> missingError{Error?}
 missingError -- Yes --> errorMissingParameters(MissingPropertiesException)
 missingError -- No --> extra(Extra Parameters) --> extraError{Error?}
-extraError -- Yes --> errorExtraParameters(ExtraPropertiesException)
-extraError -- No --> validate(Validate)
+extraError -- Yes --> errorExtraParameters(AdditionalPropertiesException)
+extraError -- No --> strip(Strip Extra Parameters) 
+--> validate(Validate)
 --> valid{Valid?}
 valid -- No --> errorValidation(ValidationException)
 valid -- Yes --> success(return true)
@@ -141,6 +144,7 @@ click fillNulls "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipe
 click mapInput "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/MapInput.php" _blank
 click missing "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/MissingParameters.php" _blank
 click extra "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/ExtraParameters.php" _blank
+click strip "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/StripExtraParameters.php" _blank
 click validate "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/Validate.php" _blank
 ```
 
@@ -160,9 +164,7 @@ start("Bag::from($data)")
 --> laravelParams(Laravel Route Parameter Binding)
 -- Finalized Input Values --> missing(Missing Parameters) --> missingError{Error?}
 missingError -- Yes --> errorMissingParameters(MissingPropertiesException)
-missingError -- No --> extra(Extra Parameters) --> extraError{Error?}
-extraError -- Yes --> errorExtraParameters(ExtraPropertiesException)
-extraError -- No
+missingError -- No --> strip(Strip Extra Parameters)
 --> construct("new Bag(...)")
 --> computed(Verify Computed Values)
 --> initialized{Initialized?}
@@ -183,7 +185,7 @@ click fillNulls "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipe
 click mapInput "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/MapInput.php" _blank
 click laravelParams "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/LaravelRouteParameters.php" _blank
 click missing "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/MissingParameters.php" _blank
-click extra "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/ExtraParameters.php" _blank
+click strip "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/StripExtraParameters.php" _
 click validate "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/Validate.php" _blank
 click cast "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/CastInputValues.php" _blank
 click construct "https://github.com/dshafik/bag/blob/main/src/Bag/Pipelines/Pipes/FillBag.php" _blank

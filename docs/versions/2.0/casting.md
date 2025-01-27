@@ -58,7 +58,7 @@ dump($value->toArray()); // ['name' => 'Davey Shafik', 'age' => 40, 'dateOfBirth
 
 ### Available Casts
 
-Bag supports several [built-in casters](./casters), and you can create your own by implementing `CastsPropertySet` and/or `CastsPropertyGet`.
+Bag supports several [built-in casters][./casters], and you can create your own by implementing `CastsPropertySet` and/or `CastsPropertyGet`.
 
 
 ## Automatic Casting

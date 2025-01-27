@@ -10,6 +10,7 @@
     "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
-    "markdown-it-task-lists": "^2.1.1"
+    "markdown-it-task-lists": "^2.1.1",
+    "vitepress-versioning-plugin": "^1.3.0"
   }
 }

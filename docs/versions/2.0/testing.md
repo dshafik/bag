@@ -32,7 +32,7 @@ return [
 ```
 
 > [!TIP]
-> You can also generate factory classes automatically using the [`artisan make:bag`](./laravel-artisan-make-bag-command) command.
+> You can also generate factory classes automatically using the [`artisan make:bag`][./laravel-artisan-make-bag-command] command.
 
 ## Using a Factory
 

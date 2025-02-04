@@ -187,7 +187,7 @@ test('it rejects extra named params', function () {
     $value = TestBag::from(name: 'Davey Shafik', age: 40, email: 'davey@php.net', extra: 'extra', foo: 'bar');
 })->throws(
     AdditionalPropertiesException::class,
-    'Additional properties found: extra, foo'
+    'Additional properties found for bag (Tests\Fixtures\Values\TestBag): extra, foo'
 );
 
 test('it accepts ordered params', function () {

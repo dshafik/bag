@@ -58,7 +58,7 @@ test('it errors on non variadic with extra parameters', function () {
 
     $pipe = new ExtraParameters();
     $pipe($input);
-})->throws(AdditionalPropertiesException::class, 'Additional properties found: test');
+})->throws(AdditionalPropertiesException::class, 'Additional properties found for bag (Tests\Fixtures\Values\TestBag): test');
 
 
 test('it errors on non variadic with extra positional parameters', function () {

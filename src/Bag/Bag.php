@@ -71,4 +71,12 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable, Castable
     {
         return [];
     }
+
+    /**
+     * @param array<mixed> $array
+     */
+    public static function __set_state(array $array): static
+    {
+        return static::from($array);
+    }
 }

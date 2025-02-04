@@ -216,3 +216,27 @@ test('union types', function () {
         ->and($value->age)->toBe('40')
         ->and($value->email)->toBe(false);
 });
+
+test('it can be var_exported', function () {
+    $value = TestBag::from('Davey Shafik', 40, 'davey@php.net');
+
+    $exported = var_export($value, true);
+
+    expect($exported)->toBe('\Tests\Fixtures\Values\TestBag::__set_state(array(' . PHP_EOL . '   \'name\' => \'Davey Shafik\',' . PHP_EOL . '   \'age\' => 40,' . PHP_EOL . '   \'email\' => \'davey@php.net\',' . PHP_EOL . '))');
+
+    $imported = eval('return ' . $exported . ';');
+
+    expect($imported)->toBeInstanceOf(TestBag::class)
+    ->and($imported->toArray())->toBe($value->toArray());
+});
+
+test('it can be serialized and unserialized', function () {
+    $value = TestBag::from('Davey Shafik', 40, 'davey@php.net');
+
+    $serialized = serialize($value);
+    $unserialized = unserialize($serialized);
+
+    /** @var TestBag $unserialized */
+    expect($unserialized)->toBeInstanceOf(TestBag::class)
+    ->and($unserialized->toArray())->toBe($value->toArray());
+});

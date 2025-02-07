@@ -46,7 +46,7 @@ jobs:
         run: 'sed -i -e "s/\"laravel\/framework\": \".*\"/\"laravel\/framework\": \"${{ matrix.laravel-versions }}\"/g" composer.json'
 
       - name: Install dependencies with composer
-        run: composer update --no-ansi --no-interaction --no-progress ${{ matrix.ignore-platform-reqs }}
+        run: composer install --no-ansi --no-interaction --no-progress ${{ matrix.ignore-platform-reqs }}
 
       - name: Run tests with pest
         run: vendor/bin/pest --parallel --coverage --min=80

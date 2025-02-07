@@ -13,15 +13,15 @@ should feel very familiar to anyone who has used it — _however_, it has severa
 
 ## Common Features
 
-- [Value Casting](casting) (both in and out, although spatie/laravel-data calls outbound casting Transforming)
+- [Value Casting](./casting) (both in and out, although spatie/laravel-data calls outbound casting Transforming)
   - Including nested Bag objects
-- [Name Mapping](mapping) (both in and out) at the class and property level
-- [Validation](validation) (although spatie/laravel-data does not support all Laravel validation options easily)
-- [Collections](collections) of Value Objects[*](#collections)
-- [Object to Bag](object-to-bag) conversion
-- [Wrapping](wrapping) of output arrays/JSON
-- [Eloquent Casting](laravel-eloquent-casting)
-- [Laravel Controller Injection](laravel-controller-injection)
+- [Name Mapping](./mapping) (both in and out) at the class and property level
+- [Validation](./validation) (although spatie/laravel-data does not support all Laravel validation options easily)
+- [Collections](./collections) of Value Objects[*](#collections)
+- [Object to Bag](./object-to-bag) conversion
+- [Wrapping](./wrapping) of output arrays/JSON
+- [Eloquent Casting](./laravel-eloquent-casting)
+- [Laravel Controller Injection](./laravel-controller-injection)
 
 ## Immutability
 
@@ -31,18 +31,18 @@ spatie/laravel-data does not support immutable value objects, and as of PHP 8.3,
 
 ## Factory Support
 
-Bag [factories](testing) support most of the rich features and simple UX of Laravel Model Factories except for the `create()` method (as value objects do not feature persistence). 
+Bag [factories](./testing) support most of the rich features and simple UX of Laravel Model Factories except for the `create()` method (as value objects do not feature persistence). 
 This includes support for [factory states](https://laravel.com/docs/11.x/eloquent-factories#factory-states) and [sequences](https://laravel.com/docs/11.x/eloquent-factories#sequences).
 
 spatie/laravel-data v3 does not support factories, while v4 has [rudimentary support](https://spatie.be/docs/laravel-data/v4/as-a-data-transfer-object/factories).
 
 ## Variadic Support
 
-Bag supports the use of [Variadic](variadics) during value object creation. 
+Bag supports the use of [Variadic](./variadics) during value object creation. 
 
 ## Collections
 
-Bag uses Laravel Collections as the basis for its [Collection](collections) classes, and supports them wherever Collections are used, however `Bag\Collection` is an immutable-safe variant that we recommend
+Bag uses Laravel Collections as the basis for its [Collection](./collections) classes, and supports them wherever Collections are used, however `Bag\Collection` is an immutable-safe variant that we recommend
 using whenever possible. 
 
 spatie/laravel-data v3 uses a custom `DataCollection` class that is not based on Laravel collections and lacks many Collection features. v4 uses Laravel Collections, although it still 
@@ -50,16 +50,16 @@ has [custom collection classes](https://spatie.be/docs/laravel-data/v4/as-a-data
 
 ## Hidden Properties
 
-Bag supports [hiding properties](hidden) when transforming to an array and/or JSON.
+Bag supports [hiding properties](./hidden) when transforming to an array and/or JSON.
 
 ## Artisan `make:bag` Command
 
-Bag supports an [artisan command](laravel-artisan-make-bag-command) for creating new Bag classes, including support for creating factories and collections.
+Bag supports an [artisan command](./laravel-artisan-make-bag-command) for creating new Bag classes, including support for creating factories and collections.
 
 ## Other Differences
 
 In addition to the above, Bag has a few other minor differences:
 
-- [Casters](casting) apply to both incoming values and outgoing values, while spatie/laravel-data splits these into two difference concepts.
-- Input from complex values uses [Transformers](transformers), which are more explicit in Bag, while spatie/laravel-data uses a more implicit approach with magic methods e.g. `::fromModel()`
+- [Casters](./casting) apply to both incoming values and outgoing values, while spatie/laravel-data splits these into two difference concepts.
+- Input from complex values uses [Transformers](./transformers), which are more explicit in Bag, while spatie/laravel-data uses a more implicit approach with magic methods e.g. `::fromModel()`
 - Simpler attribute names: `Cast` vs `WithCast` and `WithTransformer`

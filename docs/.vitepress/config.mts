@@ -1,13 +1,59 @@
 import taskLists from "markdown-it-task-lists";
-import { withMermaid } from "vitepress-plugin-mermaid";
+import defineVersionedConfig from "vitepress-versioning-plugin";
+import {withMermaid} from "vitepress-plugin-mermaid";
 
 const BASE_PATH = '/'
 
 // https://vitepress.dev/reference/site-config
-export default withMermaid({
+const defaultSidebar = [
+  {
+    "text": "Get Started",
+    "items": [
+      { "text": "Installation", "link": "./install" },
+      { "text": "Basic Usage", "link": "./basic-usage" }
+    ]
+  },
+  {
+    "text": "Using Bag",
+    "items": [
+      { "text": "Collections", "link": "./collections" },
+      { "text": "Casting Values", "link": "./casting" },
+      { "text": "Mapping", "link": "./mapping" },
+      { "text": "Variadics", "link": "./variadics" },
+      { "text": "Hiding Properties", "link": "./hidden" },
+      { "text": "Transformers", "link": "./transformers" },
+      { "text": "Validation", "link": "./validation" },
+      { "text": "Computed Properties", "link": "./computed-properties" },
+      { "text": "Output", "link": "./output" },
+      { "text": "Wrapping", "link": "./wrapping" },
+      { "text": "Factories / Testing", "link": "./testing" }
+    ]
+  },
+  {
+    "text": "Laravel Integration",
+    "items": [
+      { "text": "Controller Injection", "link": "./laravel-controller-injection" },
+      { "text": "Route Parameter Binding", "link": "./laravel-route-parameter-binding" },
+      { "text": "Eloquent Casting", "link": "./laravel-eloquent-casting" },
+      { "text": "Generating Bag Classes", "link": "./laravel-artisan-make-bag-command" }
+    ]
+  },
+  {
+    "text": "Other",
+    "items": [
+      { "text": "Creating Bags from Objects", "link": "./object-to-bag" },
+      { "text": "Why Bag?", "link": "./why" },
+      { "text": "How Bag Works", "link": "./how-bag-works" },
+    ]
+  }
+];
+export default withMermaid(defineVersionedConfig({
   title: "Bag",
   description: "Immutable Value Objects for PHP 8.3+",
   base: BASE_PATH,
+  versioning: {
+    latestVersion: '2.1',
+  },
   head: [
     [
       'meta',
@@ -41,56 +87,45 @@ export default withMermaid({
     },
     search: {
       provider: 'local',
+      options: {
+        locales: {
+          "root": {
+             translations: {
+               button: {
+                 buttonText: "Search latest version…"
+               }
+             }
+          }
+        },
+        async _render(src, env, md) {
+          const html = md.render(src, env)
+          if (env.frontmatter?.search === false) return ''
+          if (env.relativePath.match(/\d+\.(\d+|x)/) !== null) return ''
+          return html
+        }
+      },
     },
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Documentation', link: '/install' }
-    ],
-
-    sidebar: [
+      { text: 'Home', link: './' },
+      { text: 'Documentation', link: './install' },
       {
-        text: 'Get Started',
-        items: [
-          { text: 'Installation', link: '/install' },
-          { text: 'Basic Usage', link: '/basic-usage' },
-        ]
-      },
-      {
-        text: 'Using Bag',
-        items: [
-          { text: 'Collections', link: '/collections' },
-          { text: 'Casting Values', link: '/casting' },
-          { text: 'Mapping', link: '/mapping' },
-          { text: 'Variadics', link: '/variadics' },
-          { text: 'Hiding Properties', link: '/hidden' },
-          { text: 'Transformers', link: '/transformers' },
-          { text: 'Validation', link: '/validation' },
-          { text: 'Computed Properties', link: '/computed-properties' },
-          { text: 'Output', link: '/output' },
-          { text: 'Wrapping', link: '/wrapping' },
-          { text: 'Factories / Testing', link: '/testing' },
-        ]
-      },
-      {
-        text: 'Laravel Integration',
-        items: [
-          { text: 'Controller Injection', link: '/laravel-controller-injection' },
-          { text: 'Route Parameter Binding', link: '/laravel-route-parameter-binding' },
-          { text: 'Eloquent Casting', link: '/laravel-eloquent-casting' },
-          { text: 'Generating Bag Classes', link: '/laravel-artisan-make-bag-command' },
-        ]
-      },
-      {
-        text: 'Other',
-        items: [
-          { text: 'Creating Bags from Objects', link: '/object-to-bag' },
-          { text: 'Why Bag?', link: '/why' },
-          { text: 'How Bag Works', link: '/how-bag-works' },
-          { text: 'Roadmap', link: '/roadmap' },
-        ]
+        component: 'VersionSwitcher',
       }
     ],
+
+    sidebar: {
+      "/": [
+          ...defaultSidebar,
+        {"text": "What's New", "link": "./whats-new"},
+        {"text": "Upgrading to Bag 2", "link": "./upgrading"}
+      ],
+      "/2.0/": [
+          ...defaultSidebar,
+        {"text": "Upgrading to Bag 2", "link": "./upgrading"}
+      ],
+      "/1.x/": defaultSidebar,
+    },
 
     footer: {
       message: "Made with 🦁💖🏳️‍🌈 by <a href=\"https://www.daveyshafik.com\">Davey Shafik</a>.",
@@ -99,7 +134,9 @@ export default withMermaid({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/dshafik/bag' }
-    ]
+    ],
+
+    versionSwitcher: false,
   },
   markdown: {
     theme: {
@@ -111,4 +148,4 @@ export default withMermaid({
         md.use(taskLists)
     }
   },
-})
+}, __dirname))

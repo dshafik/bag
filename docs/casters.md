@@ -4,7 +4,7 @@ The following built-in explicit casters are available:
 
 ## Bag Collections
 
-`\Bag\Casts\CollectionOf` casts an array to a [Collection](/collections) of Bag objects.
+`\Bag\Casts\CollectionOf` casts an array to a [Collection](./collections) of Bag objects.
 
 ```php
 use Bag\Bag;

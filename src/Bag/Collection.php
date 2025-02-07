@@ -9,6 +9,7 @@ use Bag\Exceptions\ImmutableCollectionException;
 use Bag\Pipelines\OutputCollectionPipeline;
 use Bag\Pipelines\Values\CollectionOutput;
 use Illuminate\Support\Collection as LaravelCollection;
+use InvalidArgumentException;
 use Override;
 
 /**
@@ -200,5 +201,18 @@ class Collection extends LaravelCollection
         $output = new CollectionOutput($this, OutputType::UNWRAPPED);
 
         return OutputCollectionPipeline::process($output)->toArray();
+    }
+
+    /**
+     * @param array{items: array<mixed>} $array
+     */
+    public static function __set_state(array $array): object
+    {
+        if (!isset($array['items'])) {
+            throw new InvalidArgumentException('Invalid state array for ' . static::class);
+        }
+
+        // @phpstan-ignore-next-line new.static
+        return new static($array['items']);
     }
 }

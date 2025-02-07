@@ -32,6 +32,6 @@ class AdditionalPropertiesException extends Exception
                 );
             });
 
-        parent::__construct('Additional properties found: '.$extraProperties->implode(', '));
+        parent::__construct(sprintf('Additional properties found for bag (%s): %s', $bagClass, $extraProperties->implode(', ')));
     }
 }

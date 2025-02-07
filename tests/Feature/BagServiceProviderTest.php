@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Bag\Attributes\StripExtraParameters;
 use Bag\Attributes\WithoutValidation;
 use Bag\BagServiceProvider;
 use Illuminate\Http\Request;
@@ -98,4 +99,49 @@ test('it resolves without validation using class method route', function () {
         ->toBeInstanceOf(OptionalValidateUsingAttributesAndRulesMethodBag::class)
         ->and(\Test::$resolved->toArray())
         ->toBe(['name' => 'Davey Shafik', 'age' => null]);
+});
+
+test('it resolves and strips extra parameters using closure route', function () {
+    $resolved = null;
+
+    Route::post('/test', function (
+        #[StripExtraParameters]
+        TestBag $bag
+    ) use (&$resolved) {
+        $resolved = $bag;
+
+        return $bag;
+    });
+
+    $this->post('/test', ['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net', 'test' => true]);
+
+    expect($resolved)
+        ->toBeInstanceOf(TestBag::class)
+        ->and($resolved->toArray())
+        ->toBe(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']);
+});
+
+test('it resolves and strips extra paramaters using class method route', function () {
+    class Test2
+    {
+        public static TestBag $resolved;
+
+        public function test(
+            #[StripExtraParameters]
+            TestBag $bag
+        ) {
+            static::$resolved = $bag;
+
+            return $bag;
+        }
+    }
+
+    Route::post('/test2', [\Test2::class, 'test']);
+
+    $this->post('/test2', ['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net', 'test' => true]);
+
+    expect(\Test2::$resolved)
+        ->toBeInstanceOf(TestBag::class)
+        ->and(\Test2::$resolved->toArray())
+        ->toBe(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']);
 });

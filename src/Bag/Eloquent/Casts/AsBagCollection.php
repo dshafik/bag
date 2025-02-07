@@ -43,7 +43,21 @@ class AsBagCollection implements CastsAttributes
             return null;
         }
 
-        return [$key => json_encode(collect($value)->map(fn (Bag $bag) => $bag->getRaw())->all())];
+        return [
+            $key => json_encode(
+                collect($value)
+                ->map(
+                    function (Bag|array $bag) {
+                        if (is_array($bag)) {
+                            return $bag;
+                        }
+
+                        return $bag->getRaw();
+                    }
+                )
+                ->all()
+            )
+        ];
     }
 
     /**

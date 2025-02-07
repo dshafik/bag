@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bag;
 
+use Bag\Attributes\StripExtraParameters;
 use Bag\Attributes\WithoutValidation;
 use Bag\Console\Commands\MakeBagCommand;
 use Bag\Internal\Cache;
@@ -55,6 +56,19 @@ class BagServiceProvider extends ServiceProvider
                             return false;
                         })->isNotEmpty()) {
                             return $class::withoutValidation($request->all());
+                        }
+
+                        if (Reflection::getParameters($action)->filter(function ($parameter) use ($class) {
+                            /** @var ReflectionParameter $parameter */
+                            /** @var ReflectionNamedType|null $type */
+                            $type = $parameter->getType();
+                            if ($type?->getName() === $class) {
+                                return Reflection::getAttribute($parameter, StripExtraParameters::class) !== null;
+                            }
+
+                            return false;
+                        })->isNotEmpty()) {
+                            return $class::from($class::withoutValidation($request->all())->getRaw());
                         }
                     }
 

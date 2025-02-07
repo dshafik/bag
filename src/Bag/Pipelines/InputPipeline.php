@@ -49,6 +49,7 @@ class InputPipeline
             new ComputedValues(),
         );
 
+        // @phpstan-ignore-next-line property.nonObject
         return $pipeline->process($input)->bag;
     }
 }

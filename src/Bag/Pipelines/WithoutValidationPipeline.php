@@ -45,6 +45,7 @@ class WithoutValidationPipeline
             new ComputedValues(),
         );
 
+        // @phpstan-ignore-next-line property.nonObject
         return $pipeline->process($input)->bag;
     }
 }

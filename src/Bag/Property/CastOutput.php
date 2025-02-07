@@ -9,7 +9,7 @@ use Bag\Attributes\CastOutput as CastOutputAttribute;
 use Bag\Casts\CastsPropertyGet;
 use Bag\Internal\Reflection;
 use Bag\Internal\Util;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Collection as LaravelCollection;
 
 class CastOutput
 {
@@ -28,7 +28,7 @@ class CastOutput
         if ($castAttribute !== null) {
             $cast = Reflection::getAttributeInstance($castAttribute);
             $args = Reflection::getAttributeArguments($castAttribute);
-            $casterClass = $args[\array_key_first($args)];
+            $casterClass = $args->first();
             if ((is_string($casterClass) || is_object($casterClass)) && !\is_a($casterClass, CastsPropertyGet::class, true)) {
                 $cast = null;
             }
@@ -40,16 +40,17 @@ class CastOutput
         }
 
         $name = $property->getName();
-        $type = Util::getPropertyType($property);
+        /** @var string $type */
+        $type = Util::getPropertyTypes($property)->first();
 
         /** @var CastOutputAttribute|null $cast */
-        return new self(propertyType: $type->getName(), name: $name, caster: $cast);
+        return new self(propertyType: $type, name: $name, caster: $cast);
     }
 
     /**
-     * @param Collection<array-key,mixed> $properties
+     * @param LaravelCollection<array-key,mixed> $properties
      */
-    public function __invoke(Collection $properties): mixed
+    public function __invoke(LaravelCollection $properties): mixed
     {
         if ($this->caster === null) {
             return $properties->get($this->name);

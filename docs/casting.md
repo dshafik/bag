@@ -9,7 +9,7 @@ or simply transform it in some way. For example, you can cast a number to a `\Br
 
 Casts can act on both input and output, depending on if they implement `CastsPropertySet` or `CastsPropertyGet`.
 
-Output casts are applied when calling `toArray()`, or when serializing to JSON.
+Output casts are applied when calling `toArray()`, `toCollection()`, or when serializing to JSON.
 
 The following annotations are available:
 
@@ -50,7 +50,7 @@ When you access the `dateOfBirth` property directly, it will be a `\Carbon\Carbo
 dump($value->dateOfBirth); // CarbonImmutable
 ```
 
-However, if you call `toArray()` then it will be formatted using the format you specified:
+However, if you call `toArray()` or `toCollection()` then it will be formatted using the format you specified:
 
 ```php
 dump($value->toArray()); // ['name' => 'Davey Shafik', 'age' => 40, 'dateOfBirth' => '1984-05-31']
@@ -58,7 +58,7 @@ dump($value->toArray()); // ['name' => 'Davey Shafik', 'age' => 40, 'dateOfBirth
 
 ### Available Casts
 
-Bag supports several [built-in casters](/casters), and you can create your own by implementing `CastsPropertySet` and/or `CastsPropertyGet`.
+Bag supports several [built-in casters](./casters), and you can create your own by implementing `CastsPropertySet` and/or `CastsPropertyGet`.
 
 
 ## Automatic Casting

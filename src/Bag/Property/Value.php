@@ -5,24 +5,26 @@ declare(strict_types=1);
 namespace Bag\Property;
 
 use Bag\Bag;
+use Bag\Collection;
 use Bag\Internal\Util;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Collection as LaravelCollection;
 use ReflectionClass;
-use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionProperty;
 
 class Value
 {
     /**
-     * @param ReflectionClass<Bag|Collection<array-key, mixed>> $bag
+     * @param ReflectionClass<Bag|LaravelCollection<array-key, mixed>> $bag
+     * @param Collection<string> $type
      */
     public function __construct(
         public ReflectionClass $bag,
         public ReflectionProperty|ReflectionParameter $property,
-        public ReflectionNamedType $type,
+        public Collection $type,
         public string $name,
         public bool $required,
+        public bool $allowsNull,
         public MapCollection $maps,
         public CastInput $inputCast,
         public CastOutput $outputCast,
@@ -32,7 +34,7 @@ class Value
     }
 
     /**
-     * @param ReflectionClass<Bag|Collection<array-key, mixed>> $bag
+     * @param ReflectionClass<Bag|LaravelCollection<array-key, mixed>> $bag
      */
     public static function create(
         ReflectionClass $bag,
@@ -40,7 +42,7 @@ class Value
     ): self {
         $name = $property->getName();
 
-        $type = Util::getPropertyType($property);
+        $type = Util::getPropertyTypes($property);
 
         return new self(
             bag: $bag,
@@ -48,6 +50,7 @@ class Value
             type: $type,
             name: $name,
             required: self::isRequired($property),
+            allowsNull: self::allowsNull($property),
             maps: MapCollection::create(bagClass: $bag, property: $property),
             inputCast: CastInput::create(property: $property),
             outputCast: CastOutput::create(property: $property),
@@ -77,5 +80,14 @@ class Value
         }
 
         return false;
+    }
+
+    protected static function allowsNull(ReflectionParameter|ReflectionProperty $property): bool
+    {
+        if ($property instanceof ReflectionParameter) {
+            return $property->allowsNull();
+        }
+
+        return $property->getType()?->allowsNull() ?? true;
     }
 }

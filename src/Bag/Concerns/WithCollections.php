@@ -28,4 +28,9 @@ trait WithCollections
 
         return ($collection)::make($values)->map(fn ($value): Bag => $value instanceof Bag ? $value : static::from($value));
     }
+
+    public function toCollection(): Collection
+    {
+        return Collection::make($this->toArray());
+    }
 }

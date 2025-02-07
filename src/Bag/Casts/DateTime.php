@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Bag\Casts;
 
+use Bag\Collection;
 use Carbon\Exceptions\InvalidFormatException;
 use DateMalformedStringException;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Collection as LaravelCollection;
 use Override;
+use ReflectionNamedType;
 
 /**
  * @template T of DateTimeInterface
@@ -25,9 +27,9 @@ class DateTime implements CastsPropertyGet, CastsPropertySet
 
     #[Override]
     /**
-     * @param Collection<array-key,T> $properties
+     * @param LaravelCollection<array-key,T> $properties
      */
-    public function get(string $propertyName, Collection $properties): mixed
+    public function get(string $propertyName, LaravelCollection $properties): mixed
     {
         /** @var T $dateTime */
         $dateTime = $properties->get($propertyName);
@@ -36,16 +38,18 @@ class DateTime implements CastsPropertyGet, CastsPropertySet
     }
 
     /**
-     * @param class-string<T> $propertyType
-     * @param Collection<array-key,mixed> $properties
+     * @param Collection<ReflectionNamedType> $propertyTypes
+     * @param LaravelCollection<array-key,mixed> $properties
      * @return T
      * @throws DateMalformedStringException
      */
     #[Override]
-    public function set(string $propertyType, string $propertyName, Collection $properties): mixed
+    public function set(Collection $propertyTypes, string $propertyName, LaravelCollection $properties): mixed
     {
         if ($this->dateTimeClass === null) {
-            $this->dateTimeClass = $propertyType;
+            /** @var class-string<T> $type */
+            $type = $propertyTypes->first();
+            $this->dateTimeClass = $type;
         }
 
         $value = $properties->get($propertyName);

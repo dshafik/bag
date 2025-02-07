@@ -125,12 +125,12 @@ class MyValue extends Bag {
 
 ## When Mapping Applies
 
-Input mapping is applied when calling `Bag::from()`. You can use either the original property name _or_ the mapped name when creating a Bag.
+Input mapping is applied when calling `Bag::from()` or `Bag::withoutValidation()`. You can use either the original property name _or_ the mapped name when creating a Bag.
 
 > [!TIP]
-> [Validation](validation) is applied to the original property name, not the mapped name.
+> [Validation](./validation) is applied to the original property name, not the mapped name.
 
-Output mapping is applied when calling `$Bag->toArray()` or `$Bag->toJson()` (or when using `json_encode()`).
+Output mapping is applied when calling `$Bag->toArray()`, `$Bag->toCollection()`, or `$Bag->toJson()` (or when using `json_encode()`).
 
 ## Mapping Hierarchy
 

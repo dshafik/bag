@@ -44,6 +44,10 @@ class AsBag implements CastsAttributes
             return null;
         }
 
+        if (is_array($value)) {
+            return [$key => json_encode($value)];
+        }
+
         return [$key => json_encode($value->getRaw())];
     }
 }

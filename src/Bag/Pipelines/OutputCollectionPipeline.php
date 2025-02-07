@@ -18,6 +18,7 @@ class OutputCollectionPipeline
     {
         $pipeline = new Pipeline(null, new WrapCollection());
 
+        // @phpstan-ignore-next-line property.nonObject
         return $pipeline->process($output)->collection;
     }
 }

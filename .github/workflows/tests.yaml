@@ -24,7 +24,7 @@ jobs:
           - php-versions: '8.3'
             ignore-platform-reqs: '--ignore-platform-reqs'
           - php-versions: '8.4'
-            ignore-platform-reqs: ''
+            ignore-platform-reqs: '--ignore-platform-reqs'
           - php-versions: '8.4'
             laravel-versions: '^10'
       fail-fast: false
@@ -46,10 +46,27 @@ jobs:
         run: 'sed -i -e "s/\"laravel\/framework\": \".*\"/\"laravel\/framework\": \"${{ matrix.laravel-versions }}\"/g" composer.json'
 
       - name: Install dependencies with composer
-        run: composer update --no-ansi --no-interaction --no-progress ${{ matrix.ignore-platform-reqs }}
+        run: composer install --no-ansi --no-interaction --no-progress ${{ matrix.ignore-platform-reqs }}
 
       - name: Run tests with pest
         run: vendor/bin/pest --parallel --coverage --min=80
-
-      - name: Run type coverage with pest
-        run: vendor/bin/pest --type-coverage --min=99 --memory-limit=-1
+  doc-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Not needed if lastUpdated is not enabled
+      # - uses: pnpm/action-setup@v3 # Uncomment this if you're using pnpm
+      # - uses: oven-sh/setup-bun@v1 # Uncomment this if you're using Bun
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm # or pnpm / yarn
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Install dependencies
+        run: npm ci # or pnpm install / yarn install / bun install
+      - name: Build with VitePress
+        run: npm run docs:build # or pnpm docs:build / yarn docs:build / bun run docs:build

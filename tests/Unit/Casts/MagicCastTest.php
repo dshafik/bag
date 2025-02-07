@@ -77,38 +77,38 @@ dataset('nullable', [
 
 test('it casts int', function ($propertyType, $propertyName, $properties, $expected) {
     $cast = new MagicCast();
-    $result = $cast->set($propertyType, $propertyName, $properties);
+    $result = $cast->set(Collection::wrap($propertyType), $propertyName, $properties);
     expect($result)->toBe($expected);
 })->with('int');
 
 test('it casts float', function ($propertyType, $propertyName, $properties, $expected) {
     $cast = new MagicCast();
-    $result = $cast->set($propertyType, $propertyName, $properties);
+    $result = $cast->set(Collection::wrap($propertyType), $propertyName, $properties);
     expect($result)->toBe($expected);
 })->with('float');
 
 test('it casts boolean', function ($propertyType, $propertyName, $properties, $expected) {
     $cast = new MagicCast();
-    $result = $cast->set($propertyType, $propertyName, $properties);
+    $result = $cast->set(Collection::wrap($propertyType), $propertyName, $properties);
     expect($result)->toBe($expected);
 })->with('bool');
 
 test('it casts string', function ($propertyType, $propertyName, $properties, $expected) {
     $cast = new MagicCast();
-    $result = $cast->set($propertyType, $propertyName, $properties);
+    $result = $cast->set(Collection::wrap($propertyType), $propertyName, $properties);
     expect($result)->toBe($expected);
 })->with('string');
 
 test('it casts date times', function ($propertyType, $propertyName, $properties, $expectedClass, $expectedFormat) {
     $cast = new MagicCast();
-    $result = $cast->set($propertyType, $propertyName, $properties);
+    $result = $cast->set(Collection::wrap($propertyType), $propertyName, $properties);
     expect($result)->toBeInstanceOf($expectedClass)
         ->and($result->format('Y-m-d H:i:s'))->toBe($expectedFormat);
 })->with('date_times');
 
 test('it casts bags', function ($propertyType, $propertyName, $properties, $expectedClass, $expectedName, $expectedAge, $expectedEmail) {
     $cast = new MagicCast();
-    $result = $cast->set($propertyType, $propertyName, $properties);
+    $result = $cast->set(Collection::wrap($propertyType), $propertyName, $properties);
     expect($result)->toBeInstanceOf($expectedClass)
         ->and($result->name)->toBe($expectedName)
         ->and($result->age)->toBe($expectedAge)
@@ -117,7 +117,8 @@ test('it casts bags', function ($propertyType, $propertyName, $properties, $expe
 
 test('it casts collections', function ($propertyType, $propertyName, $properties, $expectedClass, $expectedName, $expectedAge, $expectedEmail) {
     $cast = new MagicCast();
-    $result = $cast->set($propertyType, $propertyName, $properties);
+
+    $result = $cast->set(Collection::wrap($propertyType), $propertyName, $properties);
     expect($result)->toBeInstanceOf($expectedClass)
         ->and($result['name'])->toBe($expectedName)
         ->and($result['age'])->toBe($expectedAge)
@@ -126,19 +127,19 @@ test('it casts collections', function ($propertyType, $propertyName, $properties
 
 test('it casts unit enum', function ($propertyType, $propertyName, $properties, $expected) {
     $cast = new MagicCast();
-    $result = $cast->set($propertyType, $propertyName, $properties);
+    $result = $cast->set(Collection::wrap($propertyType), $propertyName, $properties);
     expect($result)->toBe($expected);
 })->with('unit_enum');
 
 test('it casts backed enum', function ($propertyType, $propertyName, $properties, $expected) {
     $cast = new MagicCast();
-    $result = $cast->set($propertyType, $propertyName, $properties);
+    $result = $cast->set(Collection::wrap($propertyType), $propertyName, $properties);
     expect($result)->toBe($expected);
 })->with('backed_enum');
 
 test('it casts to null if value is null', function ($propertyType) {
     $cast = new MagicCast();
-    $result = $cast->set($propertyType, 'test', collect(['test' => null]));
+    $result = $cast->set(Collection::wrap($propertyType), 'test', collect(['test' => null]));
 
     expect($result)->toBeNull();
 })->with('nullable');

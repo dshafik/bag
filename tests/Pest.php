@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Bag\Internal\Cache;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Tests\TestCase;
 
 /*
@@ -17,7 +18,8 @@ use Tests\TestCase;
 |
 */
 
-uses(TestCase::class, LazilyRefreshDatabase::class)->beforeEach(fn () => Cache::reset())->in(__DIR__);
+uses(TestCase::class, LazilyRefreshDatabase::class)->beforeEach(fn () => Cache::reset())->in('Feature', 'Unit');
+uses(PHPUnitTestCase::class)->beforeEach(fn () => Cache::reset())->in('Standalone');
 
 /*
 |--------------------------------------------------------------------------

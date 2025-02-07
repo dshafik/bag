@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Bag\Casts;
 
 use Bag\Bag;
+use Bag\Collection;
 use Bag\Exceptions\BagNotFoundException;
 use Bag\Exceptions\InvalidBag;
 use Bag\Exceptions\InvalidCollection;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection as LaravelCollection;
 use Override;
+use ReflectionNamedType;
 
 class CollectionOf implements CastsPropertySet
 {
@@ -29,12 +31,15 @@ class CollectionOf implements CastsPropertySet
     }
 
     /**
-     * @param class-string<LaravelCollection<array-key,mixed>> $propertyType
+     * @param Collection<ReflectionNamedType> $propertyTypes
      * @param LaravelCollection<array-key,array<array-key, Arrayable<(int|string), mixed>|iterable<(int|string), mixed>|null>> $properties
      */
     #[Override]
-    public function set(string $propertyType, string $propertyName, LaravelCollection $properties): mixed
+    public function set(Collection $propertyTypes, string $propertyName, LaravelCollection $properties): mixed
     {
+        /** @var class-string<LaravelCollection<array-key,mixed>> $propertyType */
+        $propertyType = $propertyTypes->first();
+
         if ($propertyType !== LaravelCollection::class && ! \is_subclass_of($propertyType, LaravelCollection::class, true)) {
             throw new InvalidCollection(sprintf('The property "%s" must be a subclass of %s', $propertyName, LaravelCollection::class));
         }

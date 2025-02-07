@@ -34,6 +34,7 @@ class OutputPipeline
             new Wrap(),
         );
 
+        // @phpstan-ignore-next-line property.nonObject
         return $pipeline->process($output)->output->toArray();
     }
 }

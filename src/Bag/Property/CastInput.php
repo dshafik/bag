@@ -8,14 +8,15 @@ use Bag\Attributes\Cast;
 use Bag\Attributes\CastInput as CastInputAttribute;
 use Bag\Casts\CastsPropertySet;
 use Bag\Casts\MagicCast;
+use Bag\Collection;
 use Bag\Internal\Reflection;
 use Bag\Internal\Util;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Collection as LaravelCollection;
 
 class CastInput
 {
     public function __construct(
-        protected string $propertyType,
+        protected Collection $propertyTypes,
         protected string $name,
         protected Cast|CastInputAttribute $caster
     ) {
@@ -29,7 +30,7 @@ class CastInput
         if ($castAttribute !== null) {
             $cast = Reflection::getAttributeInstance($castAttribute);
             $args = Reflection::getAttributeArguments($castAttribute);
-            $casterClass = $args[\array_key_first($args)];
+            $casterClass = $args->first();
             if ((is_string($casterClass) || is_object($casterClass)) && !\is_a($casterClass, CastsPropertySet::class, true)) {
                 $cast = null;
             }
@@ -40,16 +41,16 @@ class CastInput
             $cast = Reflection::getAttributeInstance($castAttribute);
         }
 
-        $type = Util::getPropertyType($property);
+        $types = Collection::wrap(Util::getPropertyTypes($property));
 
-        return new self(propertyType: $type->getName(), name: $property->name, caster: $cast ?? new CastInputAttribute(MagicCast::class));
+        return new self(propertyTypes: $types, name: $property->name, caster: $cast ?? new CastInputAttribute(MagicCast::class));
     }
 
     /**
-     * @param Collection<array-key, mixed> $properties
+     * @param LaravelCollection<array-key, mixed> $properties
      */
-    public function __invoke(Collection $properties): mixed
+    public function __invoke(LaravelCollection $properties): mixed
     {
-        return $this->caster->cast(propertyType: $this->propertyType, propertyName: $this->name, properties: $properties);
+        return $this->caster->cast(propertyType: $this->propertyTypes, propertyName: $this->name, properties: $properties);
     }
 }

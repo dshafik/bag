@@ -118,3 +118,26 @@ test('it returns unwrapped', function () {
     $collection = WrappedCollection::make(['foo' => 'bar']);
     expect($collection->unwrapped())->toBe(['foo' => 'bar']);
 });
+
+test('it can be var_exported', function () {
+    $collection = Collection::make(['foo' => 'bar']);
+
+    $exported = var_export($collection, true);
+
+    expect($exported)->toBe(
+        <<<EOS
+        \Bag\Collection::__set_state(array(
+           'items' => 
+          array (
+            'foo' => 'bar',
+          ),
+           'escapeWhenCastingToString' => false,
+        ))
+        EOS
+    );
+
+    $imported = eval('return ' . $exported . ';');
+
+    expect($imported)->toBeInstanceOf(Collection::class)
+        ->and($imported->toArray())->toBe($collection->toArray());
+});

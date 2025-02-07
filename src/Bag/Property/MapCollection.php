@@ -42,8 +42,14 @@ class MapCollection extends Collection
         $outputMaps = $outputMaps->merge($propertyMapNameAttributes)->merge($propertyMapOutputNameAttributes);
 
         $aliases = [
-            'input' => $inputMaps->map(fn (ReflectionAttribute $attribute) => self::getMap($attribute, $name)['input']),
-            'output' => $outputMaps->map(fn (ReflectionAttribute $attribute) => self::getMap($attribute, $name)['output'])->last(),
+            'input' => $inputMaps->map(function ($attribute) use ($name) {
+                /** @var ReflectionAttribute<MapName|MapInputName> $attribute */
+                return self::getMap($attribute, $name)['input'];
+            }),
+            'output' => $outputMaps->map(function ($attribute) use ($name) {
+                /** @var ReflectionAttribute<MapName|MapOutputName> $attribute */
+                return self::getMap($attribute, $name)['output'];
+            })->last(),
         ];
 
         return new self($aliases);

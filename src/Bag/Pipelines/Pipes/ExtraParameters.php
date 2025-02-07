@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Bag\Pipelines\Pipes;
 
+use Bag\Attributes\StripExtraParameters;
 use Bag\Bag;
 use Bag\Exceptions\AdditionalPropertiesException;
+use Bag\Internal\Reflection;
 use Bag\Pipelines\Values\BagInput;
 
 readonly class ExtraParameters
@@ -18,6 +20,10 @@ readonly class ExtraParameters
     public function __invoke(BagInput $input): BagInput
     {
         if ($input->variadic) {
+            return $input;
+        }
+
+        if ((Reflection::getAttribute(Reflection::getClass($input->bagClassname), StripExtraParameters::class) ?? false) !== false) {
             return $input;
         }
 

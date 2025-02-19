@@ -6,34 +6,37 @@ on:
     branches:
       - main
     tags-ignore:
-      - '*'
+      - *
 
 jobs:
   tests:
     name: Tests
 
-    runs-on: 'ubuntu-latest'
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        php-versions: [ '8.2', '8.3', '8.4' ]
-        ignore-platform-reqs: [ '--ignore-platform-reqs', '' ]
-        laravel-versions: [ '^10', '^11' ]
+        php-versions: ['8.2', '8.3', '8.4']
+        ignore-platform-reqs: ['--ignore-platform-reqs', '']
+        laravel-versions: ['12.0', ^10, ^11]
         exclude:
           - php-versions: '8.2'
-            ignore-platform-reqs: '--ignore-platform-reqs'
+            ignore-platform-reqs: --ignore-platform-reqs
           - php-versions: '8.3'
-            ignore-platform-reqs: '--ignore-platform-reqs'
+            ignore-platform-reqs: --ignore-platform-reqs
           - php-versions: '8.4'
-            ignore-platform-reqs: '--ignore-platform-reqs'
+            ignore-platform-reqs: --ignore-platform-reqs
           - php-versions: '8.4'
-            laravel-versions: '^10'
+            laravel-versions: ^10
       fail-fast: false
+
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
 
       - name: Setup PHP with Xdebug
         uses: shivammathur/setup-php@v2
@@ -42,31 +45,44 @@ jobs:
           coverage: xdebug
           extensions: mbstring, intl, fileinfo, sqlite3, pdo_sqlite
 
+
       - name: Set Laravel Version
-        run: 'sed -i -e "s/\"laravel\/framework\": \".*\"/\"laravel\/framework\": \"${{ matrix.laravel-versions }}\"/g" composer.json'
+        run: sed -i -e "s/\"laravel\/framework\": \".*\"/\"laravel\/framework\": \"${{ matrix.laravel-versions }}\"/g" composer.json
+
 
       - name: Install dependencies with composer
         run: composer install --no-ansi --no-interaction --no-progress ${{ matrix.ignore-platform-reqs }}
 
+
       - name: Run tests with pest
         run: vendor/bin/pest --parallel --coverage --min=80
+
   doc-build:
+
     runs-on: ubuntu-latest
+
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Not needed if lastUpdated is not enabled
-      # - uses: pnpm/action-setup@v3 # Uncomment this if you're using pnpm
-      # - uses: oven-sh/setup-bun@v1 # Uncomment this if you're using Bun
+          fetch-depth: 0
+
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm # or pnpm / yarn
+          cache: npm
+
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
+
       - name: Install dependencies
-        run: npm ci # or pnpm install / yarn install / bun install
+        run: npm ci
+
+
       - name: Build with VitePress
-        run: npm run docs:build # or pnpm docs:build / yarn docs:build / bun run docs:build
+        run: npm run docs:build

@@ -5,10 +5,10 @@
     "require": {
         "php": "^8.2|^8.3|^8.4",
         "brick/money": "^0.8.1 || ^0.9.0 || ^0.10.0",
-        "illuminate/collections": "^10|^11",
-        "illuminate/database": "^10|^11",
-        "illuminate/support": "^10|^11",
-        "illuminate/validation": "^10|^11",
+        "illuminate/collections": "^10|^11|dev-master",
+        "illuminate/database": "^10|^11|^12.0",
+        "illuminate/support": "^10|^11|^12.0",
+        "illuminate/validation": "^10|^11|^12.0",
         "nette/php-generator": "^4.1",
         "prinsfrank/standards": "^3.8",
         "ramsey/uuid": "^4.7",
@@ -38,15 +38,14 @@
         "psr-4": {
             "Tests\\": "tests"
         }
-
     },
     "scripts": {
         "test": "pest",
         "style": "pint"
     },
-    "extra" : {
-        "laravel" : {
-            "providers" : [
+    "extra": {
+        "laravel": {
+            "providers": [
                 "\\Bag\\BagServiceProvider"
             ]
         }

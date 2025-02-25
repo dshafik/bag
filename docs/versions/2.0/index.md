@@ -36,6 +36,6 @@ Value objects should be used in place of regular arrays, allowing you enforce ty
 
 ### Does it work with Laravel/Symfony/Other Framework?
 
-Bag is framework-agnostic, but it works great with Laravel. Bag uses standard Laravel [Collections](https://laravel.com/docs/11.x/collections) and [Validation](https://laravel.com/docs/11.x/validation). 
+Bag is framework-agnostic, but it works great with Laravel. Bag uses standard Laravel [Collections](https://laravel.com/docs/12.x/collections) and [Validation](https://laravel.com/docs/12.x/validation). 
 In addition, it will automatically inject `Bag\Bag` value objects into your controllers with validation.
 

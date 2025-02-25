@@ -21,7 +21,7 @@ This will create a `\Bag\Collection` of `MyValue` objects.
 
 ### Extending Laravel Collections
 
-`Bag\Collection` extends `\Illuminate\Support\Collection` and has [most of the same methods](https://laravel.com/docs/11.x/collections#available-methods).
+`Bag\Collection` extends `\Illuminate\Support\Collection` and has [most of the same methods](https://laravel.com/docs/12.x/collections#available-methods).
 
 The following methods will throw an exception if used:
 

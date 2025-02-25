@@ -28,6 +28,7 @@ readonly class LaravelRouteParameters
         Reflection::getParameters(Reflection::getConstructor($input->bagClassname))->each(function ($parameter) use ($input) {
             /** @var ReflectionParameter $parameter */
 
+            // @phpstan-ignore notIdentical.alwaysTrue
             if (isset($input->values[$parameter->getName()]) && $input->values[$parameter->getName()] !== null) {
                 return;
             }

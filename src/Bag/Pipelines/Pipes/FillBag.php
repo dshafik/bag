@@ -16,6 +16,7 @@ readonly class FillBag
      */
     public function __invoke(BagInput $input): BagInput
     {
+        // @phpstan-ignore new.noConstructor
         $input->bag = new ($input->bagClassname)(... $input->values);
 
         return $input;

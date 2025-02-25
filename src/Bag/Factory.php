@@ -8,7 +8,6 @@ use Faker\Generator;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Collection as LaravelCollection;
-use T;
 
 /**
  * @template T of Bag
@@ -48,7 +47,7 @@ abstract class Factory
     abstract public function definition(): LaravelCollection|array;
 
     /**
-     * @return $this<T>
+     * @return $this
      */
     public function count(int $count): self
     {
@@ -59,7 +58,7 @@ abstract class Factory
 
     /**
      * @param LaravelCollection<array-key,mixed>|array<array-key,mixed>|Sequence $dataOrSequence
-     * @return $this<T>
+     * @return $this
      */
     public function state(LaravelCollection|array|Sequence $dataOrSequence): self
     {
@@ -75,7 +74,7 @@ abstract class Factory
     }
 
     /**
-     * @return $this<T>
+     * @return $this
      */
     public function sequence(mixed ... $sequence): self
     {

@@ -79,7 +79,7 @@ Bag comes with a few built-in mappers:
 - `SnakeCase` - Converts property names to/from `snake_case`
 - `CamelCase` - Converts property names to/from `camelCase`
 - `Alias` - Allows you to specify a custom alias for a specific property name
-- `Stringable` - Converts property names using a sequence of [fluent string helper methods](https://laravel.com/docs/11.x/strings#fluent-strings-method-list).
+- `Stringable` - Converts property names using a sequence of [fluent string helper methods](https://laravel.com/docs/12.x/strings#fluent-strings-method-list).
 
 ### Using the Alias Mapper
 
@@ -105,7 +105,7 @@ class MyValue extends Bag {
 
 ### Using the Stringable Mapper
 
-The `Stringable` mapper allows you to chain any of the [fluent string helper methods](https://laravel.com/docs/11.x/strings#fluent-strings-method-list) to convert property names.
+The `Stringable` mapper allows you to chain any of the [fluent string helper methods](https://laravel.com/docs/12.x/strings#fluent-strings-method-list) to convert property names.
 
 The `Stringable` mapper accepts any number of transformations. To pass in arguments to a given transformation, use a colon `:` followed by a comma-separated list of arguments.
 

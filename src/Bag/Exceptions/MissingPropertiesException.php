@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Bag\Exceptions;
 
+use Bag\Property\ValueCollection;
 use Exception;
-use Illuminate\Support\Collection;
 
 class MissingPropertiesException extends Exception
 {
-    /**
-     * @param Collection<array-key,array-key> $missingParameters
-     */
-    public function __construct(string $bagClassname, Collection $missingParameters)
+    public function __construct(string $bagClassname, ValueCollection $missingParameters)
     {
         parent::__construct(sprintf(
             'Missing required properties for Bag %s: %s',

@@ -12,6 +12,7 @@ use Bag\Exceptions\BagNotFoundException;
 use Bag\Internal\Reflection;
 use function get_object_vars;
 
+// @phpstan-ignore trait.unused
 trait HasBag
 {
     public function toBag(?int $propertyVisibility = null): Bag

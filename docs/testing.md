@@ -1,6 +1,6 @@
 # Testing
 
-Bag supports Factories to make creating test values easier. Bag factories are similar to [Eloquent factories](https://laravel.com/docs/11.x/eloquent-factories), but they are used to create Bag objects.
+Bag supports Factories to make creating test values easier. Bag factories are similar to [Eloquent factories](https://laravel.com/docs/12.x/eloquent-factories), but they are used to create Bag objects.
 
 ## Creating a Factory
 

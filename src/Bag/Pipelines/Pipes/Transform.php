@@ -135,11 +135,13 @@ readonly class Transform
 
             $parents = class_parents($from);
             if ($parents) {
+                // @phpstan-ignore argument.type
                 $classes = $classes->merge(collect($parents)->values());
             }
 
             $implements = \class_implements($from);
             if ($implements) {
+                // @phpstan-ignore argument.type
                 $classes = $classes->merge(collect($implements)->values());
             }
 

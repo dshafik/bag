@@ -14,6 +14,7 @@ use Bag\Internal\Reflection;
 /**
  * @template TFactory of Factory
  */
+// @phpstan-ignore trait.unused
 trait HasFactory
 {
     /**

@@ -50,7 +50,7 @@ readonly class Validate
 
         // Within a Laravel application, we can use the Laravel Validator
         try {
-            if (class_exists(Validator::class) && method_exists(Validator::class, 'getFacadeRoot')) {
+            if (class_exists(Validator::class)) {
                 /** @var object|null $validator */
                 $validator = Validator::getFacadeRoot();
                 if ($validator !== null && method_exists($validator, 'make')) {
@@ -58,12 +58,14 @@ readonly class Validate
                     if ($validator->fails()) {
                         if (method_exists($bagClass, 'redirect')) {
                             /** @var string $redirect */
+                            // @phpstan-ignore argument.type
                             $redirect = app()->call([$bagClass, 'redirect']);
                             $validator->validateWithBag($redirect);
                         }
 
                         if (method_exists($bagClass, 'redirectRoute')) {
                             /** @var BackedEnum|string $redirectRoute */
+                            // @phpstan-ignore argument.type
                             $redirectRoute = app()->call([$bagClass, 'redirectRoute']);
                             $validator->validateWithBag(route($redirectRoute));
                         }
@@ -89,7 +91,7 @@ readonly class Validate
 
             $validator = new Factory($translator);
 
-            if (class_exists(Application::class) && method_exists($validator, 'setPresenceVerifier')) {
+            if (class_exists(Application::class)) {
                 $app = Application::getInstance();
                 if ($app->has('db')) {
                     /** @var PresenceVerifierInterface $presenceVerifier */
@@ -106,12 +108,14 @@ readonly class Validate
         } catch (ValidationException $exception) {
             if (method_exists($bagClass, 'redirect')) {
                 /** @var string $redirect */
+                // @phpstan-ignore argument.type
                 $redirect = app()->call([$bagClass, 'redirect']);
                 $exception->redirectTo($redirect);
             }
 
             if (method_exists($bagClass, 'redirectRoute')) {
                 /** @var BackedEnum|string $redirectRoute */
+                // @phpstan-ignore argument.type
                 $redirectRoute = app()->call([$bagClass, 'redirectRoute']);
                 $exception->redirectTo(route($redirectRoute));
             }

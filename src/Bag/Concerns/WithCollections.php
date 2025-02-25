@@ -23,7 +23,7 @@ trait WithCollections
             return Reflection::getAttributeInstance(
                 Reflection::getClass(static::class),
                 CollectionAttribute::class
-            )?->collectionClass ?? Collection::class;
+            )->collectionClass ?? Collection::class;
         });
 
         return ($collection)::make($values)->map(fn ($value): Bag => $value instanceof Bag ? $value : static::from($value));

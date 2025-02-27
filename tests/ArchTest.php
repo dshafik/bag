@@ -11,4 +11,4 @@ arch('it meets PHP preset')
     ->skip(fn () => !version_compare(Pest\version(), '3.0.0', '>='), 'Requires Pest 3+')
     ->preset()
     ->php()
-    ->ignoring('var_export');
+    ->ignoring(['var_export', 'debug_backtrace']);

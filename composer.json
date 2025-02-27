@@ -28,6 +28,9 @@
         "roave/security-advisories": "dev-latest",
         "symfony/var-dumper": "*"
     },
+    "suggest": {
+        "barryvdh/laravel-debugbar": "Integrates with Laravel Debugbar"
+    },
     "license": "MIT",
     "autoload": {
         "psr-4": {

@@ -7,8 +7,10 @@ namespace Bag;
 use Bag\Attributes\StripExtraParameters;
 use Bag\Attributes\WithoutValidation;
 use Bag\Console\Commands\MakeBagCommand;
+use Bag\DebugBar\Collectors\BagCollector;
 use Bag\Internal\Cache;
 use Bag\Internal\Reflection;
+use Barryvdh\Debugbar\LaravelDebugbar;
 use Closure;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -82,6 +84,11 @@ class BagServiceProvider extends ServiceProvider
             $this->commands([
                 MakeBagCommand::class,
             ]);
+        }
+
+        if ($this->app->bound(LaravelDebugbar::class)) {
+            BagCollector::init();
+            $this->app->make(LaravelDebugbar::class)->addCollector(new BagCollector());
         }
     }
 }

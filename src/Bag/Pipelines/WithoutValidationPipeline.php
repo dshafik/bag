@@ -7,6 +7,7 @@ namespace Bag\Pipelines;
 use Bag\Bag;
 use Bag\Pipelines\Pipes\CastInputValues;
 use Bag\Pipelines\Pipes\ComputedValues;
+use Bag\Pipelines\Pipes\DebugCollection;
 use Bag\Pipelines\Pipes\FillBag;
 use Bag\Pipelines\Pipes\FillNulls;
 use Bag\Pipelines\Pipes\IsVariadic;
@@ -43,6 +44,7 @@ class WithoutValidationPipeline
             new CastInputValues(),
             new FillBag(),
             new ComputedValues(),
+            new DebugCollection(),
         );
 
         // @phpstan-ignore-next-line property.nonObject

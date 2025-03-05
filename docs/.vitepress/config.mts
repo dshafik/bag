@@ -66,6 +66,7 @@ export default withMermaid(defineVersionedConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: './' },
+      { text: 'What\'s New', link: './whats-new' },
       { text: 'Documentation', link: './install' },
       {
         component: 'VersionSwitcher',
@@ -291,6 +292,7 @@ export default withMermaid(defineVersionedConfig({
               {"text": "How Bag Works", "link": "./how-bag-works"},
             ]
           },
+        {"text": "What's New", "link": "./whats-new"},
         {"text": "Upgrading to Bag 2", "link": "./upgrading"}
       ],
       "/1.x/": [

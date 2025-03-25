@@ -11,6 +11,7 @@ readonly class HiddenParametersBag extends Bag
 {
     public function __construct(
         public string $name,
+        #[Hidden]
         public int $age,
         #[Hidden]
         public string $email

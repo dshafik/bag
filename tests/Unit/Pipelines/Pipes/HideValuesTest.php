@@ -33,7 +33,6 @@ test('it ignores hidden properties', function () {
 
     expect($output->values->toArray())->toBe([
         'name' => 'Davey Shafik',
-        'age' => 40,
     ]);
 });
 

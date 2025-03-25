@@ -15,6 +15,7 @@ readonly class HiddenJsonParametersBag extends Bag
 {
     public function __construct(
         public string $nameGoesHere,
+        #[HiddenFromJson]
         public int $ageGoesHere,
         #[HiddenFromJson]
         public string $emailGoesHere,

@@ -57,7 +57,6 @@ test('it ignores hidden properties in json', function () {
 
     expect($output->values->toArray())->toBe([
         'nameGoesHere' => 'Davey Shafik',
-        'ageGoesHere' => 40,
         'passwordGoesHere' => 'hunter2',
     ]);
 });

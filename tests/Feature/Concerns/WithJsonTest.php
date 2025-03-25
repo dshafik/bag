@@ -30,8 +30,8 @@ test('it uses cache', function () {
         'passwordGoesHere' => 'hunter2',
     ]);
 
-    expect(json_encode($value))->toBe('{"name_goes_here":"Davey Shafik","age_goes_here":40}')
-        ->and($value->toJson())->toBe('{"name_goes_here":"Davey Shafik","age_goes_here":40}');
+    expect(json_encode($value))->toBe('{"name_goes_here":"Davey Shafik"}')
+        ->and($value->toJson())->toBe('{"name_goes_here":"Davey Shafik"}');
 });
 
 test('it transforms from JSON string', function () {

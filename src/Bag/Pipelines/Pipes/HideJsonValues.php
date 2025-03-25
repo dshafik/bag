@@ -22,17 +22,17 @@ readonly class HideJsonValues
 
         $output->values = Cache::remember(__METHOD__, $output->bag, function () use ($output): Collection {
             $values = $output->values;
-            $output->properties->each(function (Value $value) use (&$values, $output) {
+            $output->properties->each(function (Value $value) use (&$values) {
                 $isHidden = Reflection::getAttribute($value->property, HiddenFromJson::class) !== null;
                 if ($isHidden) {
-                    $values = $output->values->forget($value->property->getName());
+                    $values = $values->forget($value->property->getName());
                 }
             });
 
-            $output->params->each(function (Value $value) use (&$values, $output) {
+            $output->params->each(function (Value $value) use (&$values) {
                 $isHidden = Reflection::getAttribute($value->property, HiddenFromJson::class) !== null;
                 if ($isHidden) {
-                    $values = $output->values->forget($value->property->getName());
+                    $values = $values->forget($value->property->getName());
                 }
             });
 

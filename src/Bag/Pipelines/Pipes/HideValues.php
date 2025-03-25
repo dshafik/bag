@@ -17,17 +17,17 @@ readonly class HideValues
     {
         $output->values = Cache::remember(__METHOD__, $output->bag, function () use ($output) {
             $values = $output->values;
-            $output->properties->each(function (Value $property) use (&$values, $output) {
+            $output->properties->each(function (Value $property) use (&$values) {
                 $isHidden = Reflection::getAttribute($property->property, Hidden::class) !== null || Reflection::getAttribute($property->property, SensitiveParameter::class) !== null;
                 if ($isHidden) {
-                    $values = $output->values->forget($property->property->getName());
+                    $values = $values->forget($property->property->getName());
                 }
             });
 
-            $output->params->each(function (Value $param) use (&$values, $output) {
+            $output->params->each(function (Value $param) use (&$values) {
                 $isHidden = Reflection::getAttribute($param->property, Hidden::class) !== null || Reflection::getAttribute($param->property, SensitiveParameter::class) !== null;
                 if ($isHidden) {
-                    $values = $output->values->forget($param->property->getName());
+                    $values = $values->forget($param->property->getName());
                 }
             });
 

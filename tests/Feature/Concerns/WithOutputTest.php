@@ -51,7 +51,7 @@ test('it gets values without hidden', function () {
     $values = $value->get();
 
     expect($values['name'])->toBe('Davey Shafik')
-        ->and($values['age'])->toBe(40)
+        ->and($values)->not->toHaveKey('age')
         ->and($values)->not->toHaveKey('email');
 });
 

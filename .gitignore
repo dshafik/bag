@@ -9,3 +9,4 @@ docs/.vitepress/cache/
 /coverage.xml
 /coverage-phpunit.xml
 /tests/mutation.html
+/tests/output

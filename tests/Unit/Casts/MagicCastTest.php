@@ -5,8 +5,10 @@ use Bag\Casts\MagicCast;
 use Bag\Collection;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon as LaravelCarbon;
 use Illuminate\Support\Collection as LaravelCollection;
+use Mockery\MockInterface;
 use Tests\Fixtures\Enums\TestBackedEnum;
 use Tests\Fixtures\Enums\TestUnitEnum;
 use Tests\Fixtures\Values\TestBag;
@@ -143,3 +145,22 @@ test('it casts to null if value is null', function ($propertyType) {
 
     expect($result)->toBeNull();
 })->with('nullable');
+
+test('it casts model IDs to models', function () {
+    $model = new class () extends Model {
+        public $id = 1;
+    };
+
+    $mock = mock($model::class, function (MockInterface $mock) use ($model) {
+        $mock
+            ->shouldReceive('findOrFail')
+            ->with(123)
+            ->andReturn($model);
+    });
+
+    $cast = new MagicCast();
+    $result = $cast->set(Collection::wrap($mock::class), 'test', collect(['test' => 123]));
+
+    expect($result)->toBeInstanceOf($model::class)
+        ->and($result->id)->toBe(1);
+});

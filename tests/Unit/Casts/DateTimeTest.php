@@ -122,3 +122,21 @@ test('it parses and outputs custom format', function () {
     expect($datetime->format('Y-m-d'))->toBe('2024-04-30')
         ->and($cast->get('test', collect(['test' => $datetime])))->toBe('2024-04-30');
 });
+
+test('it fails on null values', function () {
+    $cast = new DateTime();
+
+    $datetime = $cast->set(Collection::wrap([CarbonImmutable::class]), 'test', collect(['test' => null]));
+
+    expect($datetime->format('Y-m-d'))->toBe(CarbonImmutable::now()->format('Y-m-d'))
+        ->and($cast->get('test', collect(['test' => null])))->toBeNull();
+})->throws(\TypeError::class, 'DateTimeImmutable::__construct(): Argument #1 ($datetime) must be of type string, null given');
+
+test('it is nullable', function () {
+    $cast = new DateTime();
+
+    $datetime = $cast->set(Collection::wrap([CarbonImmutable::class, 'null']), 'test', collect(['test' => null]));
+
+    expect($datetime)->toBeNull()
+        ->and($cast->get('test', collect(['test' => null])))->toBeNull();
+});

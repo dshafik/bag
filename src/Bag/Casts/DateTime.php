@@ -31,28 +31,32 @@ class DateTime implements CastsPropertyGet, CastsPropertySet
      */
     public function get(string $propertyName, LaravelCollection $properties): mixed
     {
-        /** @var T $dateTime */
+        /** @var T|null $dateTime */
         $dateTime = $properties->get($propertyName);
 
-        return $dateTime->format($this->outputFormat ?? $this->format);
+        return $dateTime?->format($this->outputFormat ?? $this->format);
     }
 
     /**
      * @param Collection<ReflectionNamedType> $propertyTypes
      * @param LaravelCollection<array-key,mixed> $properties
-     * @return T
+     * @return T|null
      * @throws DateMalformedStringException
      */
     #[Override]
     public function set(Collection $propertyTypes, string $propertyName, LaravelCollection $properties): mixed
     {
+        $value = $properties->get($propertyName);
+
+        if ($propertyTypes->contains('null') && $value === null) {
+            return null;
+        }
+
         if ($this->dateTimeClass === null) {
             /** @var class-string<T> $type */
             $type = $propertyTypes->first();
             $this->dateTimeClass = $type;
         }
-
-        $value = $properties->get($propertyName);
 
         if ($value instanceof $this->dateTimeClass) {
             return $value;

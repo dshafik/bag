@@ -39,6 +39,8 @@ class Util
         return Collection::wrap($type)->map(function ($type) {
             /** @var ReflectionNamedType $type */
             return $type->getName();
+        })->when(is_callable([$type, 'allowsNull']) && $type->allowsNull(), function (Collection $types) {
+            return $types->push('null');
         });
     }
 

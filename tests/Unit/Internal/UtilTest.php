@@ -21,13 +21,23 @@ test('it defaults to mixed type', function () {
     expect($types->first())->toBe('mixed');
 });
 
+test('it gets nullable types', function () {
+    $types = Util::getPropertyTypes(new \ReflectionParameter(fn (string|null $arg) => null, 'arg'));
+
+    expect($types->toArray())->toBe(['string', 'null']);
+
+    $types = Util::getPropertyTypes(new \ReflectionParameter(fn (?string $arg) => null, 'arg'));
+
+    expect($types->toArray())->toBe(['string', 'null']);
+});
+
 test('it gets all union types', function () {
-    $types = Util::getPropertyTypes(new \ReflectionParameter(fn (int|string|float|bool $arg) => null, 'arg'));
+    $types = Util::getPropertyTypes(new \ReflectionParameter(fn (int|string|float|bool|null $arg) => null, 'arg'));
 
     expect($types)
-        ->toHaveCount(4)
+        ->toHaveCount(5)
     ->and($types->toArray())
-        ->toBe(['string', 'int', 'float', 'bool']);
+        ->toBe(['string', 'int', 'float', 'bool', 'null']);
 });
 
 test('it errors on intersection type', function () {

@@ -7,10 +7,11 @@ namespace Bag\Pipelines\Pipes;
 use Bag\Bag;
 use Bag\Pipelines\Values\BagInput;
 use Bag\Property\Value;
+use Bag\Values\Optional;
 use ReflectionParameter;
 use ReflectionProperty;
 
-readonly class FillNulls
+readonly class FillOptionals
 {
     /**
      * @template T of Bag
@@ -19,21 +20,20 @@ readonly class FillNulls
      */
     public function __invoke(BagInput $input): BagInput
     {
-        // Get a list of missing nullable values
-        $input->params->nullable()->each(function ($param) use ($input) {
+        $input->params->optional()->each(function (Value $param) use ($input) {
             /** @var Value $param */
             $hasValue = match(true) {
-                $input->values->has($param->name) => true,
+                $input->values->has($param->name)  => true,
                 $param->property instanceof ReflectionParameter && $param->property->isDefaultValueAvailable() => true,
                 $param->property instanceof ReflectionProperty && $param->property->hasDefaultValue() => true,
                 default => false
             };
 
-            if ($hasValue) {
+            if ($hasValue && !(!$param->allowsNull && $input->values->get($param->name) === null)) {
                 return;
             }
 
-            $input->values->put($param->name, null);
+            $input->values->put($param->name, new Optional());
         });
 
         return $input;

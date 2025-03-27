@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use ReflectionAttribute;
 use ReflectionMethod;
 use ReflectionNamedType;
+use ReflectionUnionType;
 use TypeError;
 
 readonly class Transform
@@ -87,7 +88,12 @@ readonly class Transform
         if (is_array($inputs) || is_iterable($inputs) || $inputs instanceof ArrayAccess || $inputs instanceof Arrayable || is_iterable($inputs)) {
             /** @var ReflectionNamedType $parameterType */
             $parameterType = Reflection::getConstructor($input->bagClassname)?->getParameters()[0]->getType();
-            if ($parameterType->getName() === 'array') {
+            // @phpstan-ignore-next-line
+            if ($parameterType instanceof ReflectionUnionType && collect($parameterType->getTypes())->map(fn (ReflectionNamedType $type) => $type->getName())->contains('array')) {
+                return $input;
+            }
+
+            if ($parameterType instanceof ReflectionNamedType && $parameterType->getName() === 'array') {
                 return $input;
             }
 

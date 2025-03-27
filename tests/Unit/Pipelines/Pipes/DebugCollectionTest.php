@@ -5,10 +5,13 @@ declare(strict_types=1);
 use Bag\DebugBar\Collectors\BagCollector;
 use Bag\Pipelines\Pipes\DebugCollection;
 use Bag\Pipelines\Values\BagInput;
+use DebugBar\DataCollector\MessagesCollector;
 use Illuminate\Support\Collection;
 use Tests\Fixtures\Values\TestBag;
 
 covers(DebugCollection::class);
+
+beforeEach()->skip(!class_exists(MessagesCollector::class));
 
 test('it collects bags', function () {
     $pipe = new DebugCollection();

@@ -5,3 +5,5 @@ parameters:
         - src/
     level: 9
     treatPhpDocTypesAsCertain: false
+    excludePaths:
+        - src/Bag/DebugBar

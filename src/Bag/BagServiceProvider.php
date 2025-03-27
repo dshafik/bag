@@ -86,9 +86,12 @@ class BagServiceProvider extends ServiceProvider
             ]);
         }
 
-        if ($this->app->bound(LaravelDebugbar::class)) {
-            BagCollector::init();
-            $this->app->make(LaravelDebugbar::class)->addCollector(new BagCollector());
+        if (class_exists(LaravelDebugbar::class)) {
+            if ($this->app->bound(LaravelDebugbar::class)) {
+                BagCollector::init();
+                // @phpstan-ignore argument.type
+                $this->app->make(LaravelDebugbar::class)->addCollector(new BagCollector());
+            }
         }
     }
 }

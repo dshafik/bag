@@ -3,14 +3,17 @@
 declare(strict_types=1);
 
 use Bag\DebugBar\Collectors\BagCollector;
+use DebugBar\DataCollector\MessagesCollector;
 use Illuminate\Support\Facades\Config;
 use Tests\Fixtures\Values\TestBag;
 
-covers(BagCollector::class);
-
 beforeEach(function () {
     BagCollector::init();
-});
+})->skip(!class_exists(MessagesCollector::class));
+
+if (class_exists(MessagesCollector::class)) {
+    covers(BagCollector::class);
+}
 
 test('it collects a bag', function () {
     $bag = TestBag::from([

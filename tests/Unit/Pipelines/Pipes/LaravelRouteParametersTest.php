@@ -119,12 +119,10 @@ test('it populates model parameter property value on Laravel 11+', function () {
 })->skip(fn () => !version_compare(Application::VERSION, '11.0.0', '>='), 'Requires Laravel 11+');
 
 test('it errors when trying to get property on scalar value', function () {
-    $this->expectException(InvalidRouteParameterException::class);
-    $this->expectExceptionMessage('Route parameter "invalidParam" must be an object.');
     $this->get('/invalid/testing');
 
     runPipeline();
-});
+})->throws(InvalidRouteParameterException::class, 'Route parameter "invalidParam" must be an object.');
 
 test('it ignores unbound params', function () {
     $this->get('/no-binding/testing');

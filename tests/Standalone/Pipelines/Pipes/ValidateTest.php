@@ -40,9 +40,6 @@ test('it validates with no rules', function () {
 });
 
 test('it fails validation', function () {
-    $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The name field must be a string. (and 1 more error)');
-
     try {
         $input = new BagInput(ValidateUsingRulesMethodBag::class, collect(['name' => 1234]));
         $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
@@ -63,12 +60,9 @@ test('it fails validation', function () {
 
         throw $e;
     }
-});
+})->throws(ValidationException::class, 'The name field must be a string. (and 1 more error)');
 
 test('it validates using rules method', function () {
-    $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The age field must be an integer.');
-
     $input = new BagInput(ValidateUsingRulesMethodBag::class, collect(['name' => 'Davey Shafik', 'age' => 'test string']));
     $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
     $input = (new MapInput())($input, fn (BagInput $input) => $input);
@@ -76,12 +70,9 @@ test('it validates using rules method', function () {
 
     $pipe = new Validate();
     $pipe($input);
-});
+})->throws(ValidationException::class, 'The age field must be an integer.');
 
 test('it validates using attributes', function () {
-    $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The age field must be an integer.');
-
     $input = new BagInput(ValidateUsingAttributesBag::class, collect(['name' => 'Davey Shafik', 'age' => 'test string']));
     $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
     $input = (new MapInput())($input, fn (BagInput $input) => $input);
@@ -89,12 +80,9 @@ test('it validates using attributes', function () {
 
     $pipe = new Validate();
     $pipe($input);
-});
+})->throws(ValidationException::class, 'The age field must be an integer.');
 
 test('it validates using both', function () {
-    $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The name field must be a string. (and 1 more error)');
-
     try {
         $input = new BagInput(ValidateUsingAttributesAndRulesMethodBag::class, collect(['name' => 1234, 'age' => 200]));
         $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
@@ -115,12 +103,9 @@ test('it validates using both', function () {
 
         throw $e;
     }
-});
+})->throws(ValidationException::class, 'The name field must be a string. (and 1 more error)');
 
 test('it validates mapped names', function () {
-    $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The name goes here field must be a string. (and 1 more error)');
-
     try {
         $input = new BagInput(ValidateMappedNameClassBag::class, collect(['nameGoesHere' => 1234]));
         $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
@@ -141,4 +126,4 @@ test('it validates mapped names', function () {
 
         throw $e;
     }
-});
+})->throws(ValidationException::class, 'The name goes here field must be a string. (and 1 more error)');

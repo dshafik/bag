@@ -41,10 +41,8 @@ test('it gets all union types', function () {
 });
 
 test('it errors on intersection type', function () {
-    $this->expectException(InvalidPropertyType::class);
-    $this->expectExceptionMessage('Intersection types are not supported for parameter anArgument');
     Util::getPropertyTypes(new \ReflectionParameter(fn (CamelCase&Stringable $anArgument) => null, 'anArgument'));
-});
+})->throws(InvalidPropertyType::class, 'Intersection types are not supported for parameter anArgument');
 
 test('it creates a pipeline', function () {
     expect(Util::getPipeline())->toBeInstanceOf(Pipeline::class);

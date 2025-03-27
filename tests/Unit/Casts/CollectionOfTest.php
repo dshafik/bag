@@ -132,9 +132,6 @@ test('it creates collection using existing bags', function () {
 });
 
 test('it fails with invalid collection', function () {
-    $this->expectException(InvalidCollection::class);
-    $this->expectExceptionMessage('The property "test" must be a subclass of Illuminate\Support\Collection');
-
     $type = Collection::wrap((new ReflectionClosure(fn (\stdClass $type) => true))->getParameters()[0]->getType());
 
     $cast = new CollectionOf(TestBag::class);
@@ -150,15 +147,12 @@ test('it fails with invalid collection', function () {
             'email' => 'david@example.org',
         ],
     ]]));
-});
+})->throws(InvalidCollection::class, 'The property "test" must be a subclass of Illuminate\Support\Collection');
 
 test('it fails with invalid bag', function () {
-    $this->expectException(InvalidBag::class);
-    $this->expectExceptionMessage('CollectionOf class "P\Tests\Unit\Casts\CollectionOfTest" must extend Bag\Bag');
-
     $type = Collection::wrap((new ReflectionClosure(fn (\stdClass $type) => true))->getParameters()[0]->getType());
 
-    $cast = new CollectionOf(static::class);
+    $cast = new CollectionOf(\stdClass::class);
     $cast->set($type, 'test', collect(['test' => [
         [
             'name' => 'Davey Shafik',
@@ -171,12 +165,9 @@ test('it fails with invalid bag', function () {
             'email' => 'david@example.org',
         ],
     ]]));
-});
+})->throws(InvalidBag::class, 'CollectionOf class "stdClass" must extend Bag\Bag');
 
 test('it fails with non existent bag', function () {
-    $this->expectException(BagNotFoundException::class);
-    $this->expectExceptionMessage('The Bag class "test-string" does not exist');
-
     $type = Collection::wrap((new ReflectionClosure(fn (\stdClass $type) => true))->getParameters()[0]->getType());
 
     $cast = new CollectionOf('test-string');
@@ -192,4 +183,4 @@ test('it fails with non existent bag', function () {
             'email' => 'david@example.org',
         ],
     ]]));
-});
+})->throws(BagNotFoundException::class, 'The Bag class "test-string" does not exist');

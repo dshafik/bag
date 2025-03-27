@@ -12,24 +12,18 @@ use Tests\Fixtures\Values\TestBag;
 covers(ProcessParameters::class);
 
 test('it requires a constructor', function () {
-    $this->expectException(\RuntimeException::class);
-    $this->expectExceptionMessage('Bag "Tests\Fixtures\Values\NoConstructorBag" must have a constructor with at least one parameter');
-
     $input = new BagInput(NoConstructorBag::class, collect(['foo' => 'bar']));
 
     $pipe = new ProcessParameters();
     $pipe($input);
-});
+})->throws(\RuntimeException::class, 'Bag "Tests\Fixtures\Values\NoConstructorBag" must have a constructor with at least one parameter');
 
 test('it requires bag parameters', function () {
-    $this->expectException(\RuntimeException::class);
-    $this->expectExceptionMessage('Bag "Tests\Fixtures\Values\NoPropertiesBag" must have a constructor with at least one parameter');
-
     $input = new BagInput(NoPropertiesBag::class, collect(['foo' => 'bar']));
 
     $pipe = new ProcessParameters();
     $pipe($input);
-});
+})->throws(\RuntimeException::class, 'Bag "Tests\Fixtures\Values\NoPropertiesBag" must have a constructor with at least one parameter');
 
 test('it handles parameters', function () {
     $input = new BagInput(TestBag::class, collect([

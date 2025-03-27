@@ -49,60 +49,44 @@ test('it clones on put', function () {
 });
 
 test('it throws exception on pull', function () {
-    $this->expectException(ImmutableCollectionException::class);
-    $this->expectExceptionMessage('Method pull is not allowed on Bag\Collection');
     $collection = Collection::make(['foo' => 'bar']);
     $collection->pull('foo');
-});
+})->throws(ImmutableCollectionException::class, 'Method pull is not allowed on Bag\Collection');
 
 test('it throws exception on shift', function () {
-    $this->expectException(ImmutableCollectionException::class);
-    $this->expectExceptionMessage('Method shift is not allowed on Bag\Collection');
     $collection = Collection::make(['foo' => 'bar']);
     $collection->shift(1);
-});
+})->throws(ImmutableCollectionException::class, 'Method shift is not allowed on Bag\Collection');
 
 test('it throws exception on splice', function () {
-    $this->expectException(ImmutableCollectionException::class);
-    $this->expectExceptionMessage('Method splice is not allowed on Bag\Collection');
     $collection = Collection::make(['foo' => 'bar']);
     $collection->splice(0);
-});
+})->throws(ImmutableCollectionException::class, 'Method splice is not allowed on Bag\Collection');
 
 test('it throws exception on transform', function () {
-    $this->expectException(ImmutableCollectionException::class);
-    $this->expectExceptionMessage('Method transform is not allowed on Bag\Collection');
     $collection = Collection::make(['foo' => 'bar']);
     $collection->transform(fn ($item) => $item);
-});
+})->throws(ImmutableCollectionException::class, 'Method transform is not allowed on Bag\Collection');
 
 test('it throws exception on get or put', function () {
-    $this->expectException(ImmutableCollectionException::class);
-    $this->expectExceptionMessage('Method getOrPut is not allowed on Bag\Collection');
     $collection = Collection::make(['foo' => 'bar']);
     $collection->getOrPut('foo', fn () => 'bar');
-});
+})->throws(ImmutableCollectionException::class, 'Method getOrPut is not allowed on Bag\Collection');
 
 test('it throws exception on offset set', function () {
-    $this->expectException(ImmutableCollectionException::class);
-    $this->expectExceptionMessage('Array key writes not allowed on Bag\Collection');
     $collection = Collection::make(['foo' => 'bar']);
     $collection['bar'] = 'bat';
-});
+})->throws(ImmutableCollectionException::class, 'Array key writes not allowed on Bag\Collection');
 
 test('it throws exception on offset unset', function () {
-    $this->expectException(ImmutableCollectionException::class);
-    $this->expectExceptionMessage('Array key writes not allowed on Bag\Collection');
     $collection = Collection::make(['foo' => 'bar']);
     unset($collection['foo']);
-});
+})->throws(ImmutableCollectionException::class, 'Array key writes not allowed on Bag\Collection');
 
 test('it throws exception on property write', function () {
-    $this->expectException(ImmutableCollectionException::class);
-    $this->expectExceptionMessage('Property writes not allowed on Bag\Collection');
     $collection = Collection::make(['foo' => 'bar']);
     $collection->baz = 'bat';
-});
+})->throws(ImmutableCollectionException::class, 'Property writes not allowed on Bag\Collection');
 
 test('it returns array', function () {
     $collection = Collection::make(['foo' => 'bar']);

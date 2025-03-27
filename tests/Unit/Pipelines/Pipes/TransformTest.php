@@ -144,11 +144,8 @@ test('it transforms multiple with single transformer', function () {
 });
 
 test('it errors with invalid type', function () {
-    $this->expectException(\TypeError::class);
-    $this->expectExceptionMessage('Tests\Fixtures\Values\BagWithTransformers::from(): Argument #1 ($values): must be of type ArrayAccess|Traversable|Collection|LaravelCollection|Arrayable|array, double given');
-
     $input = new BagInput(BagWithTransformers::class, collect([1.0]));
 
     $pipe = new Transform();
     $pipe($input);
-});
+})->throws(\TypeError::class, 'Tests\Fixtures\Values\BagWithTransformers::from(): Argument #1 ($values): must be of type ArrayAccess|Traversable|Collection|LaravelCollection|Arrayable|array, double given');

@@ -32,9 +32,6 @@ test('it validates', function () {
 });
 
 test('it fails validation', function () {
-    $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The name field must be a string. (and 1 more error)');
-
     try {
         ValidateUsingRulesMethodBag::validate(collect(['name' => 1234, 'age' => 'string']));
     } catch (ValidationException $e) {
@@ -49,14 +46,11 @@ test('it fails validation', function () {
 
         throw $e;
     }
-});
+})->throws(ValidationException::class, 'The name field must be a string. (and 1 more error)');
 
 test('it validates using rules method', function () {
-    $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The age field must be an integer.');
-
     ValidateUsingRulesMethodBag::from(['name' => 'Davey Shafik', 'age' => 'test string']);
-});
+})->throws(ValidationException::class, 'The age field must be an integer.');
 
 test('it validates using attributes', function () {
     expect(ValidateUsingAttributesBag::validate(collect(['name' => 'Davey Shafik', 'age' => 40])))->toBeTrue();
@@ -71,11 +65,8 @@ test('it validates mapped names', function () {
 });
 
 test('it errors without initialized computed property', function () {
-    $this->expectException(ComputedPropertyUninitializedException::class);
-    $this->expectExceptionMessage('Property Tests\Fixtures\Values\ComputedPropertyMissingBag->dob must be computed');
-
     ComputedPropertyMissingBag::from(['name' => 'Davey Shafik', 'age' => 40]);
-});
+})->throws(ComputedPropertyUninitializedException::class, 'Property Tests\Fixtures\Values\ComputedPropertyMissingBag->dob must be computed');
 
 test('it validates computed properties', function () {
     Carbon::setTestNow(new CarbonImmutable('2024-05-04 14:43:23'));
@@ -94,9 +85,6 @@ test('it uses cache for computed properties', function () {
 });
 
 test('it supports unique validator', function () {
-    $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The name has already been taken.');
-
     TestModel::create(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']);
 
     expect(
@@ -104,12 +92,9 @@ test('it supports unique validator', function () {
     )->toBeTrue();
 
     ValidateUniqueRuleBag::validate(collect(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']));
-});
+})->throws(ValidationException::class, 'The name has already been taken.');
 
 test('it supports exists validator', function () {
-    $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The selected name is invalid.');
-
     TestModel::create(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']);
 
     expect(
@@ -117,7 +102,7 @@ test('it supports exists validator', function () {
     )->toBeTrue();
 
     ValidateExistsRuleBag::validate(collect(['name' => 'Test User', 'age' => 40, 'email' => 'davey@php.net']));
-});
+})->throws(ValidationException::class, 'The selected name is invalid.');
 
 test('it creates without validation', function () {
     $bag = OptionalValidateUsingAttributesAndRulesMethodBag::withoutValidation(['name' => 'Davey Shafik']);

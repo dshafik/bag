@@ -62,15 +62,9 @@ test('it creates bag with private properties', function () {
 });
 
 test('it errors when no attribute found', function () {
-    $this->expectException(BagAttributeNotFoundException::class);
-    $this->expectExceptionMessage('Bag attribute not found on class ' . ObjectToBagNoAttribute::class);
-
     (new ObjectToBagNoAttribute())->toBag();
-});
+})->throws(BagAttributeNotFoundException::class, 'Bag attribute not found on class ' . ObjectToBagNoAttribute::class);
 
 test('it errors when bag does not exist', function () {
-    $this->expectException(BagNotFoundException::class);
-    $this->expectExceptionMessage('The Bag class "InvalidBagName" does not exist');
-
     (new ObjectToBagInvalidBag())->toBag();
-});
+})->throws(BagNotFoundException::class, 'The Bag class "InvalidBagName" does not exist');

@@ -117,15 +117,9 @@ test('it creates using sequence', function () {
 });
 
 test('it errors without factory attribute', function () {
-    $this->expectException(MissingFactoryException::class);
-    $this->expectExceptionMessage('Bag "Tests\Fixtures\Values\BagWithoutFactoryAttribute" missing factory attribute');
-
     BagWithoutFactoryAttribute::factory();
-});
+})->throws(MissingFactoryException::class, 'Bag "Tests\Fixtures\Values\BagWithoutFactoryAttribute" missing factory attribute');
 
 test('it errors with invalid factory attribute', function () {
-    $this->expectException(MissingFactoryException::class);
-    $this->expectExceptionMessage('Factory class "InvalidFactoryClass" for Bag "Tests\Fixtures\Values\BagWithInvalidFactoryAttribute" not found');
-
     BagWithInvalidFactoryAttribute::factory();
-});
+})->throws(MissingFactoryException::class, 'Factory class "InvalidFactoryClass" for Bag "Tests\Fixtures\Values\BagWithInvalidFactoryAttribute" not found');

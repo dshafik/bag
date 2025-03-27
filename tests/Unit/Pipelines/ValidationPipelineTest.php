@@ -35,9 +35,6 @@ test('it validates using rules', function () {
 });
 
 test('it fails validation using rules', function () {
-    $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The name field must be a string. (and 1 more error)');
-
     $input = new BagInput(ValidateUsingRulesMethodBag::class, collect([
         'name' => 1234,
         'age' => 'testing',
@@ -53,7 +50,7 @@ test('it fails validation using rules', function () {
 
         throw $e;
     }
-});
+})->throws(ValidationException::class, 'The name field must be a string. (and 1 more error)');
 
 test('it validates using attributes', function () {
     $input = new BagInput(ValidateUsingAttributesBag::class, collect([
@@ -67,9 +64,6 @@ test('it validates using attributes', function () {
 });
 
 test('it fails validation using attributes', function () {
-    $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The name field must be a string. (and 1 more error)');
-
     $input = new BagInput(ValidateUsingAttributesBag::class, collect([
         'name' => 1234,
         'age' => 'testing',
@@ -85,7 +79,7 @@ test('it fails validation using attributes', function () {
 
         throw $e;
     }
-});
+})->throws(ValidationException::class, 'The name field must be a string. (and 1 more error)');
 
 test('it validates using both', function () {
     $input = new BagInput(ValidateUsingAttributesAndRulesMethodBag::class, collect([
@@ -99,9 +93,6 @@ test('it validates using both', function () {
 });
 
 test('it fails validation using both', function () {
-    $this->expectException(ValidationException::class);
-    $this->expectExceptionMessage('The name field must not be greater than 100 characters. (and 1 more error)');
-
     $input = new BagInput(ValidateUsingAttributesAndRulesMethodBag::class, collect([
         'name' => str_repeat('Davey Shafik', 40),
         'age' => 200,
@@ -117,4 +108,4 @@ test('it fails validation using both', function () {
 
         throw $e;
     }
-});
+})->throws(ValidationException::class, 'The name field must not be greater than 100 characters. (and 1 more error)');

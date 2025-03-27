@@ -61,8 +61,6 @@ test('it errors with missing properties', function () {
     $input = (new MapInput())($input, fn (BagInput $input) => $input);
     $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
 
-    $this->expectException(MissingPropertiesException::class);
-    $this->expectExceptionMessage('Missing required properties for Bag Tests\\Fixtures\\Values\\TestBag: email');
     $pipe = new MissingProperties();
     $pipe($input);
-});
+})->throws(MissingPropertiesException::class, 'Missing required properties for Bag Tests\Fixtures\Values\TestBag: email');

@@ -83,12 +83,9 @@ test('it enforces strict mode', function () {
 });
 
 test('it errors in strict mode', function () {
-    $this->expectException(InvalidFormatException::class);
-    $this->expectExceptionMessage('Not enough data available to satisfy format');
-
     $cast = new DateTime(strictMode: true);
     $cast->set(Collection::wrap(CarbonImmutable::class), 'test', collect(['test' => '2024-04-30 01:58']));
-});
+})->throws(InvalidFormatException::class, 'Not enough data available to satisfy format');
 
 test('it does not error in non strict mode', function () {
     $cast = new DateTime(strictMode: false);

@@ -78,14 +78,11 @@ test('it casts money with currency property as unit enum', function () {
 });
 
 test('it fails with no currency', function () {
-    $this->expectException(UnknownCurrencyException::class);
-    $this->expectExceptionMessage('No currency found');
-
     $type = Collection::wrap((new ReflectionClosure(fn (MoneyFromMinor $type) => true))->getParameters()[0]->getType());
 
     $cast = new MoneyFromMinor(currencyProperty: 'currency');
     $cast->set($type, 'test', collect(['test' => 10000, 'currency' => null]));
-});
+})->throws(UnknownCurrencyException::class, 'No currency found');
 
 test('it formats output', function () {
     $cast = new MoneyFromMinor(currency: CurrencyAlpha3::US_Dollar);

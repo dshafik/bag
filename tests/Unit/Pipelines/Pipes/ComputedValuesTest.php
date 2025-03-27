@@ -43,8 +43,6 @@ test('it errors when computed not set', function () {
     Carbon::setTestNow(new CarbonImmutable('2024-05-04 14:43:23'));
     $input->bag = new ComputedPropertyMissingBag($input->values->get('name'), $input->values->get('age'));
 
-    $this->expectException(ComputedPropertyUninitializedException::class);
-    $this->expectExceptionMessage('Property Tests\Fixtures\Values\ComputedPropertyMissingBag->dob must be computed');
     $pipe = new ComputedValues();
     $pipe($input);
-});
+})->throws(ComputedPropertyUninitializedException::class, 'Property Tests\Fixtures\Values\ComputedPropertyMissingBag->dob must be computed');

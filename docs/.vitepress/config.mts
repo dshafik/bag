@@ -10,7 +10,7 @@ export default withMermaid(defineVersionedConfig({
   description: "Immutable Value Objects for PHP 8.3+",
   base: BASE_PATH,
   versioning: {
-    latestVersion: '2.4',
+    latestVersion: '2.5',
   },
   head: [
     [
@@ -91,6 +91,7 @@ export default withMermaid(defineVersionedConfig({
             {"text": "Variadics", "link": "/variadics"},
             {"text": "Hiding Properties", "link": "/hidden"},
             {"text": "Transformers", "link": "/transformers"},
+            {"text": "Optionals", "link": "/optionals"},
             {"text": "Validation", "link": "/validation"},
             {"text": "Computed Properties", "link": "/computed-properties"},
             {"text": "Output", "link": "/output"},
@@ -118,6 +119,50 @@ export default withMermaid(defineVersionedConfig({
         },
         {"text": "What's New", "link": "/whats-new"},
         {"text": "Upgrading to Bag 2", "link": "/upgrading"}
+      ],
+      "/2.4/": [
+          {
+            "text": "Get Started",
+            "items": [
+              {"text": "Installation", "link": "/2.4/install"},
+              {"text": "Basic Usage", "link": "/2.4/basic-usage"}
+            ]
+          },
+          {
+            "text": "Using Bag",
+            "items": [
+              {"text": "Collections", "link": "/2.4/collections"},
+              {"text": "Casting Values", "link": "/2.4/casting"},
+              {"text": "Mapping", "link": "/2.4/mapping"},
+              {"text": "Variadics", "link": "/2.4/variadics"},
+              {"text": "Hiding Properties", "link": "/2.4/hidden"},
+              {"text": "Transformers", "link": "/2.4/transformers"},
+              {"text": "Validation", "link": "/2.4/validation"},
+              {"text": "Computed Properties", "link": "/2.4/computed-properties"},
+              {"text": "Output", "link": "/2.4/output"},
+              {"text": "Wrapping", "link": "/2.4/wrapping"},
+              {"text": "Factories/2.3/ Testing", "link": "/2.4/testing"}
+            ]
+          },
+          {
+            "text": "Laravel Integration",
+            "items": [
+              {"text": "Controller Injection", "link": "/2.4/laravel-controller-injection"},
+              {"text": "Route Parameter Binding", "link": "/2.4/laravel-route-parameter-binding"},
+              {"text": "Eloquent Casting", "link": "/2.4/laravel-eloquent-casting"},
+              {"text": "Generating Bag Classes", "link": "/2.4/laravel-artisan-make-bag-command"},
+            ]
+          },
+          {
+            "text": "Other",
+            "items": [
+              {"text": "Creating Bags from Objects", "link": "/2.4/object-to-bag"},
+              {"text": "Why Bag?", "link": "/2.4/why"},
+              {"text": "How Bag Works", "link": "/2.4/how-bag-works"},
+            ]
+          },
+        {"text": "What's New", "link": "/2.4/whats-new"},
+        {"text": "Upgrading to Bag 2", "link": "/2.4/upgrading"}
       ],
       "/2.3/": [
           {

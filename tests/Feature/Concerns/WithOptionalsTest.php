@@ -33,3 +33,45 @@ test('has returns true with value', function () {
      ->and($bag->has('email'))
          ->toBeTrue();
 });
+
+test('hasAny returns false with optionals', function () {
+    $bag = BagWithOptionals::from(['name' => 'Davey Shafik']);
+
+    expect($bag->hasAny('age', 'email'))
+        ->toBeFalse();
+});
+
+test('hasAny returns true with null', function () {
+    $bag = BagWithOptionals::from(['name' => 'Davey Shafik', 'email' => null]);
+
+    expect($bag->hasAny('age', 'email'))
+        ->toBeTrue();
+});
+
+test('hasAny returns true with values', function () {
+    $bag = BagWithOptionals::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']);
+
+    expect($bag->hasAny('age', 'email'))
+        ->toBeTrue();
+});
+
+test('hasAll returns false with optionals', function () {
+    $bag = BagWithOptionals::from(['name' => 'Davey Shafik']);
+
+    expect($bag->hasAll('age', 'email'))
+        ->toBeFalse();
+});
+
+test('hasAll returns false with null', function () {
+    $bag = BagWithOptionals::from(['name' => 'Davey Shafik', 'email' => null]);
+
+    expect($bag->hasAll('age', 'email'))
+        ->toBeFalse();
+});
+
+test('hasAll returns true with values', function () {
+    $bag = BagWithOptionals::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']);
+
+    expect($bag->hasALl('age', 'email'))
+        ->toBeTrue();
+});

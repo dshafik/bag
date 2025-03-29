@@ -4,7 +4,7 @@
          bootstrap="vendor/autoload.php"
          cacheDirectory=".phpunit.cache"
          executionOrder="random"
-         requireCoverageMetadata="false"
+         requireCoverageMetadata="true"
          beStrictAboutCoverageMetadata="false"
          beStrictAboutOutputDuringTests="true"
          failOnRisky="false"

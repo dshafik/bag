@@ -9,6 +9,8 @@ use Bag\Pipelines\Pipes\ProcessProperties;
 use Bag\Pipelines\Values\BagOutput;
 use Tests\Fixtures\Values\BagWithOptionals;
 
+covers(HideOptionalValues::class);
+
 test('it hides optionals when Optional', function () {
     $bag = BagWithOptionals::from(['name' => 'Davey Shafik']);
 

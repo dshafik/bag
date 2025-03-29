@@ -8,7 +8,7 @@ representations.
 > Optional parameters are _different_ from nullable parameters, nulls are still included in the output, 
 > and can be combined with `Optional`. Optional parameters **will not** be filled with nulls when omitted. 
 
-> [!WARN]
+> [!WARNING]
 > You _must_ specify at least one other type. Optionals cannot be combined with `mixed`.
 
 To make a property optional, use a union type that includes `Optional`:

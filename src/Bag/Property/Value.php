@@ -7,6 +7,7 @@ namespace Bag\Property;
 use Bag\Bag;
 use Bag\Collection;
 use Bag\Internal\Util;
+use Bag\Values\Optional;
 use Illuminate\Support\Collection as LaravelCollection;
 use ReflectionClass;
 use ReflectionParameter;
@@ -23,6 +24,7 @@ class Value
         public ReflectionProperty|ReflectionParameter $property,
         public Collection $type,
         public string $name,
+        public bool $optional,
         public bool $required,
         public bool $allowsNull,
         public MapCollection $maps,
@@ -44,12 +46,15 @@ class Value
 
         $type = Util::getPropertyTypes($property);
 
+        $isOptional = Util::getPropertyTypes($property)->contains(Optional::class);
+
         return new self(
             bag: $bag,
             property: $property,
             type: $type,
             name: $name,
-            required: self::isRequired($property),
+            optional: $isOptional,
+            required: self::isRequired($property, $isOptional),
             allowsNull: self::allowsNull($property),
             maps: MapCollection::create(bagClass: $bag, property: $property),
             inputCast: CastInput::create(property: $property),
@@ -59,8 +64,12 @@ class Value
         );
     }
 
-    protected static function isRequired(ReflectionProperty|ReflectionParameter $property): bool
+    protected static function isRequired(ReflectionProperty|ReflectionParameter $property, bool $isOptional = false): bool
     {
+        if ($isOptional) {
+            return false;
+        }
+
         if ($property instanceof ReflectionParameter) {
             return !$property->isOptional();
         }

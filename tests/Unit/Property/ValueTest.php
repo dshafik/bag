@@ -5,6 +5,7 @@ use Bag\Property\CastInput;
 use Bag\Property\CastOutput;
 use Bag\Property\ValidatorCollection;
 use Bag\Property\Value;
+use Tests\Fixtures\Values\BagWithOptionals;
 use Tests\Fixtures\Values\ValidateMappedNameClassBag;
 
 covers(Value::class);
@@ -55,4 +56,18 @@ test('it creates value from parameter', function () {
         ->and($value->validators->all())->toBe(['string', 'required'])
         ->and($value->variadic)->toBeFalse();
 
+});
+
+test('it handles optionals', function () {
+    $class = new \ReflectionClass(BagWithOptionals::class);
+    $property = $class->getConstructor()->getParameters()[2];
+
+    $value = Value::create($class, $property);
+
+    expect($value->optional)
+        ->toBeTrue()
+    ->and($value->required)
+        ->toBeFalse()
+    ->and($value->allowsNull)
+        ->toBeTrue();
 });

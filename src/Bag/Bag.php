@@ -8,6 +8,7 @@ use Bag\Concerns\WithArrayable;
 use Bag\Concerns\WithCollections;
 use Bag\Concerns\WithEloquentCasting;
 use Bag\Concerns\WithJson;
+use Bag\Concerns\WithOptionals;
 use Bag\Concerns\WithOutput;
 use Bag\Concerns\WithValidation;
 use Bag\Pipelines\InputPipeline;
@@ -30,6 +31,7 @@ readonly class Bag implements Arrayable, Jsonable, JsonSerializable, Castable
     use WithCollections;
     use WithEloquentCasting;
     use WithJson;
+    use WithOptionals;
     use WithOutput;
     use WithValidation;
 

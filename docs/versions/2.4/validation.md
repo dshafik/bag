@@ -59,10 +59,6 @@ $value = MyValue::withoutValidation([
 ]);
 ```
 
-## Validation Optionals
-
-See [Optionals](./optionals#validation) for information on how to use validation with optional properties.
-
 ## Built-in Validation Attributes
 
 Bag provides a number of built-in validation attributes, based on various Laravel validation rules:

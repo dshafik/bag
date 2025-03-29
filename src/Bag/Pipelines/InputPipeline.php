@@ -11,6 +11,7 @@ use Bag\Pipelines\Pipes\DebugCollection;
 use Bag\Pipelines\Pipes\ExtraParameters;
 use Bag\Pipelines\Pipes\FillBag;
 use Bag\Pipelines\Pipes\FillNulls;
+use Bag\Pipelines\Pipes\FillOptionals;
 use Bag\Pipelines\Pipes\IsVariadic;
 use Bag\Pipelines\Pipes\LaravelRouteParameters;
 use Bag\Pipelines\Pipes\MapInput;
@@ -38,9 +39,10 @@ class InputPipeline
             new ProcessParameters(),
             new ProcessArguments(),
             new IsVariadic(),
-            new FillNulls(),
             new MapInput(),
             new LaravelRouteParameters(),
+            new FillOptionals(),
+            new FillNulls(),
             new MissingProperties(),
             new ExtraParameters(),
             new StripExtraParameters(),

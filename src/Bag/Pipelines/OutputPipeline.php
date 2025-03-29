@@ -7,6 +7,7 @@ namespace Bag\Pipelines;
 use Bag\Pipelines\Pipes\CastOutputValues;
 use Bag\Pipelines\Pipes\GetValues;
 use Bag\Pipelines\Pipes\HideJsonValues;
+use Bag\Pipelines\Pipes\HideOptionalValues;
 use Bag\Pipelines\Pipes\HideValues;
 use Bag\Pipelines\Pipes\MapOutput;
 use Bag\Pipelines\Pipes\ProcessParameters;
@@ -29,6 +30,7 @@ class OutputPipeline
             new GetValues(),
             new HideValues(),
             new HideJsonValues(),
+            new HideOptionalValues(),
             new CastOutputValues(),
             new MapOutput(),
             new Wrap(),

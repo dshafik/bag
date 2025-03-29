@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 use Bag\Bag;
 use Bag\Exceptions\AdditionalPropertiesException;
+use Bag\Exceptions\MissingPropertiesException;
+use Bag\Values\Optional;
 use Tests\Fixtures\Enums\TestBackedEnum;
+use Tests\Fixtures\Values\BagWithMappingAndOptional;
+use Tests\Fixtures\Values\BagWithOptionals;
 use Tests\Fixtures\Values\BagWithSingleArrayParameter;
 use Tests\Fixtures\Values\BagWithUnionTypes;
 use Tests\Fixtures\Values\NullablePropertiesBag;
@@ -239,4 +243,145 @@ test('it can be serialized and unserialized', function () {
     /** @var TestBag $unserialized */
     expect($unserialized)->toBeInstanceOf(TestBag::class)
     ->and($unserialized->toArray())->toBe($value->toArray());
+});
+
+test('it sets missing to Optional', function () {
+    $value = BagWithOptionals::from(['name' => 'Davey Shafik']);
+
+    expect($value->name)
+        ->toBe('Davey Shafik')
+    ->and($value->age)
+        ->toBeInstanceOf(Optional::class)
+    ->and($value->email)
+        ->toBeInstanceOf(Optional::class);
+});
+
+test('it sets null Optionals to null', function () {
+    $value = BagWithOptionals::from(['name' => 'Davey Shafik', 'email' => null]);
+
+    expect($value->name)
+        ->toBe('Davey Shafik')
+    ->and($value->age)
+        ->toBeInstanceOf(Optional::class)
+    ->and($value->email)
+        ->toBeNull();
+});
+
+test('it hides Optionals from toArray', function () {
+    $value = BagWithOptionals::from(['name' => 'Davey Shafik']);
+
+    $array = $value->toArray();
+
+    expect($array)
+        ->toHaveKey('name')
+        ->not->toHaveKey('age')
+        ->not->toHaveKey('email')
+    ->and($array['name'])
+        ->toBe('Davey Shafik');
+});
+
+test('it does not hide null Optionals from toArray', function () {
+    $value = BagWithOptionals::from(['name' => 'Davey Shafik', 'email' => null]);
+
+    $array = $value->toArray();
+
+    expect($array)
+        ->toHaveKey('name')
+        ->not->toHaveKey('age')
+        ->toHaveKey('email')
+        ->and($array['name'])
+        ->toBe('Davey Shafik')
+        ->and($array['email'])
+        ->toBeNull();
+});
+
+test('it hides Optionals from toJson', function () {
+    $value = BagWithOptionals::from(['name' => 'Davey Shafik']);
+
+    $json = json_decode($value->toJson(), true);
+
+    expect($json)
+        ->toHaveKey('name')
+        ->not->toHaveKey('age')
+        ->not->toHaveKey('email')
+    ->and($json['name'])
+        ->toBe('Davey Shafik');
+});
+
+test('it does not hide null Optionals from toJson', function () {
+    $value = BagWithOptionals::from(['name' => 'Davey Shafik', 'email' => null]);
+
+    $json = json_decode($value->toJson(), true);
+
+    expect($json)
+        ->toHaveKey('name')
+        ->not->toHaveKey('age')
+        ->toHaveKey('email')
+    ->and($json['name'])
+        ->toBe('Davey Shafik')
+    ->and($json['email'])
+        ->toBeNull();
+});
+
+test('it hides Optionals from jsonSerialize', function () {
+    $value = BagWithOptionals::from(['name' => 'Davey Shafik']);
+
+    $json = $value->jsonSerialize();
+
+    expect($json)
+        ->toHaveKey('name')
+        ->not->toHaveKey('age')
+        ->not->toHaveKey('email')
+    ->and($json['name'])
+        ->toBe('Davey Shafik');
+});
+
+test('it does not hide null Optionals from jsonSerialize', function () {
+    $value = BagWithOptionals::from(['name' => 'Davey Shafik', 'email' => null]);
+
+    $json = $value->jsonSerialize();
+
+    expect($json)
+        ->toHaveKey('name')
+        ->not->toHaveKey('age')
+        ->toHaveKey('email')
+    ->and($json['name'])
+        ->toBe('Davey Shafik')
+    ->and($json['email'])
+        ->toBeNull();
+});
+
+test('it can determine if a property is set with optionals', function () {
+    $value = BagWithOptionals::from(['name' => 'Davey Shafik', 'email' => null]);
+
+    expect($value->has('name'))
+        ->toBeTrue()
+    ->and($value->has('age'))
+        ->toBeFalse()
+    ->and($value->has('email'))
+        ->toBeTrue();
+});
+
+test('it fails when non-optionals are missing', function () {
+    $bag = BagWithOptionals::from([]);
+})->throws(MissingPropertiesException::class, 'Missing required properties for Bag Tests\Fixtures\Values\BagWithOptionals: name');
+
+test('it handles mapping and optionals', function () {
+    $bag = BagWithMappingAndOptional::from([
+        'name' => 'Davey Shafik',
+        'current_age' => 40,
+    ]);
+
+    expect($bag->toArray())->toBe([
+        'name' => 'Davey Shafik',
+        'currentAge' => 40,
+    ]);
+
+    $bag = BagWithMappingAndOptional::from([
+        'name' => 'Davey Shafik',
+    ]);
+
+    expect($bag->toArray())->toBe([
+        'name' => 'Davey Shafik',
+    ]);
 });

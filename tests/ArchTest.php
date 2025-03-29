@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+beforeEach()->coversNothing();
+
 arch('it does not call dd()')->expect('dd')->not->toBeUsed();
 arch('it does not call ddd()')->expect('ddd')->not->toBeUsed();
 arch('it does not call dump()')->expect('dump')->not->toBeUsed();

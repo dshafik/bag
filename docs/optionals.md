@@ -57,9 +57,9 @@ $value->hasAll('age', 'email'); // false
 ## Validation
 
 Because Optional properties have a value (an `Optional` object), validation may not work like expected. Bag provides
-a custom wrapper rule `\Bag\Validation\Rules\Optional` that can be used to validate optional properties correctly.
+a custom wrapper rule `\Bag\Validation\Rules\OptionalOr` that can be used to validate optional properties correctly.
 
-The `Optional` rule will pass validation if the property is set to Optional, but will run the validation rules on the value if it is not:
+The `OptionalOr` rule will pass validation if the property is set to Optional, but will run the validation rules on the value if it is not:
 
 ```php
 use Bag\Bag;

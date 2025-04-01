@@ -25,6 +25,13 @@ $value->toJson(); // {"name": "Davey Shafik", "email": null}
 
 Read more in the [documentation](./optionals).
 
+## TypeScript Transformer
+
+Bag 2.5.1 adds Optional support for the `spatie/typescript-transformer`, allowing you to easily generate TypeScript types for Bag objects with `Optional` properties 
+and mapped output names.
+
+Read more in the [documentation](./typescript).
+
 ## Nullable `DateTimeInterface` properties
 
 Prior to Bag 2.5, if you had a nullable `DateTimeInterface` property (e.g. `?\Carbon\CarbonImmutable`) it would attempt to create the

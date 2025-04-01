@@ -29,7 +29,9 @@
         "symfony/var-dumper": "*"
     },
     "suggest": {
-        "barryvdh/laravel-debugbar": "Integrates with Laravel Debugbar"
+        "barryvdh/laravel-debugbar": "Integrates with Laravel Debugbar",
+        "spatie/typescript-transformer": "Easily transform Bag Value objects into TypeScript types",
+        "spatie/laravel-typescript-transformer": "Easily transform Bag Value objects into TypeScript types within Laravel applications"
     },
     "license": "MIT",
     "autoload": {

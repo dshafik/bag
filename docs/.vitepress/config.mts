@@ -96,7 +96,8 @@ export default withMermaid(defineVersionedConfig({
             {"text": "Computed Properties", "link": "/computed-properties"},
             {"text": "Output", "link": "/output"},
             {"text": "Wrapping", "link": "/wrapping"},
-            {"text": "Factories / Testing", "link": "/testing"}
+            {"text": "Factories / Testing", "link": "/testing"},
+            {"text": "TypeScript", "link": "/typescript"},
           ]
         },
         {

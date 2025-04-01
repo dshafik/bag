@@ -27,7 +27,7 @@ jobs:
           coverage: xdebug
 
       - name: Install dependencies with composer
-        run: composer install --no-ansi --no-interaction --no-progress && composer require barryvdh/laravel-debugbar --dev
+        run: composer install --no-ansi --no-interaction --no-progress && composer require barryvdh/laravel-debugbar spatie/laravel-typescript-transformer --dev
 
       - name: Run tests with pest
         run: vendor/bin/pest --coverage-clover coverage.xml
@@ -58,7 +58,7 @@ jobs:
           coverage: xdebug
 
       - name: Install dependencies with composer
-        run: composer install --no-ansi --no-interaction --no-progress && composer require barryvdh/laravel-debugbar --dev
+        run: composer install --no-ansi --no-interaction --no-progress && composer require barryvdh/laravel-debugbar spatie/laravel-typescript-transformer --dev
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse --memory-limit=-1

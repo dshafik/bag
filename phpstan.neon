@@ -5,5 +5,7 @@ parameters:
         - src/
     level: 9
     treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
     excludePaths:
         - src/Bag/DebugBar
+        - src/Bag/TypeScript/Reflection

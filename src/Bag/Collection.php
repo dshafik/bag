@@ -67,7 +67,7 @@ class Collection extends LaravelCollection
     /**
      * @inheritDoc
      */
-    protected function prependReal(mixed $value, string|int $key): static
+    protected function prependReal(mixed $value, string|int|null $key): static
     {
         return parent::prepend($value, $key);
     }

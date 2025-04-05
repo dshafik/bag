@@ -23,7 +23,7 @@ use Bag\Bag;
 use Bag\Attributes\MapName;
 use Bag\Mappers\SnakeCase;
 
-#[MapInputName(SnakeCase::class)
+#[MapInputName(SnakeCase::class)]
 #[MapOutputName(SnakeCase::class)]
 class MyValue extends Bag {
     public function __construct(

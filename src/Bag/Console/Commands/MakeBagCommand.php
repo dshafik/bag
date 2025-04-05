@@ -12,11 +12,13 @@ use Bag\Casts\CollectionOf;
 use Bag\Collection;
 use Bag\Factory;
 use Bag\Internal\Reflection;
+use Bag\Internal\Util;
 use Bag\Traits\HasFactory;
 use Brick\Money\Money;
 use DateTimeInterface;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
+use Illuminate\Support\Collection as LaravelCollection;
 use Illuminate\Support\Str;
 use function Laravel\Prompts\outro;
 use function Laravel\Prompts\text;
@@ -27,7 +29,6 @@ use Nette\PhpGenerator\PsrPrinter;
 use Nette\PhpGenerator\TraitType;
 use PrinsFrank\Standards\Currency\CurrencyAlpha3;
 use ReflectionClass;
-use ReflectionNamedType;
 
 class MakeBagCommand extends Command implements PromptsForMissingInput
 {
@@ -183,12 +184,14 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
 
         /** @var class-string $fullyQualifiedName */
         $fullyQualifiedName = $classNamespace->getName() . '\\' . $name;
+        $reflectionClass = new ReflectionClass($fullyQualifiedName);
+
         if ($factory !== null) {
             $classNamespace->addUse(FactoryAttribute::class);
             $classNamespace->addUse(HasFactory::class);
             $classNamespace->addUse($namespace . '\\Factories\\' . $factory);
 
-            if (count((new ReflectionClass($fullyQualifiedName))->getAttributes(FactoryAttribute::class)) > 0) {
+            if (count($reflectionClass->getAttributes(FactoryAttribute::class)) > 0) {
                 $attributes = $class->getAttributes();
                 foreach ($attributes as $key => $attribute) {
                     if ($attribute->getName() === FactoryAttribute::class) {
@@ -205,7 +208,7 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
         }
 
         if ($collection !== null) {
-            if (count((new ReflectionClass($fullyQualifiedName))->getAttributes(CollectionAttribute::class)) > 0) {
+            if (count($reflectionClass->getAttributes(CollectionAttribute::class)) > 0) {
                 $attributes = $class->getAttributes();
                 foreach ($attributes as $key => $attribute) {
                     if ($attribute->getName() === CollectionAttribute::class) {
@@ -229,48 +232,88 @@ class MakeBagCommand extends Command implements PromptsForMissingInput
 
             /** @var class-string $fullyQualifiedName */
             $fullyQualifiedName = $namespace . '\\' . $name;
-            $parameters = (new ReflectionClass($fullyQualifiedName))->getMethod('__construct')->getParameters();
+            $parameters = $reflectionClass->getConstructor()?->getParameters() ?? [];
             foreach ($parameters as $parameter) {
-                /** @var ReflectionNamedType $parameterType */
-                $parameterType = $parameter->getType();
-                $parameterTypeName = $parameterType->getName();
-
-                if (!$parameterType->isBuiltin()) {
-                    $classNamespace->addUse($parameterTypeName);
-
-                    $collectionOf = '';
-                    if ($parameterTypeName === Collection::class || \is_subclass_of($parameterTypeName, Collection::class, true)) {
-                        $castAttribute = Reflection::getAttribute($parameter, Cast::class);
-
-                        if ($castAttribute !== null && $castAttribute->getArguments()[0] === CollectionOf::class && $castAttribute->getArguments()[1] !== null) {
-                            $classNamespace->addUse($castAttribute->getArguments()[1]);
-
-                            $collectionOf = '<' . \class_basename($castAttribute->getArguments()[1]) . '>';
+                /** @var Collection<string> $types */
+                $types = Util::getPropertyTypes($parameter)->map(
+                    // @phpstan-ignore argument.type
+                    function (string $type) use ($parameter, $classNamespace): string {
+                        if (!\class_exists($type)) {
+                            return $type;
                         }
+
+                        $classNamespace->addUse($type);
+
+                        $typeName = \class_basename($type);
+                        $collectionOf = '';
+
+                        if ($type === LaravelCollection::class || \is_subclass_of($type, LaravelCollection::class, true)) {
+                            $castAttribute = Reflection::getAttribute($parameter, Cast::class);
+
+                            if ($castAttribute !== null && $castAttribute->getArguments()[0] === CollectionOf::class && $castAttribute->getArguments()[1] !== null) {
+                                $classNamespace->addUse($castAttribute->getArguments()[1]);
+                                $collectionOf = '<' . \class_basename($castAttribute->getArguments()[1]) . '>';
+                            }
+                        }
+
+                        return $typeName . $collectionOf;
                     }
+                );
 
-                    $parameterTypeName = class_basename($parameterTypeName) . $collectionOf;
+                if ($types->count() === 2 && $types->contains('null')) {
+                    $type = $types->first(fn ($type) => $type !== 'null');
+                    if ($type === 'mixed') {
+                        $types = collect(['mixed']);
+                    } else {
+                        /** @var string $type */
+                        $types = collect(['?' . $type]);
+                    }
                 }
 
-                if ($parameterType->allowsNull() && $parameterType->getName() !== 'mixed') {
-                    $parameterTypeName = '?' . $parameterTypeName;
+                $parameterTypeName = $types->implode('|');
+
+                if ($parameter->isVariadic()) {
+                    $parameterTypeName = ' ...';
                 }
 
-                $args[] = $parameterTypeName . ' $' . $parameter->getName();
+                $parameterDefinition = $parameterTypeName . ' $' . $parameter->getName();
                 if ($parameter->isDefaultValueAvailable()) {
                     if ($parameter->isDefaultValueConstant()) {
-                        $args[count($args) - 1] .= ' = ' . $parameter->getDefaultValueConstantName();
+                        $parameterDefinition .= ' = ' . $parameter->getDefaultValueConstantName();
                     } else {
-                        $args[count($args) - 1] .= ' = ' . Str::of(var_export($parameter->getDefaultValue(), true))
+                        $parameterDefinition .= ' = ' . Str::of(var_export($parameter->getDefaultValue(), true))
                                 ->replace(['NULL', 'FALSE', 'TRUE'], ['null', 'false', 'true']);
                     }
                 }
+
+                $args[] = $parameterDefinition;
             }
 
             $comment = Str::of($class->getComment() ?? '')
-                ->replaceMatches('/^@method static static from\(.*$/', '')
+                ->replaceMatches('/@method static .*? from\(.*/', '')
                 ->append("\n@method static static from(" . implode(', ', $args) . ')')
                 ->ltrim("\n");
+
+            $collectionAttributes = $reflectionClass->getAttributes(CollectionAttribute::class);
+            if (count($collectionAttributes) > 0) {
+                $collectionAttribute = $collectionAttributes[0];
+                $collectionClass = $collectionAttribute->getArguments()[0];
+                $comment = $comment
+                    ->replaceMatches('/@method static .*? collect\(.*/', '')
+                    ->append("\n@method static " . \class_basename($collectionClass) . '<' . $name . '> collect(iterable $items)')
+                    ->ltrim("\n");
+            }
+
+
+            $factoryAttributes = $reflectionClass->getAttributes(FactoryAttribute::class);
+            if (count($factoryAttributes) > 0) {
+                $factoryAttributes = $factoryAttributes[0];
+                $factoryClass = $factoryAttributes->getArguments()[0];
+                $comment = $comment
+                    ->replaceMatches('/@method static .*? factory\(.*/', '')
+                    ->append("\n@method static " . \class_basename($factoryClass) . '<' . $name . '> factory(Collection|array|int $data = [])')
+                    ->ltrim("\n");
+            }
 
             $class->setComment($comment->toString());
         }

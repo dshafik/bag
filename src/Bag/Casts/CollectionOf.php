@@ -38,9 +38,9 @@ class CollectionOf implements CastsPropertySet
     public function set(Collection $propertyTypes, string $propertyName, LaravelCollection $properties): mixed
     {
         /** @var class-string<LaravelCollection<array-key,mixed>> $propertyType */
-        $propertyType = $propertyTypes->first();
+        $propertyType = $propertyTypes->firstWhere(fn ($type) => $type === LaravelCollection::class || \is_subclass_of($type, LaravelCollection::class, true));
 
-        if ($propertyType !== LaravelCollection::class && ! \is_subclass_of($propertyType, LaravelCollection::class, true)) {
+        if ($propertyType === null) {
             throw new InvalidCollection(sprintf('The property "%s" must be a subclass of %s', $propertyName, LaravelCollection::class));
         }
 

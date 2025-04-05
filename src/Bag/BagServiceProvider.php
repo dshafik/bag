@@ -37,6 +37,8 @@ class BagServiceProvider extends ServiceProvider
                     /** @var Request $request */
                     $request = $this->app->get('request');
 
+                    $values = collect($request->all())->filter();
+
                     if (($route = $request->route()) !== null) {
                         if (($controller = $route->getController()) === null) {
                             /** @var Closure $closure */
@@ -57,7 +59,7 @@ class BagServiceProvider extends ServiceProvider
 
                             return false;
                         })->isNotEmpty()) {
-                            return $class::withoutValidation($request->all());
+                            return $class::withoutValidation($values);
                         }
 
                         if (Reflection::getParameters($action)->filter(function ($parameter) use ($class) {
@@ -70,12 +72,12 @@ class BagServiceProvider extends ServiceProvider
 
                             return false;
                         })->isNotEmpty()) {
-                            return $class::from($class::withoutValidation($request->all())->getRaw());
+                            return $class::from($class::withoutValidation($values)->getRaw());
                         }
                     }
 
 
-                    return $class::from($request->all());
+                    return $class::from($values);
                 })
             );
         });

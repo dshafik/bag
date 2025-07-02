@@ -38,9 +38,11 @@ class MagicCast implements CastsPropertySet
         }
 
         // Fuzzy Matches
-        /** @var string $propertyType */
+        /** @var Collection<string> $propertyType */
         $propertyType = $propertyTypes->first(function ($type) {
-            /** @var string $type */
+            // @phpstan-ignore cast.string
+            $type = (string) $type;
+
             return match (true) {
                 is_a($type, \DateTime::class, true) => true,
                 is_a($type, DateTimeImmutable::class, true) => true,
@@ -72,9 +74,11 @@ class MagicCast implements CastsPropertySet
             is_string($value) && (
                 is_a($propertyType, \DateTime::class, true) ||
                 is_a($propertyType, DateTimeImmutable::class, true) ||
-                is_a($propertyType, Carbon::class, true) ||
-                is_a($propertyType, CarbonImmutable::class, true)
-            ) => $propertyType::createFromFormat('U.u', (new DateTimeImmutable($value))->format('U.u')),
+                // @phpstan-ignore cast.string
+                is_a((string) $propertyType, Carbon::class, true) ||
+                // @phpstan-ignore cast.string
+                is_a((string) $propertyType, CarbonImmutable::class, true)
+            ) => $propertyType::createFromFormat('U.u', (new DateTimeImmutable($value))->format('U.u')), // @phpstan-ignore staticMethod.notFound
             is_subclass_of($propertyType, Bag::class, true) => $propertyType::from($value),
             (is_a($propertyType, LaravelCollection::class, true) || is_subclass_of((string) $propertyType, LaravelCollection::class)) && \is_iterable($value) => $propertyType::make($value),
             is_subclass_of($propertyType, BackedEnum::class, true) && (is_string($value) || is_int($value)) => $propertyType::from($value),

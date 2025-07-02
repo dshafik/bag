@@ -12,7 +12,7 @@ use Tests\Fixtures\Values\BagWithOptionals;
 use Tests\Fixtures\Values\BagWithSingleArrayParameter;
 use Tests\Fixtures\Values\BagWithUnionTypes;
 use Tests\Fixtures\Values\NullablePropertiesBag;
-use Tests\Fixtures\Values\OptionalPropertiesBag;
+use Tests\Fixtures\Values\NullableWithDefaultValueBag;
 use Tests\Fixtures\Values\OptionalPropertiesWithDefaultsBag;
 use Tests\Fixtures\Values\TestBag;
 
@@ -112,7 +112,7 @@ test('it errors on non-nullables', function () {
 })->throws(\TypeError::class, 'Tests\Fixtures\Values\TestBag::__construct(): Argument #1 ($name) must be of type string, null given');
 
 test('it allows nullables with explicit nulls', function () {
-    $value = OptionalPropertiesBag::from([
+    $value = NullableWithDefaultValueBag::from([
         'name' => null,
         'age' => null,
         'email' => null,
@@ -126,7 +126,7 @@ test('it allows nullables with explicit nulls', function () {
 });
 
 test('it allows nullables with implicit nulls', function () {
-    $value = OptionalPropertiesBag::from([]);
+    $value = NullableWithDefaultValueBag::from([]);
 
     expect($value->name)->toBeNull()
         ->and($value->age)->toBeNull()
@@ -153,7 +153,7 @@ test('it sets nullable without input', function () {
 });
 
 test('it allows nullables with no values', function () {
-    $value = OptionalPropertiesBag::from();
+    $value = NullableWithDefaultValueBag::from();
 
     expect($value->name)->toBeNull()
         ->and($value->age)->toBeNull()

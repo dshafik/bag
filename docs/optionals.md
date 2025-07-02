@@ -5,8 +5,9 @@ that can be omitted when creating a Bag object, and will automatically be exclud
 representations.
 
 > [!NOTE]
-> Optional parameters are _different_ from nullable parameters, nulls are still included in the output, 
-> and can be combined with `Optional`. Optional parameters **will not** be filled with nulls when omitted. 
+> Optional parameters are _different_ from nullable parameters, nulls are still included in outputs (array or JSON), 
+> and can be combined with `Optional` which will not be. Optional parameters **will not** be filled with nulls when omitted.
+> Optionals will not be persisted to the database when using [Eloquent Casting](./laravel-eloquent-casting).
 
 > [!WARNING]
 > You _must_ specify at least one other type. Optionals cannot be combined with `mixed`.

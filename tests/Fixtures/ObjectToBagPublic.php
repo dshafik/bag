@@ -6,9 +6,9 @@ namespace Tests\Fixtures;
 
 use Bag\Attributes\Bag;
 use Bag\Traits\HasBag;
-use Tests\Fixtures\Values\OptionalPropertiesBag;
+use Tests\Fixtures\Values\NullableWithDefaultValueBag;
 
-#[Bag(OptionalPropertiesBag::class)]
+#[Bag(NullableWithDefaultValueBag::class)]
 class ObjectToBagPublic
 {
     use HasBag;

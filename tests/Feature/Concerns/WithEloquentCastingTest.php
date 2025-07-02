@@ -5,6 +5,7 @@ use Bag\Collection;
 use Bag\Concerns\WithEloquentCasting;
 use Bag\Eloquent\Casts\AsBag;
 use Bag\Eloquent\Casts\AsBagCollection;
+use Bag\Values\Optional;
 use Illuminate\Foundation\Application;
 use function Pest\Laravel\assertDatabaseHas;
 use Tests\Fixtures\Collections\BagWithCollectionCollection;
@@ -13,7 +14,8 @@ use Tests\Fixtures\Models\CastedModelLegacy;
 use Tests\Fixtures\Values\BagWithCollection;
 use Tests\Fixtures\Values\CastedModelValues;
 use Tests\Fixtures\Values\HiddenParametersBag;
-use Tests\Fixtures\Values\OptionalPropertiesBag;
+use Tests\Fixtures\Values\NullableWithDefaultValueBag;
+use Tests\Fixtures\Values\OptionalValueBag;
 use Tests\Fixtures\Values\TestBag;
 
 covers(WithEloquentCasting::class, AsBag::class, AsBagCollection::class);
@@ -25,6 +27,14 @@ describe('Laravel 11+', function () {
         ]);
 
         assertDatabaseHas('testing', ['bag' => '{"name":"Davey Shafik","age":40,"email":"davey@php.net"}']);
+    });
+
+    test('it stores bag with optionals on Laravel 11+', function () {
+        CastedModel::create([
+            'optional_bag' => OptionalValueBag::from(name: 'Davey Shafik'),
+        ]);
+
+        assertDatabaseHas('testing', ['optional_bag' => '{"name":"Davey Shafik"}']);
     });
 
     test('it does not store null on Laravel 11+', function () {
@@ -48,6 +58,19 @@ describe('Laravel 11+', function () {
             ->and($model->bag->age)->toBe(40)
             ->and($model->bag->email)->toBe('davey@php.net')
             ->and($model->collection)->toBeNull();
+    });
+
+    test('it retrieves bag with optionals on Laravel 11+', function () {
+        CastedModel::create([
+            'optional_bag' => OptionalValueBag::from(name: 'Davey Shafik'),
+        ]);
+
+        /** @var CastedModel $model */
+        $model = CastedModel::first();
+
+        expect($model->optional_bag)->toBeInstanceOf(OptionalValueBag::class)
+            ->and($model->optional_bag->name)->toBe('Davey Shafik')
+            ->and($model->optional_bag->age)->toBeInstanceOf(Optional::class);
     });
 
     test('it does not retrieve null bag on Laravel 11+', function () {
@@ -179,20 +202,20 @@ describe('Laravel 11+', function () {
     test('it stores nested bags with toArray on Laravel 11+', function () {
         $model = CastedModel::create(CastedModelValues::from(
             [
-                'optionalsBag' => OptionalPropertiesBag::from([
+                'nullsBag' => NullableWithDefaultValueBag::from([
                     'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net'])
                 ]),
             ]
         )->toArray());
 
-        expect($model->optionals_bag)
-            ->toBeInstanceOf(OptionalPropertiesBag::class)
-            ->and($model->optionals_bag->bag)->toBeInstanceOf(TestBag::class)
-            ->and($model->optionals_bag->bag->name)->toBe('Davey Shafik')
-            ->and($model->optionals_bag->bag->age)->toBe(40)
-            ->and($model->optionals_bag->bag->email)->toBe('davey@php.net');
+        expect($model->nulls_bag)
+            ->toBeInstanceOf(NullableWithDefaultValueBag::class)
+            ->and($model->nulls_bag->bag)->toBeInstanceOf(TestBag::class)
+            ->and($model->nulls_bag->bag->name)->toBe('Davey Shafik')
+            ->and($model->nulls_bag->bag->age)->toBe(40)
+            ->and($model->nulls_bag->bag->email)->toBe('davey@php.net');
 
-        assertDatabaseHas('testing', ['optionals_bag' => '{"name":null,"age":null,"email":null,"bag":{"name":"Davey Shafik","age":40,"email":"davey@php.net"}}']);
+        assertDatabaseHas('testing', ['nulls_bag' => '{"name":null,"age":null,"email":null,"bag":{"name":"Davey Shafik","age":40,"email":"davey@php.net"}}']);
     });
 
     test('it retrieves bags stored with toArray on Laravel 11+', function () {
@@ -213,7 +236,7 @@ describe('Laravel 11+', function () {
     test('it retrieves nested bags stored with toArray on Laravel 11+', function () {
         CastedModel::create(CastedModelValues::from(
             [
-                'optionalsBag' => OptionalPropertiesBag::from([
+                'nullsBag' => NullableWithDefaultValueBag::from([
                     'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net'])
                 ]),
             ]
@@ -221,12 +244,12 @@ describe('Laravel 11+', function () {
 
         $model = CastedModel::first();
 
-        expect($model->optionals_bag)
-            ->toBeInstanceOf(OptionalPropertiesBag::class)
-            ->and($model->optionals_bag->bag)->toBeInstanceOf(TestBag::class)
-            ->and($model->optionals_bag->bag->name)->toBe('Davey Shafik')
-            ->and($model->optionals_bag->bag->age)->toBe(40)
-            ->and($model->optionals_bag->bag->email)->toBe('davey@php.net');
+        expect($model->nulls_bag)
+            ->toBeInstanceOf(NullableWithDefaultValueBag::class)
+            ->and($model->nulls_bag->bag)->toBeInstanceOf(TestBag::class)
+            ->and($model->nulls_bag->bag->name)->toBe('Davey Shafik')
+            ->and($model->nulls_bag->bag->age)->toBe(40)
+            ->and($model->nulls_bag->bag->email)->toBe('davey@php.net');
     });
 })->skip(fn () => !version_compare(Application::VERSION, '11.0.0', '>='), 'Requires Laravel 11+');
 
@@ -237,6 +260,14 @@ describe('Laravel 10+', function () {
         ]);
 
         assertDatabaseHas('testing', ['bag' => '{"name":"Davey Shafik","age":40,"email":"davey@php.net"}']);
+    });
+
+    test('it stores bag with optionals on Laravel 11+', function () {
+        CastedModelLegacy::create([
+            'optional_bag' => OptionalValueBag::from(name: 'Davey Shafik'),
+        ]);
+
+        assertDatabaseHas('testing', ['optional_bag' => '{"name":"Davey Shafik"}']);
     });
 
     test('it does not store null on Laravel 10+', function () {
@@ -260,6 +291,19 @@ describe('Laravel 10+', function () {
             ->and($model->bag->age)->toBe(40)
             ->and($model->bag->email)->toBe('davey@php.net')
             ->and($model->collection)->toBeNull();
+    });
+
+    test('it retrieves bag with optionals on Laravel 10+', function () {
+        CastedModelLegacy::create([
+            'optional_bag' => OptionalValueBag::from(name: 'Davey Shafik'),
+        ]);
+
+        /** @var CastedModel $model */
+        $model = CastedModel::first();
+
+        expect($model->optional_bag)->toBeInstanceOf(OptionalValueBag::class)
+            ->and($model->optional_bag->name)->toBe('Davey Shafik')
+            ->and($model->optional_bag->age)->toBeInstanceOf(Optional::class);
     });
 
     test('it does not retrieve null bag on Laravel 10+', function () {
@@ -391,20 +435,20 @@ describe('Laravel 10+', function () {
     test('it stores nested bags with toArray on Laravel 10+', function () {
         $model = CastedModelLegacy::create(CastedModelValues::from(
             [
-                'optionalsBag' => OptionalPropertiesBag::from([
+                'nullsBag' => NullableWithDefaultValueBag::from([
                     'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net'])
                 ]),
             ]
         )->toArray());
 
-        expect($model->optionals_bag)
-            ->toBeInstanceOf(OptionalPropertiesBag::class)
-            ->and($model->optionals_bag->bag)->toBeInstanceOf(TestBag::class)
-            ->and($model->optionals_bag->bag->name)->toBe('Davey Shafik')
-            ->and($model->optionals_bag->bag->age)->toBe(40)
-            ->and($model->optionals_bag->bag->email)->toBe('davey@php.net');
+        expect($model->nulls_bag)
+            ->toBeInstanceOf(NullableWithDefaultValueBag::class)
+            ->and($model->nulls_bag->bag)->toBeInstanceOf(TestBag::class)
+            ->and($model->nulls_bag->bag->name)->toBe('Davey Shafik')
+            ->and($model->nulls_bag->bag->age)->toBe(40)
+            ->and($model->nulls_bag->bag->email)->toBe('davey@php.net');
 
-        assertDatabaseHas('testing', ['optionals_bag' => '{"name":null,"age":null,"email":null,"bag":{"name":"Davey Shafik","age":40,"email":"davey@php.net"}}']);
+        assertDatabaseHas('testing', ['nulls_bag' => '{"name":null,"age":null,"email":null,"bag":{"name":"Davey Shafik","age":40,"email":"davey@php.net"}}']);
     });
 
     test('it retrieves bags stored with toArray on Laravel 10+', function () {
@@ -425,7 +469,7 @@ describe('Laravel 10+', function () {
     test('it retrieves nested bags stored with toArray on Laravel 10+', function () {
         CastedModelLegacy::create(CastedModelValues::from(
             [
-                'optionalsBag' => OptionalPropertiesBag::from([
+                'nullsBag' => NullableWithDefaultValueBag::from([
                     'bag' => TestBag::from(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net'])
                 ]),
             ]
@@ -433,11 +477,11 @@ describe('Laravel 10+', function () {
 
         $model = CastedModelLegacy::first();
 
-        expect($model->optionals_bag)
-            ->toBeInstanceOf(OptionalPropertiesBag::class)
-            ->and($model->optionals_bag->bag)->toBeInstanceOf(TestBag::class)
-            ->and($model->optionals_bag->bag->name)->toBe('Davey Shafik')
-            ->and($model->optionals_bag->bag->age)->toBe(40)
-            ->and($model->optionals_bag->bag->email)->toBe('davey@php.net');
+        expect($model->nulls_bag)
+            ->toBeInstanceOf(NullableWithDefaultValueBag::class)
+            ->and($model->nulls_bag->bag)->toBeInstanceOf(TestBag::class)
+            ->and($model->nulls_bag->bag->name)->toBe('Davey Shafik')
+            ->and($model->nulls_bag->bag->age)->toBe(40)
+            ->and($model->nulls_bag->bag->email)->toBe('davey@php.net');
     });
 });

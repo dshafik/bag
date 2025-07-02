@@ -7,7 +7,7 @@ namespace Tests\Fixtures\Values;
 use Bag\Attributes\Bag;
 use Bag\Traits\HasBag;
 
-#[Bag(OptionalPropertiesBag::class, Bag::PRIVATE)]
+#[Bag(NullableWithDefaultValueBag::class, Bag::PRIVATE)]
 class ObjectToBagPrivate
 {
     use HasBag;

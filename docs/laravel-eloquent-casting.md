@@ -21,7 +21,7 @@ class MyModel extends Model
 This will cast the `MyValue` object to a JSON string when saving it to the database and will cast it back to a `MyValue` object when retrieving it from the database.
 
 > [!WARNING]
-> Bag will store _all_ properties, including hidden properties.
+> Bag will store _all_ properties, including hidden properties, but excluding [`Optional`](./optionals) values.
 
 ## Casting Collections
 

@@ -7,7 +7,7 @@ use Bag\Pipelines\Pipes\MapInput;
 use Bag\Pipelines\Pipes\MissingProperties;
 use Bag\Pipelines\Pipes\ProcessParameters;
 use Bag\Pipelines\Values\BagInput;
-use Tests\Fixtures\Values\OptionalPropertiesBag;
+use Tests\Fixtures\Values\NullableWithDefaultValueBag;
 use Tests\Fixtures\Values\TestBag;
 
 covers(MissingProperties::class, MissingPropertiesException::class);
@@ -29,7 +29,7 @@ test('it does not error without missing properties', function () {
 });
 
 test('it does not error with missing optional properties', function () {
-    $input = new BagInput(OptionalPropertiesBag::class, collect());
+    $input = new BagInput(NullableWithDefaultValueBag::class, collect());
     $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
     $input = (new MapInput())($input, fn (BagInput $input) => $input);
     $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
@@ -39,7 +39,7 @@ test('it does not error with missing optional properties', function () {
 
     expect($input)->toBeInstanceOf(BagInput::class);
 
-    $input = new BagInput(OptionalPropertiesBag::class, collect([
+    $input = new BagInput(NullableWithDefaultValueBag::class, collect([
         'name' => 'Davey Shafik',
     ]));
     $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);

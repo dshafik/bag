@@ -16,7 +16,7 @@ readonly class CastedModelValues extends Bag
         public ?int $age = null,
         public ?string $email = null,
         public ?TestBag $bag = null,
-        public ?OptionalPropertiesBag $optionalsBag = null,
+        public ?NullableWithDefaultValueBag $nullsBag = null,
     ) {
     }
 }

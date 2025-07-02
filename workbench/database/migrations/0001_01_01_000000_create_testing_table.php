@@ -18,7 +18,8 @@ return new class () extends Migration {
             $table->json('collection')->nullable();
             $table->json('custom_collection')->nullable();
             $table->json('hidden_bag')->nullable();
-            $table->json('optionals_bag')->nullable();
+            $table->json('nulls_bag')->nullable();
+            $table->json('optional_bag')->nullable();
             $table->timestamps();
         });
     }

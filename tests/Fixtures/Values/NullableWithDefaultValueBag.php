@@ -6,7 +6,7 @@ namespace Tests\Fixtures\Values;
 
 use Bag\Bag;
 
-readonly class OptionalPropertiesBag extends Bag
+readonly class NullableWithDefaultValueBag extends Bag
 {
     public function __construct(
         public ?string $name = null,

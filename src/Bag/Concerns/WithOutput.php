@@ -8,6 +8,7 @@ use Bag\Collection;
 use Bag\Enums\OutputType;
 use Bag\Pipelines\OutputPipeline;
 use Bag\Pipelines\Values\BagOutput;
+use Bag\Values\Optional;
 
 trait WithOutput
 {
@@ -36,7 +37,7 @@ trait WithOutput
             return $values[$key];
         }
 
-        return $values;
+        return $values->filter(fn ($value) => !($value instanceof Optional));
     }
 
     /**

@@ -11,8 +11,8 @@ use Tests\Fixtures\ObjectToBagInvalidBag;
 use Tests\Fixtures\ObjectToBagNoAttribute;
 use Tests\Fixtures\ObjectToBagProtected;
 use Tests\Fixtures\ObjectToBagPublic;
+use Tests\Fixtures\Values\NullableWithDefaultValueBag;
 use Tests\Fixtures\Values\ObjectToBagPrivate;
-use Tests\Fixtures\Values\OptionalPropertiesBag;
 
 covers(
     HasBag::class,
@@ -24,7 +24,7 @@ covers(
 test('it creates bag with public properties', function () {
     $object = new ObjectToBagPublic('Davey Shafik', 40, 'davey@php.net');
 
-    /** @var OptionalPropertiesBag $bag */
+    /** @var NullableWithDefaultValueBag $bag */
     $bag = $object->toBag();
     expect($bag->name)->toBe('Davey Shafik')
         ->and($bag->age)->toBeNull()
@@ -34,7 +34,7 @@ test('it creates bag with public properties', function () {
 test('it creates bag with public and protected properties', function () {
     $object = new ObjectToBagProtected('Davey Shafik', 40, 'davey@php.net');
 
-    /** @var OptionalPropertiesBag $bag */
+    /** @var NullableWithDefaultValueBag $bag */
     $bag = $object->toBag();
     expect($bag->name)->toBe('Davey Shafik')
         ->and($bag->age)->toBe(40)
@@ -44,7 +44,7 @@ test('it creates bag with public and protected properties', function () {
 test('it creates bag with public protected and private properties', function () {
     $object = new ObjectToBagAll('Davey Shafik', 40, 'davey@php.net');
 
-    /** @var OptionalPropertiesBag $bag */
+    /** @var NullableWithDefaultValueBag $bag */
     $bag = $object->toBag();
     expect($bag->name)->toBe('Davey Shafik')
         ->and($bag->age)->toBe(40)
@@ -54,7 +54,7 @@ test('it creates bag with public protected and private properties', function () 
 test('it creates bag with private properties', function () {
     $object = new ObjectToBagPrivate('Davey Shafik', 40, 'davey@php.net');
 
-    /** @var OptionalPropertiesBag $bag */
+    /** @var NullableWithDefaultValueBag $bag */
     $bag = $object->toBag();
     expect($bag->name)->toBeNull()
         ->and($bag->age)->toBeNull()

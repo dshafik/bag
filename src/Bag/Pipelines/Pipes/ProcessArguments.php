@@ -18,10 +18,18 @@ readonly class ProcessArguments
     public function __invoke(BagInput $input): BagInput
     {
         $firstInput = $input->input->first();
-        if (is_array($firstInput) && $input->input->count() === 1 && !\ctype_digit((string) key($firstInput))) {
-            $input->input = collect($firstInput);
 
-            return $input;
+        if (is_array($firstInput) && $input->input->count() === 1) {
+            $firstKey = (string) $input->input->keys()->first();
+            if (!\ctype_digit($firstKey) && $input->params->has($firstKey)) {
+                return $input;
+            }
+
+            if (!\ctype_digit((string) key($firstInput))) {
+                $input->input = collect($firstInput);
+
+                return $input;
+            }
         }
 
         if (\ctype_digit((string) $input->input->keys()->first())) {

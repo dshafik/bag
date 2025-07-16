@@ -41,10 +41,10 @@ class OptionalOr implements ValidationRule
 
         try {
             /** @var Collection<string, string|ValidationRule> $rules */
-            $rules = collect(['value' => Arr::wrap($this->validation)]);
-            Validator::validate(['value' => $value], $rules);
+            $rules = collect([$attribute => Arr::wrap($this->validation)]);
+            Validator::validate([$attribute => $value], $rules);
         } catch (ValidationException $exception) {
-            $fail($exception->errors()['value'][0]);
+            $fail($exception->errors()[$attribute][0]);
         }
     }
 }

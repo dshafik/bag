@@ -52,7 +52,7 @@ test('it handles positional arguments', function () {
         'davey@php.net',
     ]));
 
-    $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
+    $input = (new ProcessParameters())($input);
     $pipe = new ProcessArguments();
     $input = $pipe($input);
 
@@ -72,7 +72,7 @@ test('it handles single array arguments', function () {
         ]
     ]));
 
-    $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
+    $input = (new ProcessParameters())($input);
     $pipe = new ProcessArguments();
     $input = $pipe($input);
 

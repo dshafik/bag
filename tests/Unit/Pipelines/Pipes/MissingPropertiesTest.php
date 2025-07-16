@@ -18,9 +18,9 @@ test('it does not error without missing properties', function () {
         'age' => 40,
         'email' => 'davey@php.net',
     ]));
-    $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
-    $input = (new MapInput())($input, fn (BagInput $input) => $input);
-    $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
+    $input = (new ProcessParameters())($input);
+    $input = (new MapInput())($input);
+    $input = (new IsVariadic())($input);
 
     $pipe = new MissingProperties();
     $input = $pipe($input);
@@ -30,9 +30,9 @@ test('it does not error without missing properties', function () {
 
 test('it does not error with missing optional properties', function () {
     $input = new BagInput(NullableWithDefaultValueBag::class, collect());
-    $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
-    $input = (new MapInput())($input, fn (BagInput $input) => $input);
-    $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
+    $input = (new ProcessParameters())($input);
+    $input = (new MapInput())($input);
+    $input = (new IsVariadic())($input);
 
     $pipe = new MissingProperties();
     $input = $pipe($input);
@@ -42,9 +42,9 @@ test('it does not error with missing optional properties', function () {
     $input = new BagInput(NullableWithDefaultValueBag::class, collect([
         'name' => 'Davey Shafik',
     ]));
-    $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
-    $input = (new MapInput())($input, fn (BagInput $input) => $input);
-    $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
+    $input = (new ProcessParameters())($input);
+    $input = (new MapInput())($input);
+    $input = (new IsVariadic())($input);
 
     $pipe = new MissingProperties();
     $input = $pipe($input);
@@ -57,9 +57,9 @@ test('it errors with missing properties', function () {
         'name' => 'Davey Shafik',
         'age' => 40,
     ]));
-    $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
-    $input = (new MapInput())($input, fn (BagInput $input) => $input);
-    $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
+    $input = (new ProcessParameters())($input);
+    $input = (new MapInput())($input);
+    $input = (new IsVariadic())($input);
 
     $pipe = new MissingProperties();
     $pipe($input);

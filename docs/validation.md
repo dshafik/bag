@@ -59,7 +59,7 @@ $value = MyValue::withoutValidation([
 ]);
 ```
 
-## Validation Optionals
+## Validating Optionals
 
 See [Optionals](./optionals#validation) for information on how to use validation with optional properties.
 

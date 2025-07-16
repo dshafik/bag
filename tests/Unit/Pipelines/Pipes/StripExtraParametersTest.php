@@ -21,10 +21,10 @@ test('it does not error on non variadic with extra parameters ignored', function
         'email' => 'davey@php.net',
         'test' => true,
     ]));
-    $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
-    $input = (new MapInput())($input, fn (BagInput $input) => $input);
-    $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
-    $input = (new ExtraParameters())($input, fn (BagInput $input) => $input);
+    $input = (new ProcessParameters())($input);
+    $input = (new MapInput())($input);
+    $input = (new IsVariadic())($input);
+    $input = (new ExtraParameters())($input);
 
     $pipe = new StripExtraParameters();
     $input = $pipe($input);
@@ -49,11 +49,11 @@ test('it does not error on non variadic with extra positional parameters ignore'
         'davey@php.net',
         true,
     ]));
-    $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
-    $input = (new ProcessArguments())($input, fn (BagInput $input) => $input);
-    $input = (new MapInput())($input, fn (BagInput $input) => $input);
-    $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
-    $input = (new ExtraParameters())($input, fn (BagInput $input) => $input);
+    $input = (new ProcessParameters())($input);
+    $input = (new ProcessArguments())($input);
+    $input = (new MapInput())($input);
+    $input = (new IsVariadic())($input);
+    $input = (new ExtraParameters())($input);
 
     $pipe = new StripExtraParameters();
     $input = $pipe($input);
@@ -77,10 +77,10 @@ test('it does not strip extra parameters with variadic', function () {
         'email' => 'davey@php.net',
         'test' => true,
     ]));
-    $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
-    $input = (new MapInput())($input, fn (BagInput $input) => $input);
-    $input = (new IsVariadic())($input, fn (BagInput $input) => $input);
-    $input = (new ExtraParameters())($input, fn (BagInput $input) => $input);
+    $input = (new ProcessParameters())($input);
+    $input = (new MapInput())($input);
+    $input = (new IsVariadic())($input);
+    $input = (new ExtraParameters())($input);
 
     $pipe = new StripExtraParameters();
     $input = $pipe($input);

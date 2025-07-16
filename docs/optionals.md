@@ -57,10 +57,12 @@ $value->hasAll('age', 'email'); // false
 
 ## Validation
 
-Because Optional properties have a value (an `Optional` object), validation may not work like expected. Bag provides
-a custom wrapper rule `\Bag\Validation\Rules\OptionalOr` that can be used to validate optional properties correctly.
+When validating optional properties, `Optional` values will _not be included_ in the validated values. If you want to allow `Optional` _or_ validate the value, you can use the `OptionalOr` rule.
 
-The `OptionalOr` rule will pass validation if the property is set to Optional, but will run the validation rules on the value if it is not:
+> [!WARNING]
+> Using `Optional` with validation rules that require a value (like `required`, `integer`, etc.) will result in validation errors without the use of `OptionalOr`.
+
+The `OptionalOr` rule will pass validation if the property is set to `Optional`, but will run the validation rules on the value if it is not:
 
 ```php
 use Bag\Bag;
@@ -77,33 +79,34 @@ class MyValue extends Bag
     public function rules(): array
     {
         return [
-            'age' => [new OptionalOr(['required', 'integer'])],
+            'age' => ['required', 'integer'],
             'email' => [new OptionalOr(['nullable', 'email'])],
         ];
     }
 }
 
-// All of the following are valid
+// The following are valid:
 
-// both age and email are optional
-$value = new MyValue(name: 'Davey Shafik'); 
-// age is an int, email is optional
-$value = new MyValue(name: 'Davey Shafik', age: 40); 
-// age is optional, email is nullable
-$value = new MyValue(name: 'Davey Shafik', email: null) 
-// age is integer, email is an email
-$value = new MyValue(name: 'Davey Shafik', age: 40, email: 'davey@php.net') 
+$value = new MyValue(name: 'Davey Shafik', age: 40);
+
+$value = new MyValue(name: 'Davey Shafik', age: 40, email: null);
+ 
+$value = new MyValue(name: 'Davey Shafik', age: 40, email: 'davey@php.net');
 
 // While these are invalid:
 
-// age is not an int, email is optional
+$value = new MyValue(name: 'Davey Shafik', email: null)
+
 $value = new MyValue(name: 'Davey Shafik', age: '40'); 
 
-// age is required, email is optional
 $value = new MyValue(name: 'Davey Shafik', age: null); 
 
-// email is not an email, age is optional
 $value = new MyValue(name: 'Davey Shafik', email: 'foo'); 
 ```
 
 The `OptionalOr` class accepts an array of rules, a single string rule, or a class name that the value should be an `instanceof`.
+
+> [!TIP]
+> You can use the `Bag::withoutValidation()` method or the `#[WithoutValidation]` attribute to skip validation when creating a Bag value object to skip validation.
+> 
+> The `Bag->valid()` method will allow you to check if the Bag is valid at any time. 

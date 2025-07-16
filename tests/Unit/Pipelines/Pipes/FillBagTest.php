@@ -11,8 +11,8 @@ covers(FillBag::class);
 
 test('it creates bag instance', function () {
     $input = new BagInput(TestBag::class, collect(['name' => 'Davey Shafik', 'age' => 40, 'email' => 'davey@php.net']));
-    $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
-    $input = (new MapInput())($input, fn (BagInput $input) => $input);
+    $input = (new ProcessParameters())($input);
+    $input = (new MapInput())($input);
 
     $pipe = new FillBag();
     $input = $pipe($input);

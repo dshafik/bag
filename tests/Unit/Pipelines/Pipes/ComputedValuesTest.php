@@ -18,8 +18,8 @@ test('it validates computed exists', function () {
         'name' => 'Davey Shafik',
         'age' => 40,
     ]));
-    $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
-    $input = (new MapInput())($input, fn (BagInput $input) => $input);
+    $input = (new ProcessParameters())($input);
+    $input = (new MapInput())($input);
 
     /** @var BagInput $input */
     Carbon::setTestNow(new CarbonImmutable('2024-05-04 14:43:23'));
@@ -36,8 +36,8 @@ test('it errors when computed not set', function () {
         'name' => 'Davey Shafik',
         'age' => 40,
     ]));
-    $input = (new ProcessParameters())($input, fn (BagInput $input) => $input);
-    $input = (new MapInput())($input, fn (BagInput $input) => $input);
+    $input = (new ProcessParameters())($input);
+    $input = (new MapInput())($input);
 
     /** @var BagInput $input */
     Carbon::setTestNow(new CarbonImmutable('2024-05-04 14:43:23'));

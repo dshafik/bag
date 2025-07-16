@@ -6,9 +6,11 @@ namespace Bag\Pipelines\Pipes;
 
 use BackedEnum;
 use Bag\Bag;
-use Bag\Internal\Validator as ValidatorAlias;
+use Bag\Internal\Validator;
 use Bag\Pipelines\Values\BagInput;
 use Bag\Property\Value;
+use Bag\Validation\Rules\OptionalOr;
+use Bag\Values\Optional;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Collection as LaravelCollection;
 use Illuminate\Validation\ValidationException;
@@ -24,7 +26,6 @@ readonly class Validate
     {
         /** @var class-string<Bag> $bagClass */
         $bagClass = $input->bagClassname;
-        $values = $input->values->all();
         $aliases = $input->params->aliases();
 
         $rules = LaravelCollection::wrap($bagClass::rules())->mapWithKeys(function (mixed $rules, string $key) use ($aliases) {
@@ -42,9 +43,29 @@ readonly class Validate
             return $input;
         }
 
+        $values = $input->values->filter(function ($value, $key) use ($rules) {
+            if (!$value instanceof Optional) {
+                return true;
+            }
+
+            $fieldRules = $rules->get($key, []);
+            if (!is_array($fieldRules)) {
+                $fieldRules = [$fieldRules];
+            }
+
+            foreach ($fieldRules as $rule) {
+                if ($rule instanceof OptionalOr) {
+                    return true;
+                }
+            }
+
+            // Optional value without OptionalOr validator should be removed
+            return false;
+        });
+
         // Within a Laravel application, we can use the Laravel Validator
         try {
-            ValidatorAlias::validate($values, $rules);
+            Validator::validate($values->all(), $rules);
         } catch (ValidationException $exception) {
             if (method_exists($bagClass, 'redirect')) {
                 /** @var string $redirect */

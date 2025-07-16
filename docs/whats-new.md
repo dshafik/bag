@@ -1,51 +1,13 @@
-# What's New in Bag 2.5
+# What's New in Bag 2.6
 
-## Optional Properties
+## Improvements to Optional Property Validation
 
-Bag 2.5 adds support for optional properties using the `Optional` class. This allows you to define properties that can be omitted when creating a Bag object.
+Bag 2.6 improves validation of `Optional` properties.
 
-Optional properties will _also_ be omitted when outputting the Bag object as an array or JSON.
+This release changes the behavior of validation when Optionals are involved. Prior to this release, if your validation for an Optional field was a simple presence requirement (e.g. `required`, `present`), an Optional value would pass, whereas a type/format validator would fail.
 
-```php
-use Bag\Bag;
+After this change, **unless** you use the `OptionalOr` validator, Optional values are stripped from the validated values, allowing rules like `required` to fail as expected.
 
-class MyValue extends Bag
-{
-    public function __construct(
-        public string $name,
-        public Optional|int $age,
-        public Optional|string|null $email = null,
-    ) {}
-}
+This is a minor backward incompatible change, but the behavior is now what would have been expected previously.
 
-$value = new MyValue(name: 'Davey Shafik', email: null);
-$value->toArray(); // ['name' => 'Davey Shafik', 'email' => null]
-$value->toJson(); // {"name": "Davey Shafik", "email": null}
-```
-
-Read more in the [documentation](./optionals).
-
-## TypeScript Transformer
-
-Bag 2.5.1 adds Optional support for the `spatie/typescript-transformer`, allowing you to easily generate TypeScript types for Bag objects with `Optional` properties 
-and mapped output names.
-
-Read more in the [documentation](./typescript).
-
-## Nullable `DateTimeInterface` properties
-
-Prior to Bag 2.5, if you had a nullable `DateTimeInterface` property (e.g. `?\Carbon\CarbonImmutable`) it would attempt to create the
-`DateTimeInterface` object with `null` and fail with a `TypeError`. Bag 2.5 will instead assign the value to `null`.
-
-```php
-use Bag\Bag;
-
-class MyValue extends Bag
-{
-    public function __construct(
-        public ?DateTimeInterface $date = null,
-    ) {}
-}
-
-$value = new MyValue(date: null); // Bag < 2.5 TypeError, 2.5+ sets null
-```
+Full documentation on `Optional` and the validation of Optionals can be found [here](/optionals)
